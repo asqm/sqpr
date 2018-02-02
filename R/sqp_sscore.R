@@ -7,7 +7,7 @@
 # the first one with the variabl names (column 2) and the second
 # one with the quality predictions (column 12)
 
-sqp_sumscore <- function(sqp_data, df, new_name, ...) {
+sqp_sscore <- function(sqp_data, df, new_name, ...) {
 
   # Turn all variables into a list and delete the 'list'
   # from the new character vector
@@ -59,7 +59,7 @@ sqp_sumscore <- function(sqp_data, df, new_name, ...) {
 # Rather with measurement quality as a wrapper
 # because it checks all of the arguments are in
 # the correct format, etc..
-estimate_sumscore <- function(sqp_data, df, vars_names) {
+estimate_sscore <- function(sqp_data, df, vars_names) {
 
   # Calculate the sum score and it's variance
   var_sumscore <- stats::var(rowSums(df, na.rm = TRUE), na.rm = TRUE)
