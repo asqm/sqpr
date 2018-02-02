@@ -7,7 +7,7 @@
 sqp_bind_metrics(df, question, metrics)
 }
 \arguments{
-\item{metrics}{}
+\item{metrics}{must be a named list containing only one numeric element per name.}
 }
 \description{
 Title

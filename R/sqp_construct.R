@@ -28,15 +28,18 @@ construct_sqp_ <- function(question_name, metrics) {
 
   if (length(question) > 1) stop("question_name must have only one question")
 
+  is_list <- is.list(metrics)
   named <- !is.null(names(metrics))
   numeric <- is.numeric(unlist(metrics))
 
-  if (!named | !numeric) {
-    stop("Metrics must be a named list or named numeric vector")
+  if (!named | !numeric | !is_list) {
+    stop("metrics must be a named numeric list",
+         call. = FALSE)
   }
 
   if (length(names(metrics)) != length(unlist(metrics))) {
-    stop("Metrics must contain only one element per name")
+    stop("metrics must contain only one element per name",
+         call. = FALSE)
   }
 
   sqp_metrics <- columns_sqp(names(metrics), unlist(metrics))
@@ -52,7 +55,7 @@ construct_sqp_ <- function(question_name, metrics) {
 columns_sqp <- function(columns_to_fill, replacement) {
 
   if (!all(columns_to_fill %in% top_env$sqp_columns)) {
-    stop("One or more of the specified columns don't match the SQP column names",
+    stop("One or more of the specified metrics don't match the SQP column names",
          call. = FALSE)
   }
 

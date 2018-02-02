@@ -5,7 +5,7 @@
 #'
 #' @param df
 #' @param question
-#' @param metrics
+#' @param metrics must be a named list containing only one numeric element per name.
 #'
 #' @return
 #' @export
