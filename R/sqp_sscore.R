@@ -45,7 +45,7 @@ sqp_sscore <- function(sqp_data, df, new_name, ...) {
   sqp_scores <- sqp_data[rows_to_pick, 2, drop = TRUE]
 
   new_estimate <-
-    columns_sqp("quality", estimate_sumscore(sqp_scores, the_vars, vars_names))
+    columns_sqp("quality", estimate_sscore(sqp_scores, the_vars, vars_names))
 
   additional_rows <- generic_sqp(summary_name, new_estimate)
 
@@ -65,7 +65,7 @@ estimate_sscore <- function(sqp_data, df, vars_names) {
   var_sumscore <- stats::var(rowSums(df, na.rm = TRUE), na.rm = TRUE)
 
   # Calculat variable of each of the selected variables
-  var_othervars <- purrr::map_dbl(df, var, na.rm = TRUE)
+  var_othervars <- purrr::map_dbl(df, stats::var, na.rm = TRUE)
 
   # Each sqp score is subtracted a 1 and multiplied
   # by it's corresponding var_* variables
