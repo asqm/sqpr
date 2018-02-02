@@ -7,11 +7,6 @@
 # the first one with the variabl names (column 2) and the second
 # one with the quality predictions (column 12)
 
-sqp_data <- sqp_collect()
-df <- ess::ess_rounds(7, "cimentadaj@gmail.com")
-summary_name <- "polit"
-vars_names <- c("ppltrst", "polintr")
-
 sqp_sumscore <- function(sqp_data, df, new_name, ...) {
 
   # Turn all variables into a list and delete the 'list'
