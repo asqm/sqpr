@@ -1,6 +1,16 @@
-# export
 # Binds a df to a fully constructed sqp data with
 # new values
+
+#' Title
+#'
+#' @param df
+#' @param question
+#' @param metrics
+#'
+#' @return
+#' @export
+#'
+#' @examples
 bind_metrics <- function(df, question, metrics) {
   stopifnot(is.data.frame(df))
 

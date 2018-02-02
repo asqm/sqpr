@@ -7,6 +7,17 @@
 # the first one with the variabl names (column 2) and the second
 # one with the quality predictions (column 12)
 
+#' Title
+#'
+#' @param sqp_data
+#' @param df
+#' @param new_name
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
 sqp_sscore <- function(sqp_data, df, new_name, ...) {
 
   # Turn all variables into a list and delete the 'list'

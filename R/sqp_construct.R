@@ -1,9 +1,27 @@
+#' Title
+#'
+#' @param question_name
+#' @param metrics
+#'
+#' @return
+#' @export
+#'
+#' @examples
 construct_sqp <- function(question_name, metrics) {
   question <- as.character(substitute(question_name))
   construct_sqp_(question, metrics)
 }
 
-# export
+
+#' Title
+#'
+#' @param question_name
+#' @param metrics
+#'
+#' @return
+#' @export
+#'
+#' @examples
 construct_sqp_ <- function(question_name, metrics) {
 
   question <- question_name
