@@ -1,11 +1,7 @@
 sqp_collect <- function(...) {
   selected_vars <- as.character(substitute(list(...))[-1])
 
-  ex <- suppressMessages(
-    suppressWarnings(
-      readr::read_csv2("data/SQPexport_20171230_2255.csv")
-    )
-  )
+  ex <- file.path(find.package("sqpr"), "/data/Rdata.rds")
 
     sqp_data_fin <-
       dplyr::transmute(
