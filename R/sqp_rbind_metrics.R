@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-bind_metrics <- function(df, question, metrics) {
+sqp_bind_metrics <- function(df, question, metrics) {
   stopifnot(is.data.frame(df))
 
   question_name <- as.character(substitute(question))
