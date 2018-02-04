@@ -2,13 +2,55 @@
 % Please edit documentation in R/sqp_cmv.R
 \name{sqp_cmv}
 \alias{sqp_cmv}
-\title{Title}
+\title{Adjust coefficients for Common Method Variance (CMV)}
 \usage{
 sqp_cmv(x, y, ...)
 }
 \arguments{
-\item{...}{}
+\item{x}{a correlation \code{tibble} given by \code{\link{sqp_correlate}}}
+
+\item{y}{a data frame or tibble given by \code{\link{sqp_collect}}}
+
+\item{...}{two or more variables present in both \code{x} and \code{y}. Can
+be both in bare unquoted names or as character strings.}
 }
 \description{
-Title
+\code{sqp_cmv} takes a correlation tibble from \code{\link{sqp_correlate}}
+and adjusts the coefficients of the variables specified
+in  \code{...} with the reliability and validity coefficients given
+by \code{\link{sqp_collect}}. All variables specified in \code{...} must
+be present in both \code{x} and \code{y}.
+}
+\examples{
+
+# Note to Jorge: Must be changed to a valid correlation matrix
+# that has same name in the SQP data base
+# Also change ALL of this in thte tests doc
+set.seed(2131)
+library(tibble)
+
+corr_tibble <- sqp_correlate(matrix(rnorm(100, sd = 50), nrow = 20), rnorm(5))
+
+# Note to Jorge: Change this to a sqp df when sqp_collect() works.
+sqp_df <-
+ tibble(question = paste0("V", 1:5),
+ quality = c(0.2, 0.3, 0.5, 0.6, 0.9),
+ reliability = c(NA, 0.4, 0.5, 0.5, 0.7),
+ validity = c(NA, NA, 0.6, 0.7, 0.8))
+
+# Show that when y is not from sqp class, there's an error
+
+# Original correlation matrix with new diagonal
+corr_tibble
+
+# Coefficient of correlation changes
+# when adjusting for common method variance
+sqp_cmv(corr_tibble, sqp_df, V4, V5)
+
+# The V5*V4 cell from the lower triangle of the
+# correlation matrix changed from -0.137 to -0.282
+
+}
+\seealso{
+\code{\link{sqp_correlate}}, \code{\link{sqp_collect}}
 }

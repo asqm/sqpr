@@ -1,17 +1,54 @@
-#' Title
+#' Adjust coefficients for Common Method Variance (CMV)
 #'
-#' @param x
-#' @param y
-#' @param ...
+#' \code{sqp_cmv} takes a correlation tibble from \code{\link{sqp_correlate}}
+#' and adjusts the coefficients of the variables specified
+#' in  \code{...} with the reliability and validity coefficients given
+#' by \code{\link{sqp_collect}}. All variables specified in \code{...} must
+#' be present in both \code{x} and \code{y}.
+#'
+#' @param x a correlation \code{tibble} given by \code{\link{sqp_correlate}}
+#' @param y a data frame or tibble given by \code{\link{sqp_collect}}
+#' @param ... two or more variables present in both \code{x} and \code{y}. Can
+#' be both in bare unquoted names or as character strings.
 #'
 #' @return
 #' @export
 #'
+#' @seealso \code{\link{sqp_correlate}}, \code{\link{sqp_collect}}
+#'
 #' @examples
+#'
+#' # Note to Jorge: Must be changed to a valid correlation matrix
+#' # that has same name in the SQP data base
+#' # Also change ALL of this in thte tests doc
+#' set.seed(2131)
+#' library(tibble)
+#'
+#' corr_tibble <- sqp_correlate(matrix(rnorm(100, sd = 50), nrow = 20), rnorm(5))
+#'
+#' # Note to Jorge: Change this to a sqp df when sqp_collect() works.
+#' sqp_df <-
+#'  tibble(question = paste0("V", 1:5),
+#'  quality = c(0.2, 0.3, 0.5, 0.6, 0.9),
+#'  reliability = c(NA, 0.4, 0.5, 0.5, 0.7),
+#'  validity = c(NA, NA, 0.6, 0.7, 0.8))
+#'
+#' # Show that when y is not from sqp class, there's an error
+#'
+#' # Original correlation matrix with new diagonal
+#' corr_tibble
+#'
+#' # Coefficient of correlation changes
+#' # when adjusting for common method variance
+#' sqp_cmv(corr_tibble, sqp_df, V4, V5)
+#'
+#' # The V5*V4 cell from the lower triangle of the
+#' # correlation matrix changed from -0.137 to -0.282
+#'
 sqp_cmv <- function(x, y, ...) {
   cmv_vars <- as.character(substitute(list(...)))[-1]
 
-  if (length(cmv_vars) == 1) {
+  if (length(cmv_vars) < 2) {
     stop("You need to supply at least two variables to calculate the common method variance",
          call. = FALSE)
   }
@@ -44,24 +81,27 @@ sqp_cmv <- function(x, y, ...) {
          paste0(cmv_vars, collapse = ", "))
   }
 
-  cmv <- estimate_cmv(y, sum_sqp)
+  cmv <- estimate_cmv(y[sum_sqp, ])
 
   corrected_corr <- tibble::as_tibble(corr2cmv(x, cmv, cmv_vars))
 
   corrected_corr
 }
 
+# Workhorse of the function. It simply estimates
+# the common method variance of the variables.
 
-estimate_cmv <- function(y, vars_sqp) {
-
-  first_part <- sqrt(y[vars_sqp, "reliability", drop = TRUE])
-  second_part <- sqrt(1 - y[vars_sqp, "validity", drop = TRUE])
+estimate_cmv <- function(y) {
+  first_part <- sqrt(y[["reliability"]])
+  second_part <- sqrt(1 - y[["validity"]])
 
   cmv <- purrr::reduce(c(first_part, second_part), `*`)
   cmv
 }
 
-# @unexported
+# This function is the one doing the replacing in
+# the correlation matrix. It adjusts only the
+# lower.tri of the matrix.
 corr2cmv <- function(x, cmv, cmv_vars) {
   # Here I sort because if not I would be
   # getting the index of the upper triangle
