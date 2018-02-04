@@ -20,6 +20,8 @@ sqp_df <-
  reliability = c(NA, 0.4, 0.5, 0.5, 0.7),
  validity = c(NA, NA, 0.6, 0.7, 0.8))
 
+sqp_df <- structure(sqp_df, class = c(class(sqp_df), "sqp"))
+
 
 test_that("sqp_cmv returns correct output", {
   cmv_tib <- sqp_cmv(corr_tibble, sqp_df, V4, V5)

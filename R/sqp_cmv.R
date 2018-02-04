@@ -33,6 +33,8 @@
 #'  reliability = c(NA, 0.4, 0.5, 0.5, 0.7),
 #'  validity = c(NA, NA, 0.6, 0.7, 0.8))
 #'
+#' sqp_df <- structure(sqp_df, class = c(class(sqp_df), "sqp"))
+#'
 #' # Show that when y is not from sqp class, there's an error
 #'
 #' # Original correlation matrix with new diagonal
@@ -51,6 +53,10 @@ sqp_cmv <- function(x, y, ...) {
   if (length(cmv_vars) < 2) {
     stop("You need to supply at least two variables to calculate the common method variance",
          call. = FALSE)
+  }
+
+  if (!inherits(y, "sqp")) {
+    stop("`y` must be of class 'sqp'. Use collect_sqp() to collect the sqp data.", call. = FALSE)
   }
 
   if (is.matrix(x)) x <- tibble::as_tibble(x, rownames = "rowname")

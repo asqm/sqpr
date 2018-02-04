@@ -38,6 +38,8 @@ sqp_df <-
  reliability = c(NA, 0.4, 0.5, 0.5, 0.7),
  validity = c(NA, NA, 0.6, 0.7, 0.8))
 
+sqp_df <- structure(sqp_df, class = c(class(sqp_df), "sqp"))
+
 # Show that when y is not from sqp class, there's an error
 
 # Original correlation matrix with new diagonal
