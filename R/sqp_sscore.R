@@ -1,24 +1,78 @@
-## Jorge's function to calculate the quality of sum scores####
-
-# Only select the columns with variable names
-# and the quality prediction
-# VERY IMPORTANT!
-# the function accepts an sqp data with only two columns
-# the first one with the variabl names (column 2) and the second
-# one with the quality predictions (column 12)
-
-#' Title
+#' Calculate sum score of selected variables
 #'
-#' @param sqp_data
-#' @param df
-#' @param new_name
-#' @param ...
+#' \code{sqp_sscore} takes a data frame with quality estimates from
+#' \code{sqp_collect} and estimates a sum score for selected variables
+#' in \code{...}.
 #'
-#' @return
+#' @param sqp_data a data frame given by \code{sqp_collect} containing
+#' quality estimates from the variables specified in \code{...}.
+#' @param df a data frame which contains data for the variables specified
+#' in \code{...}.
+#' @param new_name a bare unquoted name or a string specifying the name
+#' of the new sum score.
+#' @param ... bare unquoted names or separate strings specifying
+#' the variable names from which to estimate the sum score. They all
+#' must be present in \code{sqp_data} and \code{df}. At minimum, it must
+#' be two or more variable names.
+#'
+#'
+#' @return a \code{\link[tibble]{tibble}} similar to \code{sqp_data} but
+#' with a new row containing the sum score with the name specified in
+#' \code{new_name}. The result excludes the variables specified in
+#' \code{...} and only shows the new sum score. In future releases
+#' there might be an option to keep both the variables in \code{...}
+#' and the sum score.
+#'
 #' @export
 #'
 #' @examples
+#'
+#' # Prepare data
+#' library(tibble)
+#' sqp_df <-
+#' tibble(question = paste0("V", 1:5),
+#'        quality = c(0.2, 0.3, 0.5, 0.6, 0.9),
+#'        reliability = c(NA, 0.4, 0.5, 0.5, 0.7),
+#'        validity = c(NA, NA, 0.6, 0.7, 0.8))
+#'
+#'
+#' sqp_df <- structure(sqp_df, class = c(class(sqp_df), "sqp"))
+#'
+#' sample_data <-
+#'  as_tibble(
+#'  setNames(
+#'   replicate(5, rbinom(1000, 5, 0.6), simplify = FALSE),
+#'  paste0("V", 1:5))
+#'  )
+#' #
+#'
+#' sqp_sscore(
+#' sqp_data = sqp_df,
+#' df = sample_data,
+#' new_name = new_sumscore,
+#' V3, V4
+#' )
+#'
+#' sqp_sscore(
+#' sqp_data = sqp_df,
+#' df = sample_data,
+#' new_name = new_sumscore,
+#' "V1", "V2", "V3"
+#' )
+#'
+#' sqp_sscore(
+#' sqp_data = sqp_df,
+#' df = sample_data,
+#' new_name = new_sumscore,
+#' V1, random_var
+#' )
+#'
 sqp_sscore <- function(sqp_data, df, new_name, ...) {
+
+  if (!inherits(sqp_data, "sqp")) {
+    stop("`sqp_data` must be collected using sqp_collect()",
+         call. = FALSE)
+  }
 
   # Turn all variables into a list and delete the 'list'
   # from the new character vector
@@ -28,7 +82,7 @@ sqp_sscore <- function(sqp_data, df, new_name, ...) {
   # Check all variables present in df
   vars_not_matched <- !vars_names %in% names(df)
   if (any(vars_not_matched)) {
-    stop("One or more variables are not present in df: ",
+    stop("One or more variables are not present in `df`: ",
          paste0(vars_names[vars_not_matched], collapse = ", "),
          call. = FALSE)
   }
@@ -36,7 +90,7 @@ sqp_sscore <- function(sqp_data, df, new_name, ...) {
   # Check all variables present in sqp_data
   vars_not_matched <- !vars_names %in% sqp_data[[1]]
   if (any(vars_not_matched)) {
-    stop("One or more variables are not present in sqp_data: ",
+    stop("One or more variables are not present in `sqp_data`: ",
          paste0(vars_names[vars_not_matched], collapse = ", "),
          call. = FALSE)
   }
@@ -44,8 +98,11 @@ sqp_sscore <- function(sqp_data, df, new_name, ...) {
   the_vars <- df[vars_names]
 
   # Check all variables are numeric and there are at least two columns in the df data
-  if (!all(purrr::map_lgl(the_vars, is.numeric))) stop("All variables must be numeric")
-  if (ncol(the_vars) < 2) stop("df must have at least two columns")
+  if (!all(purrr::map_lgl(the_vars, is.numeric))) {
+    stop(paste0(vars_names, collapse = ", "), " must be numeric variables in `df`")
+  }
+
+  if (ncol(the_vars) < 2) stop("`df` must have at least two columns")
 
   # Check SQP data has correct class and formats
   check_sqp_data(sqp_data)
@@ -63,7 +120,7 @@ sqp_sscore <- function(sqp_data, df, new_name, ...) {
   # Bind the unselected questions with the new sumscore
   combined_matrix <- dplyr::bind_rows(sqp_data[!rows_to_pick, ], additional_rows)
 
-  combined_matrix
+  structure(combined_matrix, class = c(class(combined_matrix), "sqp"))
 }
 
 # This is not supposed to be used in isolation.
@@ -99,6 +156,8 @@ check_sqp_data <- function(sqp_data) {
 
   # Check all variables are numeric in the sqp data
   if(!first_character | !all_numeric) {
-    stop("The first column must be a character vector containing the question names and all other columns must be numeric")
+    stop("`sqp_data` must be collected using sqp_collect()",
+         call. = FALSE)
   }
 }
+

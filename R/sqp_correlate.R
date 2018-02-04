@@ -1,8 +1,8 @@
 #' Calculate a correlation matrix with an adjusted diagonal
 #'
-#' \code{sqp_correlate} calculates a correlation matrix through \code{\link{cor}}
-#' and replaces the diagonal with the supplied numeric vector. It's a wrapper
-#' around \code{\link{cor}} with slight tweaks.
+#' \code{sqp_correlate} calculates a correlation matrix through
+#' \code{\link[stats]{cor}} and replaces the diagonal with the supplied
+#' numeric vector. It's a wrapper around \code{\link[stats]{cor}} with slight tweaks.
 #'
 #' @param x a matrix or data frame with numeric columns.
 #' @param diag_adj a numeric vector with length equal to the number of columns of \code{x}
@@ -17,7 +17,7 @@
 #' @return a correlation \code{tibble} with variable names as a column and
 #' the diagonal replaced by \code{diag_adj}
 #'
-#' @seealso \code{\link{cor}} for the workhorse behind the function and for
+#' @seealso \code{\link[stats]{cor}} for the workhorse behind the function and for
 #' details on the \code{use} and \code{method} arguments.
 #'
 #' @export
@@ -32,7 +32,7 @@
 #' sqp_correlate(mtcars, new_diagonal, method = "kendall")
 #'
 sqp_correlate <- function(x, diag_adj, use = "complete.obs", method = "pearson") {
-  if (!is.numeric(diag_adj)) stop("diag_adj must be numeric")
+  if (!is.numeric(diag_adj)) stop("`diag_adj` must be numeric")
   corr_matrix <- stats::cor(x = x, use = use, method = method)
   diag(corr_matrix) <- diag_adj
 

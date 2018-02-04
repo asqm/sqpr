@@ -2,13 +2,78 @@
 % Please edit documentation in R/sqp_sscore.R
 \name{sqp_sscore}
 \alias{sqp_sscore}
-\title{Title}
+\title{Calculate sum score of selected variables}
 \usage{
 sqp_sscore(sqp_data, df, new_name, ...)
 }
 \arguments{
-\item{...}{}
+\item{sqp_data}{a data frame given by \code{sqp_collect} containing
+quality estimates from the variables specified in \code{...}.}
+
+\item{df}{a data frame which contains data for the variables specified
+in \code{...}.}
+
+\item{new_name}{a bare unquoted name or a string specifying the name
+of the new sum score.}
+
+\item{...}{bare unquoted names or separate strings specifying
+the variable names from which to estimate the sum score. They all
+must be present in \code{sqp_data} and \code{df}. At minimum, it must
+be two or more variable names.}
+}
+\value{
+a \code{\link[tibble]{tibble}} similar to \code{sqp_data} but
+with a new row containing the sum score with the name specified in
+\code{new_name}. The result excludes the variables specified in
+\code{...} and only shows the new sum score. In future releases
+there might be an option to keep both the variables in \code{...}
+and the sum score.
 }
 \description{
-Title
+\code{sqp_sscore} takes a data frame with quality estimates from
+\code{sqp_collect} and estimates a sum score for selected variables
+in \code{...}.
+}
+\examples{
+
+# Prepare data
+library(tibble)
+sqp_df <-
+tibble(question = paste0("V", 1:5),
+       quality = c(0.2, 0.3, 0.5, 0.6, 0.9),
+       reliability = c(NA, 0.4, 0.5, 0.5, 0.7),
+       validity = c(NA, NA, 0.6, 0.7, 0.8))
+
+
+sqp_df <- structure(sqp_df, class = c(class(sqp_df), "sqp"))
+
+sample_data <-
+ as_tibble(
+ setNames(
+  replicate(5, rbinom(1000, 5, 0.6), simplify = FALSE),
+ paste0("V", 1:5))
+ )
+#
+
+sqp_sscore(
+sqp_data = sqp_df,
+df = sample_data,
+new_name = new_sumscore,
+V3, V4
+)
+
+sqp_sscore(
+sqp_data = sqp_df,
+df = sample_data,
+new_name = new_sumscore,
+"V1", "V2", "V3"
+)
+
+sqp_sscore(
+sqp_data = sqp_df,
+df = sample_data,
+new_name = new_sumscore,
+V1, random_var
+)
+
 }

@@ -11,7 +11,9 @@
 #' @param ... two or more variables present in both \code{x} and \code{y}. Can
 #' be both in bare unquoted names or as character strings.
 #'
-#' @return
+#' @return the same matrix supplied in \code{x} but as a tibble with
+#' the correlation coefficients of the variables supplied in \code{...}
+#' adjusted for their common method variance.
 #' @export
 #'
 #' @seealso \code{\link{sqp_correlate}}, \code{\link{sqp_collect}}

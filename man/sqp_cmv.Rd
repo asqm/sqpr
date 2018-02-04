@@ -14,6 +14,11 @@ sqp_cmv(x, y, ...)
 \item{...}{two or more variables present in both \code{x} and \code{y}. Can
 be both in bare unquoted names or as character strings.}
 }
+\value{
+the same matrix supplied in \code{x} but as a tibble with
+the correlation coefficients of the variables supplied in \code{...}
+adjusted for their common method variance.
+}
 \description{
 \code{sqp_cmv} takes a correlation tibble from \code{\link{sqp_correlate}}
 and adjusts the coefficients of the variables specified

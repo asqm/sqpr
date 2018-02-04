@@ -25,9 +25,9 @@ a correlation \code{tibble} with variable names as a column and
 the diagonal replaced by \code{diag_adj}
 }
 \description{
-\code{sqp_correlate} calculates a correlation matrix through \code{\link{cor}}
-and replaces the diagonal with the supplied numeric vector. It's a wrapper
-around \code{\link{cor}} with slight tweaks.
+\code{sqp_correlate} calculates a correlation matrix through
+\code{\link[stats]{cor}} and replaces the diagonal with the supplied
+numeric vector. It's a wrapper around \code{\link[stats]{cor}} with slight tweaks.
 }
 \examples{
 
@@ -40,6 +40,6 @@ sqp_correlate(mtcars, new_diagonal, method = "kendall")
 
 }
 \seealso{
-\code{\link{cor}} for the workhorse behind the function and for
+\code{\link[stats]{cor}} for the workhorse behind the function and for
 details on the \code{use} and \code{method} arguments.
 }

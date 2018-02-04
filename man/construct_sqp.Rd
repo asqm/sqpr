@@ -2,13 +2,28 @@
 % Please edit documentation in R/sqp_construct.R
 \name{construct_sqp}
 \alias{construct_sqp}
-\title{Title}
+\title{Construct an SQP tibble manually}
 \usage{
 construct_sqp(question_name, metrics)
 }
 \arguments{
-\item{metrics}{}
+\item{question_name}{a character string that will be used as the question name}
+
+\item{metrics}{a list containing new SQP metrics. Currently it only
+supports quality, reliability and validity. Can also specify one of the metrics
+and the remaining are set to NA by default}
+}
+\value{
+a tibble of one row with the supplied metrics. It also has
+class \code{sqp} for further manipulations within the \code{sqpr} package.
 }
 \description{
-Title
+\code{sqp_construct} is designed to allow the user to create SQP tibbles
+by manually inserting new metrics such as quality or validity.
+}
+\details{
+\code{construct_sqp_} is useful if you're interested in programming
+with \code{sqpr} rather than using it interactively. If you want to use
+\code{construct_sqp} inside a function, use the equivalent \code{construct_
+sqp_} which uses standard evaluation.
 }

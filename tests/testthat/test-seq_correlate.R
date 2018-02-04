@@ -30,5 +30,5 @@ test_that("sqp_correlate returns correct df", {
                "supply both 'x' and 'y' or a matrix-like 'x'")
 
   expect_error(sqp_correlate(mtcars, "wrong_diag"),
-               "diag_adj must be numeric")
+               "`diag_adj` must be numeric")
 })
