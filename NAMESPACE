@@ -3,4 +3,7 @@
 export(construct_sqp)
 export(construct_sqp_)
 export(sqp_bind_metrics)
+export(sqp_cmv)
+export(sqp_collect)
+export(sqp_correlate)
 export(sqp_sscore)

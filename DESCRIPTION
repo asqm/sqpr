@@ -11,5 +11,8 @@ Imports:
     readr,
     purrr,
     dplyr,
-    stats
+    stats,
+    tibble
 RoxygenNote: 6.0.1
+Suggests: 
+    testthat

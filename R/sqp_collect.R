@@ -1,3 +1,11 @@
+#' Collect data from the Survey Quality Prediction database.
+#'
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
 sqp_collect <- function(...) {
   # selected_vars <- as.character(substitute(list(...))[-1])
   #
