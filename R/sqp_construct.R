@@ -1,6 +1,6 @@
 #' Construct an SQP tibble manually
 #'
-#' \code{sqp_construct} is designed to allow the user to create SQP tibbles
+#' \code{sqp_construct} is designed to to create SQP tibbles
 #' by manually inserting new metrics such as quality or validity.
 #'
 #' @param question_name a character string that will be used as the question name
@@ -8,36 +8,38 @@
 #' supports quality, reliability and validity. Can also specify one of the metrics
 #' and the remaining are set to NA by default
 #'
-#' @return a tibble of one row with the supplied metrics. It also has
+#' @return a \code{\link[tibble]{tibble}} of one row with the supplied metrics. It also has
 #' class \code{sqp} for further manipulations within the \code{sqpr} package.
 #'
-#' @details \code{construct_sqp_} is useful if you're interested in programming
+#' @details \code{sqp_construct_} is useful if you're interested in programming
 #' with \code{sqpr} rather than using it interactively. If you want to use
-#' \code{construct_sqp} inside a function, use the equivalent \code{construct_
-#' sqp_} which uses standard evaluation.
+#' \code{sqp_construct} inside a function, use the equivalent \code{sqp_construct_}
+#' which uses standard evaluation.
 #'
 #' @export
 #'
 #' @examples
 #'
-#' construct_sqp(new_question, list(quality = 0.3))
+#' sqp_construct(new_question, list(quality = 0.3))
 #'
-#' construct_sqp(new_question, list(quality = 0.3, validity = 0.2))
+#' sqp_construct(new_question, list(quality = 0.3, validity = 0.2))
 #'
 #' # Note that specifying a column which is not availabe in SQP data
 #' # will throw an error
 #'
-#' construct_sqp(new_question, list(random_col = 0.3, validity = 0.2))
-#' Error: One or more of the specified metrics don't match the SQP column names
+#' # sqp_construct(new_question, list(random_col = 0.3, validity = 0.2))
+#' # Error: One or more of the specified metrics don't match the SQP column names
 #'
-construct_sqp <- function(question_name, metrics) {
+#' # Currently only quality, reliability and validity are allowed.
+#'
+sqp_construct <- function(question_name, metrics) {
   question <- as.character(substitute(question_name))
-  construct_sqp_(question, metrics)
+  sqp_construct_(question, metrics)
 }
 
 #' @rdname sqp_construct
 #' @export
-construct_sqp_ <- function(question_name, metrics) {
+sqp_construct_ <- function(question_name, metrics) {
 
   question <- question_name
 

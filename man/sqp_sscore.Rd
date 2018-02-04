@@ -69,11 +69,5 @@ new_name = new_sumscore,
 "V1", "V2", "V3"
 )
 
-sqp_sscore(
-sqp_data = sqp_df,
-df = sample_data,
-new_name = new_sumscore,
-V1, random_var
-)
 
 }

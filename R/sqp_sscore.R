@@ -60,19 +60,11 @@
 #' "V1", "V2", "V3"
 #' )
 #'
-#' sqp_sscore(
-#' sqp_data = sqp_df,
-#' df = sample_data,
-#' new_name = new_sumscore,
-#' V1, random_var
-#' )
 #'
 sqp_sscore <- function(sqp_data, df, new_name, ...) {
 
-  if (!inherits(sqp_data, "sqp")) {
-    stop("`sqp_data` must be collected using sqp_collect()",
-         call. = FALSE)
-  }
+  # Check SQP data has correct class and formats
+  check_sqp_data(sqp_data)
 
   # Turn all variables into a list and delete the 'list'
   # from the new character vector
@@ -103,9 +95,6 @@ sqp_sscore <- function(sqp_data, df, new_name, ...) {
   }
 
   if (ncol(the_vars) < 2) stop("`df` must have at least two columns")
-
-  # Check SQP data has correct class and formats
-  check_sqp_data(sqp_data)
 
   # Select the rows with only the selected variales
   # for the sumscore
@@ -153,9 +142,10 @@ check_sqp_data <- function(sqp_data) {
 
   first_character <- is.character(sqp_data[[1]])
   all_numeric <- all(purrr::map_lgl(sqp_data[-1], is.numeric))
+  is_sqp <- inherits(sqp_data, "sqp")
 
   # Check all variables are numeric in the sqp data
-  if(!first_character | !all_numeric) {
+  if(!first_character | !all_numeric | !is_sqp) {
     stop("`sqp_data` must be collected using sqp_collect()",
          call. = FALSE)
   }

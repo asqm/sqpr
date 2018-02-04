@@ -2,7 +2,7 @@ context("test-sqp_cmv.R")
 
 
 set.seed(2131)
-library(tibble)
+suppressWarnings(library(tibble))
 
 corr_tibble <-
   sqp_correlate(matrix(rnorm(100, sd = 50), nrow = 20),
@@ -54,7 +54,7 @@ test_that("sqp_cmv throws specific errors", {
                "You need to supply at least two variables to calculate the common method variance")
 
   expect_error(sqp_cmv(corr_tibble, sqp_df, V2, V3),
-               "`y` must have non-missing values at variable/s: V2, V3")
+               "`sqp_data` must have non-missing values at variable/s: V2, V3")
 
   expect_error(sqp_cmv(corr_tibble, sqp_df, hey, other),
                "At least one variable not present in `x`: hey, other")

@@ -1,5 +1,6 @@
 context("test-sqp_sscore.R")
 
+set.seed(231321)
 library(tibble)
 sqp_df <-
   tibble(question = paste0("V", 1:5),
@@ -34,7 +35,7 @@ test_that("sqp_sscore returns correct output", {
   expect_is(result[[1]], "character")
 
   # Same result:
-  expect_equal(round(result[4, 2, drop = TRUE], 3), 0.553)
+  expect_equal(round(result[4, 2, drop = TRUE], 3), 0.563)
 })
 
 sqp_df <-

@@ -4,14 +4,14 @@
 \alias{sqp_cmv}
 \title{Adjust coefficients for Common Method Variance (CMV)}
 \usage{
-sqp_cmv(x, y, ...)
+sqp_cmv(x, sqp_data, ...)
 }
 \arguments{
 \item{x}{a correlation \code{tibble} given by \code{\link{sqp_correlate}}}
 
-\item{y}{a data frame or tibble given by \code{\link{sqp_collect}}}
+\item{sqp_data}{a \code{data frame} or \code{tibble} given by \code{\link{sqp_collect}}}
 
-\item{...}{two or more variables present in both \code{x} and \code{y}. Can
+\item{...}{two or more variables present in both \code{x} and \code{sqp_data}. Can
 be both in bare unquoted names or as character strings.}
 }
 \value{
@@ -24,7 +24,7 @@ adjusted for their common method variance.
 and adjusts the coefficients of the variables specified
 in  \code{...} with the reliability and validity coefficients given
 by \code{\link{sqp_collect}}. All variables specified in \code{...} must
-be present in both \code{x} and \code{y}.
+be present in both \code{x} and \code{sqp_data}.
 }
 \examples{
 

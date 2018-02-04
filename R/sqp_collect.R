@@ -1,11 +1,16 @@
 #' Collect data from the Survey Quality Prediction database.
 #'
-#' @param ...
+#' @param ... variable names to collect from the SQP database
 #'
-#' @return
+#' @return a tibble with the selected variables as rows and SQP metrics
+#' as columns
+#'
 #' @export
 #'
 #' @examples
+#'
+#' 5 + 5
+#'
 sqp_collect <- function(...) {
   # selected_vars <- as.character(substitute(list(...))[-1])
   #

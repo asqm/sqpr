@@ -7,8 +7,17 @@
 sqp_collect(...)
 }
 \arguments{
-\item{...}{}
+\item{...}{variable names to collect from the SQP database}
+}
+\value{
+a tibble with the selected variables as rows and SQP metrics
+as columns
 }
 \description{
 Collect data from the Survey Quality Prediction database.
+}
+\examples{
+
+5 + 5
+
 }
