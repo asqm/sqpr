@@ -59,3 +59,22 @@ test_that("sqp_cmv throws specific errors", {
   expect_error(sqp_cmv(corr_tibble, sqp_df, hey, other),
                "At least one variable not present in `x`: hey, other")
 })
+
+test_that("sqp_sscore adds sqp class to valid sqp_data", {
+  tmp <- sqp_df
+  class(tmp) <- c("tbl_df", "tbl", "data.frame")
+
+  noclass <- sqp_cmv(
+    corr_tibble,
+    sqp_data = tmp,
+    V4, V5
+  )
+
+  valid_class <- sqp_cmv(
+    corr_tibble,
+    sqp_data = sqp_df,
+    V4, V5
+  )
+  expect_identical(valid_class, noclass)
+})
+

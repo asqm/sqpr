@@ -59,15 +59,6 @@ test_that("sqp_sscore checks for arguments", {
 
   expect_error(
     sqp_sscore(
-      sqp_data = mtcars,
-      df = sample_data,
-      new_name = new_sumscore,
-      V1, V2),
-    "`sqp_data` must be collected using sqp_collect()"
-  )
-
-  expect_error(
-    sqp_sscore(
       sqp_data = sqp_df,
       df = sample_data,
       new_name = new_sumscore),
@@ -84,18 +75,6 @@ test_that("sqp_sscore checks for arguments", {
       new_name = new_sumscore,
       V1, V5),
     "V1, V5 must be numeric variables in `df`"
-  )
-
-  tmp_sqp <- sqp_df
-  tmp_sqp$quality <- as.character(tmp_sqp$quality)
-
-  expect_error(
-    sqp_sscore(
-      sqp_data = tmp_sqp,
-      df = sample_data,
-      new_name = new_sumscore,
-      V1, V5),
-    "`sqp_data` must be collected using sqp_collect()"
   )
 })
 
@@ -117,4 +96,24 @@ test_that("sqp_sscore checks variables are in both dfs", {
       V1, V6),
     "One or more variables are not present in `sqp_data`: V6"
   )
+})
+
+test_that("sqp_sscore adds sqp class to valid sqp_data", {
+  tmp <- sqp_df
+  class(tmp) <- c("tbl_df", "tbl", "data.frame")
+
+  noclass <- sqp_sscore(
+    sqp_data = tmp,
+    df = sample_data,
+    new_name = new_sumscore,
+    V1, V2
+  )
+
+  valid_class <- sqp_sscore(
+    sqp_data = sqp_df,
+    df = sample_data,
+    new_name = new_sumscore,
+    V1, V2
+  )
+  expect_identical(valid_class, noclass)
 })

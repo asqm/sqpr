@@ -159,15 +159,15 @@ sqp_reconstruct <- function(sqp_data) {
 check_sqp_data <- function(sqp_data) {
   # Check top_env$sqp_columns variables exists
 
-  metrics_available <- all(sqpr:::top_env$sqp_columns %in% names(sqp_data))
+  metrics_available <- all(top_env$sqp_columns %in% names(sqp_data))
 
   if (!metrics_available) {
-    stop("Variables ", paste0(sqpr:::top_env$sqp_columns, collapse = ", "),
-         "must be available in `sqp_data`",
+    stop("Variables ", paste0(top_env$sqp_columns, collapse = ", "),
+         " must be available in `sqp_data`",
          call. = FALSE)
   }
 
-  purrr::walk(sqp_data[sqpr:::top_env$sqp_columns], col_checker)
+  purrr::walk(sqp_data[top_env$sqp_columns], col_checker)
   if (!is.character(sqp_data[[1]])) {
     stop("First column in `sqp_data` must contain the question names as strings")
   }
@@ -177,7 +177,7 @@ col_checker <- function(x) {
   is_numeric <- is.numeric(x)
   is_perc <- all(x >= 0 & x <= 1, na.rm = TRUE)
   if (!is_numeric | !is_perc) {
-    stop(paste0(sqpr:::top_env$sqp_columns, collapse = ", "),
+    stop(paste0(top_env$sqp_columns, collapse = ", "),
          " must be numeric columns with values between/including 0 and 1 in `sqp_data`",
          call. = FALSE)
   }
