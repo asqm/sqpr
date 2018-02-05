@@ -64,7 +64,7 @@
 sqp_sscore <- function(sqp_data, df, new_name, ...) {
 
   # Check SQP data has correct class and formats
-  check_sqp_data(sqp_data)
+  sqp_data <- sqp_reconstruct(sqp_data)
 
   # Turn all variables into a list and delete the 'list'
   # from the new character vector
@@ -136,18 +136,50 @@ estimate_sscore <- function(sqp_data, df, vars_names) {
 }
 
 
-# Check the SQP data
+# Check sqp data and throw erros if it's not in correct format.
+# If it is in the correct format attach 'sqp' class if it doesn't
+# have it.
+
+# Why? Because using any of the sqp_ funs with tidyverse verbs
+# (or any other function whatsoever), drops the 'sqp' class. These
+# functions will check whether the data is in right format and assign
+# the class accordingly. It basically makes sure the data is good for
+# later processing.
+sqp_reconstruct <- function(sqp_data) {
+
+  # If sqp_data is not in the correct format, throw an error
+  check_sqp_data(sqp_data)
+
+  # If it has a correct format, then simply add the sqp class if
+  # it doesn't have it
+  if (!inherits(sqp_data, "sqp")) class(sqp_data) <- c(class(sqp_data), "sqp")
+  sqp_data
+}
+
 check_sqp_data <- function(sqp_data) {
-  stopifnot(is.data.frame(sqp_data))
+  # Check top_env$sqp_columns variables exists
 
-  first_character <- is.character(sqp_data[[1]])
-  all_numeric <- all(purrr::map_lgl(sqp_data[-1], is.numeric))
-  is_sqp <- inherits(sqp_data, "sqp")
+  metrics_available <- all(sqpr:::top_env$sqp_columns %in% names(sqp_data))
 
-  # Check all variables are numeric in the sqp data
-  if(!first_character | !all_numeric | !is_sqp) {
-    stop("`sqp_data` must be collected using sqp_collect()",
+  if (!metrics_available) {
+    stop("Variables ", paste0(sqpr:::top_env$sqp_columns, collapse = ", "),
+         "must be available in `sqp_data`",
          call. = FALSE)
+  }
+
+  purrr::walk(sqp_data[sqpr:::top_env$sqp_columns], col_checker)
+  if (!is.character(sqp_data[[1]])) {
+    stop("First column in `sqp_data` must contain the question names as strings")
   }
 }
 
+col_checker <- function(x) {
+  is_numeric <- is.numeric(x)
+  is_perc <- all(x >= 0 & x <= 1, na.rm = TRUE)
+  if (!is_numeric | !is_perc) {
+    stop(paste0(sqpr:::top_env$sqp_columns, collapse = ", "),
+         " must be numeric columns with values between/including 0 and 1 in `sqp_data`",
+         call. = FALSE)
+  }
+  invisible(TRUE)
+}

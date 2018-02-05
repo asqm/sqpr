@@ -57,7 +57,7 @@ sqp_cmv <- function(x, sqp_data, ...) {
          call. = FALSE)
   }
 
-  check_sqp_data(sqp_data)
+  sqp_data <- sqp_reconstruct(sqp_data)
 
   if (is.matrix(x)) x <- tibble::as_tibble(x, rownames = "rowname")
 
