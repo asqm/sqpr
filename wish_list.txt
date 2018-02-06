@@ -1,0 +1,2 @@
+- [] Variables in the correlation matrix in alphabetical order
+- [] Quality of the sum scores are calculated based on other than SQP estimates (highlight the fact that SQP estimates are separate from other estimates)
