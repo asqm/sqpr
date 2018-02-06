@@ -9,7 +9,7 @@ std_data <- c(2.591, 2.236, 2.167)
 var_cs <- 38.7139
 
 
-## Quality estimates
+# # Quality estimates
 # quality <-
 #   suppressMessages(suppressWarnings(read_csv2("SQPexport_20171230_2255.csv"))) %>%
 #   select(question = `Question name`,
@@ -48,8 +48,8 @@ variance_error <- function(quality, std_data) {
   purrr::map2_dbl(quality, std_data, ~ (1 - .x) * .y^2)
 }
 
-cov_both <- function(y) {
-  result <- purrr::map_dbl(y, ~ std_data[.x] * r_coef[.x] * method_e[.x])
+cov_both <- function(index, std_data, r_coef, method_e) {
+  result <- purrr::map_dbl(index, ~ std_data[.x] * r_coef[.x] * method_e[.x])
   prod(result)
 }
 
@@ -68,31 +68,44 @@ combn_multiplication <- function(comb, wt, cov_e) {
   })
 }
 
-wt <- wt
-vars_names <- select_vars
+# You need to check that all sqp data in the chosen
+# variables don't have NA's. But that is in the wrapper of estimate_sscore
 
-estimate_sscore <- function(sqp_data, df, wt, vars_names) {
+# Check that the set of weights are numeric, non-NA and
+# the same length as the number of variables
+
+estimate_sscore <- function(sqp_data, the_data, wt) {
   # 1 is validity
   # 2 is reliability
   # 3 is validity
   qr2 <- sqp_data[[top_env$sqp_columns[1]]]
   # By squaring this you actually get the reliability
   # coefficient
-  r_coe <- sqrt(sqp_data[[top_env$sqp_columns[2]]])
-  v_coe <- sqrt(sqp_data[[top_env$sqp_columns[3]]])
+  r_coef <- sqrt(sqp_data[[top_env$sqp_columns[2]]])
+  v_coef <- sqrt(sqp_data[[top_env$sqp_columns[3]]])
 
-  # variance of errors
+  # Method effect
+  method_e <- 1 - v_coef^2
+
+  std_data <- purrr::map_dbl(the_data, sd, na.rm = TRUE)
+
   var_e <- variance_error(qr2, std_data)
-  #  Σ wk2 var(ek)
+
   wk2 <- round(sum(wt^2 * var_e), 3)
 
-  # covariance of error
-  comb <- combn(seq_along(vars_names), 2, simplify = FALSE)
-  cov_e <- map_dbl(comb, cov_both)
+  cov_e <- map_dbl(seq_along(the_data),
+                   ~ cov_both(.x, std_data, r_coef, method_e))
 
+  # Here you create
+  # all combinations
+  comb <- combn(seq_along(the_data), 2, simplify = FALSE)
+
+  # you need to calculate the product of a combination
+  # of the weights by the covariance of errors.
   intm <- combn_multiplication(comb, wt, cov_e)
 
   var_ecs <- wk2 + sum(intm) * 2
+  var_composite <- stats::var(rowSums(the_data, na.rm = TRUE))
 
-  round(1 - (var_ecs / var_cs), 3)
+  round(1 - (var_ecs / var_composite), 3)
 }
