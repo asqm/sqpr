@@ -53,27 +53,46 @@ cov_both <- function(y) {
   prod(result)
 }
 
+combn_multiplication <- function(comb, wt, cov_e) {
+  # This might seem confusing but it's actually not that hard.
+  intm <- purrr::map2_dbl(comb, seq_along(comb), function(both_combn, the_seq) {
+    # both_combn is the combination of variables like 1:2, 2:3 and c(3, 1)
+    # below I grab both ends
+    separ_first <- both_combn[1]
+    separ_second <- both_combn[2]
 
-# variance of errors
-var_e <- variance_error(qr2, std_data)
-#  Σ wk2 var(ek)
-wk2 <- round(sum(wt^2 * var_e), 3)
+    # and the multiply the weigghts with the cov_e
+    # so for example wt[1] * wt[2] * cov_e[1]
+    # so for example wt[1] * wt[3] * cov_e[3]
+    purrr::map2_dbl(separ_first, separ_second, ~ wt[.x] * wt[.y] * cov_e[the_seq])
+  })
+}
 
-# Could be any other variable.
-# The seq should reflect the number of variable names
+wt <- wt
+vars_names <- select_vars
 
-# covariance of error
-comb <- combn(seq_along(select_vars), 2, simplify = FALSE)
-cov_e <- map_dbl(comb, cov_both)
+estimate_sscore <- function(sqp_data, df, wt, vars_names) {
+  # 1 is validity
+  # 2 is reliability
+  # 3 is validity
+  qr2 <- sqp_data[[top_env$sqp_columns[1]]]
+  # By squaring this you actually get the reliability
+  # coefficient
+  r_coe <- sqrt(sqp_data[[top_env$sqp_columns[2]]])
+  v_coe <- sqrt(sqp_data[[top_env$sqp_columns[3]]])
 
-intm <- map2_dbl(comb, seq_along(comb), function(both_combn, the_seq) {
-  separ_first <- both_combn[1]
-  separ_second <- both_combn[2]
-  map2_dbl(separ_first, separ_second, ~ wt[.x] * wt[.y] * cov_e[the_seq])
-})
+  # variance of errors
+  var_e <- variance_error(qr2, std_data)
+  #  Σ wk2 var(ek)
+  wk2 <- round(sum(wt^2 * var_e), 3)
 
-wkwk <- sum(intm) * 2
+  # covariance of error
+  comb <- combn(seq_along(vars_names), 2, simplify = FALSE)
+  cov_e <- map_dbl(comb, cov_both)
 
-var_ecs <- wk2 + wkwk
+  intm <- combn_multiplication(comb, wt, cov_e)
 
-round(1 - (var_ecs / var_cs), 3)
+  var_ecs <- wk2 + sum(intm) * 2
+
+  round(1 - (var_ecs / var_cs), 3)
+}
