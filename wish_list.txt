@@ -1,2 +1,4 @@
 - [] Variables in the correlation matrix in alphabetical order
 - [] Quality of the sum scores are calculated based on other than SQP estimates (highlight the fact that SQP estimates are separate from other estimates)
+- [] common method variance between the composite score and another variable, using the following equation: cmv(yi,ycs) = ri miΣ[(wk/σcs)mk rk]	- equation 7.6 (http://essedunet.nsd.uib.no/cms/topics/measurement/7/1.html)
+
