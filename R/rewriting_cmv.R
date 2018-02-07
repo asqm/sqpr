@@ -53,11 +53,6 @@ variance_error <- function(quality, std_data) {
   purrr::map2_dbl(quality, std_data, ~ (1 - .x) * .y^2)
 }
 
-cov_both <- function(index, std_data, r_coef, method_e) {
-  result <- purrr::map_dbl(index, ~ std_data[.x] * r_coef[.x] * method_e[.x])
-  prod(result)
-}
-
 combn_multiplication <- function(comb, wt, cov_e) {
   # This might seem confusing but it's actually not that hard.
   intm <- purrr::map2_dbl(comb, seq_along(comb), function(both_combn, the_seq) {
@@ -72,6 +67,31 @@ combn_multiplication <- function(comb, wt, cov_e) {
     purrr::map2_dbl(separ_first, separ_second, ~ wt[.x] * wt[.y] * cov_e[the_seq])
   })
 }
+
+# For an explanation of this see the above
+cov_both <- function(combinations, std_data, r_coef, method_e) {
+
+  # This formula is not complicated. It's simply the product of
+  # the standard deviation of the data, the r_coef and the
+  # method effect between all combination of questions.
+  cov_formula <- function(one, two, std_data, r_coef, method_e) {
+    (std_data[one] * r_coef[one] * method_e[one]) *
+      (std_data[two] * r_coef[two] * method_e[two])
+  }
+
+  # Here I apply the formula to all combinations. combinations
+  # must be a list where each slot is of length 2 with a pair
+  # combination. The whole list must contain all combinations
+  result <- purrr::map_dbl(combinations, function(index) {
+    index_one <- index[1]
+    index_two <- index[2]
+    result <- purrr::map2_dbl(index_one, index_two, cov_formula,
+                              std_data, r_coef, method_e)
+    result
+  })
+  result
+}
+
 
 # You need to check that all sqp data in the chosen
 # variables don't have NA's. But that is in the wrapper of estimate_sscore
@@ -101,20 +121,19 @@ estimate_sscore <- function(sqp_data, the_data, wt) {
 
   var_e <- variance_error(qr2, std_data)
 
-  wk2 <- round(sum(wt^2 * var_e), 3)
-
-  cov_e <- map_dbl(seq_along(the_data),
-                   ~ cov_both(.x, std_data, r_coef, method_e))
+  wk2_varek <- sum(wt^2 * var_e)
 
   # Here you create
   # all combinations
   comb <- combn(seq_along(the_data), 2, simplify = FALSE)
 
+  cov_e <- cov_both(comb, std_data, r_coef, method_e)
+
   # you need to calculate the product of a combination
   # of the weights by the covariance of errors.
   intm <- combn_multiplication(comb, wt, cov_e)
 
-  var_ecs <- wk2 + sum(intm) * 2
+  var_ecs <- wk2_varek + sum(intm) * 2
   var_composite <- stats::var(rowSums(the_data, na.rm = TRUE))
 
   1 - (var_ecs / var_composite)
