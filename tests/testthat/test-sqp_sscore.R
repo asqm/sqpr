@@ -5,8 +5,8 @@ library(tibble)
 sqp_df <-
   tibble(question = paste0("V", 1:5),
          quality = c(0.2, 0.3, 0.5, 0.6, 0.9),
-         reliability = c(NA, 0.4, 0.5, 0.5, 0.7),
-         validity = c(NA, NA, 0.6, 0.7, 0.8))
+         reliability = c(0.2, 0.4, 0.5, 0.5, 0.7),
+         validity = c(0.2, 0.6, 0.6, 0.7, 0.8))
 
 
 sqp_df <- structure(sqp_df, class = c(class(sqp_df), "sqp"))
@@ -31,18 +31,15 @@ test_that("sqp_sscore returns correct output", {
   expect_s3_class(result, "sqp")
 
   expect_equal(nrow(result), 4)
-  expect_equal(nrow(result), ncol(result))
+  expect_true(ncol(result) >= 3)
   expect_is(result[[1]], "character")
-
-  # Same result:
-  expect_equal(round(result[4, 2, drop = TRUE], 3), 0.563)
 })
 
 sqp_df <-
   tibble(question = paste0("V", 1:5),
          quality = c(0.2, 0.3, 0.5, 0.6, 0.9),
-         reliability = c(NA, 0.4, 0.5, 0.5, 0.7),
-         validity = c(NA, NA, 0.6, 0.7, 0.8),
+         reliability = c(0.1, 0.4, 0.5, 0.5, 0.7),
+         validity = c(0.4, 0.7, 0.6, 0.7, 0.8),
          random_var = NA_real_)
 
 
@@ -121,13 +118,84 @@ test_that("sqp_sscore adds sqp class to valid sqp_data", {
   expect_identical(valid_class, noclass)
 })
 
-test_that("sqp_sscore checks weights argument", {
-  estimate_sscore(sqp_data, the_data, NA)
-  estimate_sscore(sqp_data, the_data, "NA")
-  estimate_sscore(sqp_data, the_data, c(1, 1))
+test_that("sqp_sscore checks that there's non_NA's in important arguments", {
+  sqp_df <-
+    tibble(question = paste0("V", 1:5),
+           quality = c(0.2, 0.3, 0.5, 0.6, 0.9),
+           reliability = c(0.2, 0.4, 0.5, 0.5, 0.7),
+           validity = c(0.4, NA, 0.6, 0.7, 0.8),
+           random_var = NA_real_)
+
+
+  sqp_df <- structure(sqp_df, class = c(class(sqp_df), "sqp"))
+
+  expect_error(
+    sqp_sscore(
+    sqp_df,
+    sample_data,
+    new_name = new_sumscore,
+    V1, V2
+  ),
+  "`sqp_data` must have non-missing values at variable/s: quality, reliability, validity")
+
+  sqp_df$validity[is.na(sqp_df$validity)] <- 0.5
+
+
+  expect_error(
+    sqp_sscore(
+      sqp_df,
+      sample_data,
+      new_name = new_sumscore,
+      V1, V2,
+      wt = NA,
+    "`weights` must be a non-NA numeric vector with the same length as the number of variables")
+  )
+
+  expect_error(
+    sqp_sscore(
+      sqp_df,
+      sample_data,
+      new_name = new_sumscore,
+      V1, V2,
+      wt = 1,
+      "`weights` must be a non-NA numeric vector with the same length as the number of variables")
+  )
+
+  expect_error(
+    sqp_sscore(
+      sqp_df,
+      sample_data,
+      new_name = new_sumscore,
+      V1, V2,
+      wt = c(1, 2),
+      "`weights` must be a non-NA numeric vector with the same length as the number of variables")
+  )
 })
 
 
+
 test_that("sqp_sscore returns the exact result to decimal points", {
-  0.9799974
+  selected_vars <- c("trstprl", "trstplt", "trstprt")
+  the_data <- ess::ess_country("Spain", 7, "cimentadaj@gmail.com")[selected_vars]
+
+  # # Quality estimates
+  quality <-
+    structure(list(question = c("ppltrst", "polintr", "psppsgv",
+                                "psppipl", "ptcpplt", "stflife", "stfeco", "stfedu", "stfhlth",
+                                "trstprl", "trstplt", "trstprt"), reliability = c(0.729, 0.659,
+                                                                                  0.761, 0.757, 0.758, 0.716, 0.823, 0.729, 0.762, 0.815, 0.826,
+                                                                                  0.854), validity = c(0.951, 0.964, 0.933, 0.932, 0.932, 0.899,
+                                                                                                       0.903, 0.827, 0.863, 0.944, 0.975, 0.898), quality = c(0.693,
+                                                                                                                                                              0.636, 0.71, 0.705, 0.707, 0.644, 0.743, 0.602, 0.658, 0.77,
+                                                                                                                                                              0.805, 0.767), r_coef = c(0.854, 0.812, 0.872, 0.87, 0.871, 0.846,
+                                                                                                                                                                                        0.907, 0.854, 0.873, 0.903, 0.909, 0.924), v_coef = c(0.975,
+                                                                                                                                                                                                                                              0.982, 0.966, 0.965, 0.965, 0.948, 0.95, 0.909, 0.929, 0.972,
+                                                                                                                                                                                                                                              0.987, 0.948), q_coef = c(0.833, 0.797, 0.843, 0.84, 0.841, 0.803,
+                                                                                                                                                                                                                                                                        0.862, 0.776, 0.811, 0.877, 0.897, 0.876)), .Names = c("question",
+                                                                                                                                                                                                                                                                                                                               "reliability", "validity", "quality", "r_coef", "v_coef", "q_coef"
+                                                                                                                                                                                                                                                                        ), class = c("tbl_df", "tbl", "data.frame"), row.names = c(NA,
+                                                                                                                                                                                                                                                                                                                                   -12L))
+
+  score <- estimate_sscore(quality[quality$question %in% selected_vars, ], the_data, wt = NULL)
+  expect_equal(score, 0.9799974, tolerance = 0.01)
 })

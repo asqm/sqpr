@@ -15,8 +15,9 @@
 #' must be present in \code{sqp_data} and \code{df}. At minimum, it must
 #' be two or more variable names.
 #'
-#' @param weights a non-NA numeric vector of the same length as the variables
-#' specified in \code{...}. Be default, all variables are given the same weight.
+#' @param wt a non-NA numeric vector of the same length as the variables
+#' specified in \code{...}. This will be used as weights in calculating the
+#' sum scores of all variable. Be default, all variables are given the same weight.
 #'
 #' @return a \code{\link[tibble]{tibble}} similar to \code{sqp_data} but
 #' with a new row containing the sum score with the name specified in
@@ -63,7 +64,7 @@
 #' )
 #'
 #'
-sqp_sscore <- function(sqp_data, df, new_name, ..., weights = NULL) {
+sqp_sscore <- function(sqp_data, df, new_name, ..., wt = NULL) {
 
   # Check SQP data has correct class and formats
   sqp_data <- sqp_reconstruct(sqp_data)
@@ -109,14 +110,16 @@ sqp_sscore <- function(sqp_data, df, new_name, ..., weights = NULL) {
   }
 
   new_estimate <-
-    columns_sqp("quality", estimate_sscore(sqp_scores, the_vars, wt = weights))
+    columns_sqp("quality", estimate_sscore(sqp_scores, the_vars, wt = wt))
 
   additional_rows <- generic_sqp(summary_name, new_estimate)
 
   # Bind the unselected questions with the new sumscore
   combined_matrix <- dplyr::bind_rows(sqp_data[!rows_to_pick, ], additional_rows)
+  correct_order <- c("question", top_env$sqp_columns)
+  new_order <- combined_matrix[c(correct_order, setdiff(names(combined_matrix), correct_order))]
 
-  structure(combined_matrix, class = c(class(combined_matrix), "sqp"))
+  structure(new_order, class = c(class(new_order), "sqp"))
 }
 
 # This is not supposed to be used in isolation.
@@ -132,7 +135,7 @@ estimate_sscore <- function(sqp_data, the_data, wt) {
   correct_length <- length(wt) == ncol(the_data)
 
   if (!is_numeric | is_na | !correct_length) {
-    stop("`weights` must be a non-NA numeric vector with the same length as the number of variables")
+    stop("`wt` must be a non-NA numeric vector with the same length as the number of variables")
   }
 
   # 1 is validity
