@@ -109,7 +109,7 @@ sqp_sscore <- function(sqp_data, df, new_name, ..., weights = NULL) {
   }
 
   new_estimate <-
-    columns_sqp("quality", estimate_sscore(sqp_scores, the_vars, vars_names, wt = weights))
+    columns_sqp("quality", estimate_sscore(sqp_scores, the_vars, wt = weights))
 
   additional_rows <- generic_sqp(summary_name, new_estimate)
 
