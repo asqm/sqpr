@@ -45,8 +45,8 @@ library(tibble)
 sqp_df <-
 tibble(question = paste0("V", 1:5),
        quality = c(0.2, 0.3, 0.5, 0.6, 0.9),
-       reliability = c(NA, 0.4, 0.5, 0.5, 0.7),
-       validity = c(NA, NA, 0.6, 0.7, 0.8))
+       reliability = c(0.2, 0.4, 0.5, 0.5, 0.7),
+       validity = c(0.8, 0.1, 0.6, 0.7, 0.8))
 
 
 sqp_df <- structure(sqp_df, class = c(class(sqp_df), "sqp"))

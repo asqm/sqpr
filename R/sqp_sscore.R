@@ -35,8 +35,8 @@
 #' sqp_df <-
 #' tibble(question = paste0("V", 1:5),
 #'        quality = c(0.2, 0.3, 0.5, 0.6, 0.9),
-#'        reliability = c(NA, 0.4, 0.5, 0.5, 0.7),
-#'        validity = c(NA, NA, 0.6, 0.7, 0.8))
+#'        reliability = c(0.2, 0.4, 0.5, 0.5, 0.7),
+#'        validity = c(0.8, 0.1, 0.6, 0.7, 0.8))
 #'
 #'
 #' sqp_df <- structure(sqp_df, class = c(class(sqp_df), "sqp"))
@@ -150,7 +150,7 @@ estimate_sscore <- function(sqp_data, the_data, wt) {
   # Method effect
   method_e <- sqrt(1 - v_coef^2)
 
-  std_data <- purrr::map_dbl(the_data, sd, na.rm = TRUE)
+  std_data <- purrr::map_dbl(the_data, stats::sd, na.rm = TRUE)
 
   var_e <- variance_error(qr2, std_data)
 
@@ -158,9 +158,9 @@ estimate_sscore <- function(sqp_data, the_data, wt) {
 
   # Here you create
   # all combinations
-  comb <- combn(seq_along(the_data), 2, simplify = FALSE)
+  comb <- utils::combn(seq_along(the_data), 2, simplify = FALSE)
 
-  cov_e <- cov_both(comb, std_data, r_coef, method_e)
+  cov_e <- cov_both(comb, r_coef, method_e)
 
   # you need to calculate the product of a combination
   # of the weights by the covariance of errors.
@@ -192,14 +192,14 @@ combn_multiplication <- function(comb, wt, cov_e) {
 }
 
 # For an explanation of this see the above
-cov_both <- function(combinations, std_data, r_coef, method_e) {
+cov_both <- function(combinations, r_coef, method_e) {
 
   # This formula is not complicated. It's simply the product of
   # the standard deviation of the data, the r_coef and the
   # method effect between all combination of questions.
-  cov_formula <- function(one, two, std_data, r_coef, method_e) {
-    (std_data[one] * r_coef[one] * method_e[one]) *
-      (std_data[two] * r_coef[two] * method_e[two])
+  cov_formula <- function(one, two, r_coef, method_e) {
+    (r_coef[one] * method_e[one]) *
+      (r_coef[two] * method_e[two])
   }
 
   # Here I apply the formula to all combinations. combinations
@@ -209,7 +209,7 @@ cov_both <- function(combinations, std_data, r_coef, method_e) {
     index_one <- index[1]
     index_two <- index[2]
     result <- purrr::map2_dbl(index_one, index_two, cov_formula,
-                              std_data, r_coef, method_e)
+                              r_coef, method_e)
     result
   })
   result
