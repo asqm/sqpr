@@ -4,7 +4,7 @@
 \alias{sqp_sscore}
 \title{Calculate sum score of selected variables}
 \usage{
-sqp_sscore(sqp_data, df, new_name, ...)
+sqp_sscore(sqp_data, df, new_name, ..., weights = NULL)
 }
 \arguments{
 \item{sqp_data}{a data frame given by \code{sqp_collect} containing
@@ -20,6 +20,9 @@ of the new sum score.}
 the variable names from which to estimate the sum score. They all
 must be present in \code{sqp_data} and \code{df}. At minimum, it must
 be two or more variable names.}
+
+\item{weights}{a non-NA numeric vector of the same length as the variables
+specified in \code{...}. Be default, all variables are given the same weight.}
 }
 \value{
 a \code{\link[tibble]{tibble}} similar to \code{sqp_data} but

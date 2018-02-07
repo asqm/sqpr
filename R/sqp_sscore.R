@@ -15,6 +15,8 @@
 #' must be present in \code{sqp_data} and \code{df}. At minimum, it must
 #' be two or more variable names.
 #'
+#' @param weights a non-NA numeric vector of the same length as the variables
+#' specified in \code{...}. Be default, all variables are given the same weight.
 #'
 #' @return a \code{\link[tibble]{tibble}} similar to \code{sqp_data} but
 #' with a new row containing the sum score with the name specified in
@@ -61,7 +63,7 @@
 #' )
 #'
 #'
-sqp_sscore <- function(sqp_data, df, new_name, ...) {
+sqp_sscore <- function(sqp_data, df, new_name, ..., weights = NULL) {
 
   # Check SQP data has correct class and formats
   sqp_data <- sqp_reconstruct(sqp_data)
@@ -99,10 +101,15 @@ sqp_sscore <- function(sqp_data, df, new_name, ...) {
   # Select the rows with only the selected variales
   # for the sumscore
   rows_to_pick <- sqp_data[[1]] %in% vars_names
-  sqp_scores <- sqp_data[rows_to_pick, 2, drop = TRUE]
+  sqp_scores <- sqp_data[rows_to_pick, top_env$sqp_columns]
+
+  if (anyNA(sqp_scores)) {
+    stop("`sqp_data` must have non-missing values at variable/s: ",
+         paste0(top_env$sqp_columns, collapse = ", "))
+  }
 
   new_estimate <-
-    columns_sqp("quality", estimate_sscore(sqp_scores, the_vars, vars_names))
+    columns_sqp("quality", estimate_sscore(sqp_scores, the_vars, vars_names, wt = weights))
 
   additional_rows <- generic_sqp(summary_name, new_estimate)
 
@@ -116,70 +123,91 @@ sqp_sscore <- function(sqp_data, df, new_name, ...) {
 # Rather with measurement quality as a wrapper
 # because it checks all of the arguments are in
 # the correct format, etc..
-estimate_sscore <- function(sqp_data, df, vars_names) {
+estimate_sscore <- function(sqp_data, the_data, wt) {
 
-  # Calculate the sum score and it's variance
-  var_sumscore <- stats::var(rowSums(df, na.rm = TRUE), na.rm = TRUE)
+  if (is.null(wt)) wt <- rep(1/length(the_data), length(the_data))
 
-  # Calculat variable of each of the selected variables
-  var_othervars <- purrr::map_dbl(df, stats::var, na.rm = TRUE)
+  is_numeric <- is.numeric(wt)
+  is_na <- anyNA(wt)
+  correct_length <- length(wt) == ncol(the_data)
 
-  # Each sqp score is subtracted a 1 and multiplied
-  # by it's corresponding var_* variables
-  adj_sqp <- (1 - sqp_data) *  var_othervars
-
-  # This new vector is summed and divided by the variance of the sumscore
-  # and 1 is subtracted from the final result
-  final_result <- 1 - sum(adj_sqp) / var_sumscore
-
-  final_result
-}
-
-
-# Check sqp data and throw erros if it's not in correct format.
-# If it is in the correct format attach 'sqp' class if it doesn't
-# have it.
-
-# Why? Because using any of the sqp_ funs with tidyverse verbs
-# (or any other function whatsoever), drops the 'sqp' class. These
-# functions will check whether the data is in right format and assign
-# the class accordingly. It basically makes sure the data is good for
-# later processing.
-sqp_reconstruct <- function(sqp_data) {
-
-  # If sqp_data is not in the correct format, throw an error
-  check_sqp_data(sqp_data)
-
-  # If it has a correct format, then simply add the sqp class if
-  # it doesn't have it
-  if (!inherits(sqp_data, "sqp")) class(sqp_data) <- c(class(sqp_data), "sqp")
-  sqp_data
-}
-
-check_sqp_data <- function(sqp_data) {
-  # Check top_env$sqp_columns variables exists
-
-  metrics_available <- all(top_env$sqp_columns %in% names(sqp_data))
-
-  if (!metrics_available) {
-    stop("Variables ", paste0(top_env$sqp_columns, collapse = ", "),
-         " must be available in `sqp_data`",
-         call. = FALSE)
+  if (!is_numeric | is_na | !correct_length) {
+    stop("`weights` must be a non-NA numeric vector with the same length as the number of variables")
   }
 
-  purrr::walk(sqp_data[top_env$sqp_columns], col_checker)
-  if (!is.character(sqp_data[[1]])) {
-    stop("First column in `sqp_data` must contain the question names as strings")
-  }
+  # 1 is validity
+  # 2 is reliability
+  # 3 is validity
+  qr2 <- sqp_data[[top_env$sqp_columns[1]]]
+  # By squaring this you actually get the reliability
+  # coefficient.
+  r_coef <- sqrt(sqp_data[[top_env$sqp_columns[2]]])
+  v_coef <- sqrt(sqp_data[[top_env$sqp_columns[3]]])
+
+  # Method effect
+  method_e <- sqrt(1 - v_coef^2)
+
+  std_data <- purrr::map_dbl(the_data, sd, na.rm = TRUE)
+
+  var_e <- variance_error(qr2, std_data)
+
+  wk2_varek <- sum(wt^2 * var_e)
+
+  # Here you create
+  # all combinations
+  comb <- combn(seq_along(the_data), 2, simplify = FALSE)
+
+  cov_e <- cov_both(comb, std_data, r_coef, method_e)
+
+  # you need to calculate the product of a combination
+  # of the weights by the covariance of errors.
+  intm <- combn_multiplication(comb, wt, cov_e)
+
+  var_ecs <- wk2_varek + sum(intm) * 2
+  var_composite <- stats::var(rowSums(the_data, na.rm = TRUE))
+
+  1 - (var_ecs / var_composite)
 }
 
-col_checker <- function(x) {
-  is_numeric <- is.numeric(x)
-  is_perc <- all(x >= 0 & x <= 1, na.rm = TRUE)
-  if (!is_numeric | !is_perc) {
-    stop(paste0(top_env$sqp_columns, collapse = ", "),
-         " must be numeric columns with values between/including 0 and 1 in `sqp_data`",
-         call. = FALSE)
+variance_error <- function(quality, std_data) {
+  purrr::map2_dbl(quality, std_data, ~ (1 - .x) * .y^2)
+}
+
+combn_multiplication <- function(comb, wt, cov_e) {
+  # This might seem confusing but it's actually not that hard.
+  intm <- purrr::map2_dbl(comb, seq_along(comb), function(both_combn, the_seq) {
+    # both_combn is the combination of variables like 1:2, 2:3 and c(3, 1)
+    # below I grab both ends
+    separ_first <- both_combn[1]
+    separ_second <- both_combn[2]
+
+    # and the multiply the weigghts with the cov_e
+    # so for example wt[1] * wt[2] * cov_e[1]
+    # so for example wt[1] * wt[3] * cov_e[3]
+    purrr::map2_dbl(separ_first, separ_second, ~ wt[.x] * wt[.y] * cov_e[the_seq])
+  })
+}
+
+# For an explanation of this see the above
+cov_both <- function(combinations, std_data, r_coef, method_e) {
+
+  # This formula is not complicated. It's simply the product of
+  # the standard deviation of the data, the r_coef and the
+  # method effect between all combination of questions.
+  cov_formula <- function(one, two, std_data, r_coef, method_e) {
+    (std_data[one] * r_coef[one] * method_e[one]) *
+      (std_data[two] * r_coef[two] * method_e[two])
   }
-  invisible(TRUE)
+
+  # Here I apply the formula to all combinations. combinations
+  # must be a list where each slot is of length 2 with a pair
+  # combination. The whole list must contain all combinations
+  result <- purrr::map_dbl(combinations, function(index) {
+    index_one <- index[1]
+    index_two <- index[2]
+    result <- purrr::map2_dbl(index_one, index_two, cov_formula,
+                              std_data, r_coef, method_e)
+    result
+  })
+  result
 }

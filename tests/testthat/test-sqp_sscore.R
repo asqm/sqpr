@@ -76,6 +76,9 @@ test_that("sqp_sscore checks for arguments", {
       V1, V5),
     "V1, V5 must be numeric variables in `df`"
   )
+
+  ## NOTEEEE##
+  ## Check that all sqp_data are non-NA in all variables selected
 })
 
 test_that("sqp_sscore checks variables are in both dfs", {
@@ -116,4 +119,15 @@ test_that("sqp_sscore adds sqp class to valid sqp_data", {
     V1, V2
   )
   expect_identical(valid_class, noclass)
+})
+
+test_that("sqp_sscore checks weights argument", {
+  estimate_sscore(sqp_data, the_data, NA)
+  estimate_sscore(sqp_data, the_data, "NA")
+  estimate_sscore(sqp_data, the_data, c(1, 1))
+})
+
+
+test_that("sqp_sscore returns the exact result to decimal points", {
+  0.9799974
 })
