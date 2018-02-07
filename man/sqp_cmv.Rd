@@ -54,7 +54,7 @@ corr_tibble
 # when adjusting for common method variance
 sqp_cmv(corr_tibble, sqp_df, V4, V5)
 
-# The V5*V4 cell from the lower triangle of the
+# The V5*V4 from both the upper/lower triangles
 # correlation matrix changed from -0.137 to -0.282
 
 }
