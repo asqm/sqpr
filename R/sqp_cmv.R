@@ -6,7 +6,8 @@
 #' by \code{\link{sqp_collect}}. All variables specified in \code{...} must
 #' be present in both \code{x} and \code{sqp_data}.
 #'
-#' @param x a correlation \code{tibble} given by \code{\link{sqp_correlate}}
+#' @param x a correlation matrix or a correlation \code{tibble}
+#'  given by \code{\link{sqp_correlate}}
 #' @param sqp_data a \code{data frame} or \code{tibble} given by \code{\link{sqp_collect}}
 #' @param ... two or more variables present in both \code{x} and \code{sqp_data}. Can
 #' be both in bare unquoted names or as character strings.

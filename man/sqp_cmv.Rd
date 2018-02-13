@@ -7,7 +7,8 @@
 sqp_cmv(x, sqp_data, ...)
 }
 \arguments{
-\item{x}{a correlation \code{tibble} given by \code{\link{sqp_correlate}}}
+\item{x}{a correlation matrix or a correlation \code{tibble}
+given by \code{\link{sqp_correlate}}}
 
 \item{sqp_data}{a \code{data frame} or \code{tibble} given by \code{\link{sqp_collect}}}
 
