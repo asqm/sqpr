@@ -178,6 +178,8 @@ test_that("sqp_sscore returns the exact result to decimal points", {
   selected_vars <- c("trstprl", "trstplt", "trstprt")
   the_data <- ess::ess_country("Spain", 7, "cimentadaj@gmail.com")[selected_vars]
 
+  the_data <-  purrr::map_dfc(the_data, ~ {.x[.x > 10] <- NA; .x})
+
   # # Quality estimates
   quality <-
     structure(list(question = c("ppltrst", "polintr", "psppsgv",
@@ -197,5 +199,5 @@ test_that("sqp_sscore returns the exact result to decimal points", {
                                                                                                                                                                                                                                                                                                                                    -12L))
 
   score <- estimate_sscore(quality[quality$question %in% selected_vars, ], the_data, wt = NULL)
-  expect_equal(score, 0.985193, tolerance = 0.01)
+  expect_equal(score, 0.867985, tolerance = 0.01)
 })
