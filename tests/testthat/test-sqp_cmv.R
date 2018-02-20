@@ -74,16 +74,18 @@ test_that("sqp_cmv throws specific errors", {
 })
 
 test_that("sqp_cmv replaces upper and lower triangle", {
+  up_equal <- function(x) {
+    tp <- x[-1]
+    all(sort(tp[lower.tri(tp)]) == sort(tp[upper.tri(tp)]))
+  }
+
   # Two variables
-  cmv_tib <- sqp_cmv(corr_tibble, sqp_df, V4, V5)
-  matr <- cmv_tib[cmv_tib$rowname %in% c("V4", "V5"), ]
-  expect_equal(matr[1, 6, drop = TRUE], matr[2, 5, drop = TRUE])
+  cmv_tib <- as.data.frame(sqp_cmv(corr_tibble, sqp_df, V4, V5))
+  expect_true(up_equal(cmv_tib))
 
   # Three variables
-  cmv_tib <- sqp_cmv(corr_tibble, sqp_df, V3, V4, V5)
-  matr <- as.matrix(cmv_tib[cmv_tib$rowname %in% c("V3", "V4", "V5"), c("V3", "V4", "V5")])
-  expect_equal(matr[lower.tri(matr)], matr[upper.tri(matr)])
-
+  cmv_tib <- as.data.frame(sqp_cmv(corr_tibble, sqp_df, V3, V4, V5))
+  expect_true(up_equal(cmv_tib))
 })
 
 test_that("sqp_sscore adds sqp class to valid sqp_data", {

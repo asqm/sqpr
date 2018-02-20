@@ -110,27 +110,15 @@ estimate_cmv <- function(sqp_data) {
 # This function is the one doing the replacement of the upper
 # and lower of the correlation matrix.
 corr2cmv <- function(x, cmv, cmv_vars) {
-  # Here I sort because if not I would be
-  # getting the index of the upper triangle
-  # and we want to work with the lower.tri
   x_row_low <- sort(match(cmv_vars, x[[1]]))
   x_col_low <- sort(match(cmv_vars, names(x)))
-  x_row_up <- match(cmv_vars, x[[1]])
-  x_col_up <- match(cmv_vars, names(x))
-
 
   x <- as.data.frame(x)
 
-  # Because we only want to adjust the triangle
-  # below the diagonal, we ignore the upper triangle.
-  # The upper triangle will be eliminated in future call.
   p <- x[x_row_low, x_col_low] # subset only the select variables
   p[lower.tri(p)] <- p[lower.tri(p)] - cmv # adjust the lower.tri
-  x[x_row_low, x_col_low] <- p # replace in the original data.frame
-
-  p <- x[x_row_up, x_col_up] # subset only the select variables
   p[upper.tri(p)] <- p[upper.tri(p)] - cmv # adjust the upper.tri
-  x[x_row_up, x_col_up] <- p # replace in the original data.frame
+  x[x_row_low, x_col_low] <- p # replace in the original data.frame
 
   x
 }
