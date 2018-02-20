@@ -5,3 +5,4 @@
 - [] Fow now not done that "we can also calculate the common method variance between the composite score and another variable, using the following equation:
 		cmv(yi,ycs) = ri miΣ[(wk/σcs)mk rk]	equation 7.6 (http://essedunet.nsd.uib.no/cms/topics/measurement/7/1.html)
 
+- If the same variable is specified twice in any of sqp_* functions, use only the unique
