@@ -22,7 +22,6 @@ sqp_df <-
 
 sqp_df <- structure(sqp_df, class = c(class(sqp_df), "sqp"))
 
-
 test_that("sqp_cmv returns correct output", {
   cmv_tib <- sqp_cmv(corr_tibble, sqp_df, V4, V5)
   expect_is(cmv_tib, "data.frame")
@@ -46,6 +45,20 @@ test_that("sqp_cmv returns correct output", {
                    sqp_cmv(corr_tibble, sqp_df, "V4", "V5"))
 })
 
+test_that("sqp_cmv uses only unique variable names", {
+  cmv_tib <- sqp_cmv(corr_tibble, sqp_df, V4, V5, V5)
+  expect_is(cmv_tib, "data.frame")
+
+  # First column is the row names
+  expect_is(cmv_tib[[1]], "character")
+
+  # All other columns are numeric
+  expect_true(all(vapply(cmv_tib[-1], is.numeric, FUN.VALUE = logical(1))))
+
+  # df is symmetric when excluding the rowname variables
+  expect_equal(nrow(cmv_tib), ncol(cmv_tib) - 1)
+})
+
 test_that("sqp_cmv throws specific errors", {
   expect_error(sqp_cmv(corr_tibble, sqp_df),
                "You need to supply at least two variables to calculate the common method variance")
@@ -58,6 +71,19 @@ test_that("sqp_cmv throws specific errors", {
 
   expect_error(sqp_cmv(corr_tibble, sqp_df, hey, other),
                "At least one variable not present in `x`: hey, other")
+})
+
+test_that("sqp_cmv replaces upper and lower triangle", {
+  # Two variables
+  cmv_tib <- sqp_cmv(corr_tibble, sqp_df, V4, V5)
+  matr <- cmv_tib[cmv_tib$rowname %in% c("V4", "V5"), ]
+  expect_equal(matr[1, 6, drop = TRUE], matr[2, 5, drop = TRUE])
+
+  # Three variables
+  cmv_tib <- sqp_cmv(corr_tibble, sqp_df, V3, V4, V5)
+  matr <- as.matrix(cmv_tib[cmv_tib$rowname %in% c("V3", "V4", "V5"), c("V3", "V4", "V5")])
+  expect_equal(matr[lower.tri(matr)], matr[upper.tri(matr)])
+
 })
 
 test_that("sqp_sscore adds sqp class to valid sqp_data", {

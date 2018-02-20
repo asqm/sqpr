@@ -21,7 +21,8 @@ the correlation coefficients of the variables supplied in \code{...}
 adjusted for their common method variance.
 }
 \description{
-\code{sqp_cmv} takes a correlation tibble from \code{\link{sqp_correlate}}
+\code{sqp_cmv} accepts a correlation matrix or a correlation
+tibble from \code{\link{sqp_correlate}}
 and adjusts the coefficients of the variables specified
 in  \code{...} with the reliability and validity coefficients given
 by \code{\link{sqp_collect}}. All variables specified in \code{...} must

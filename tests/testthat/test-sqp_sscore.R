@@ -35,6 +35,24 @@ test_that("sqp_sscore returns correct output", {
   expect_is(result[[1]], "character")
 })
 
+test_that("sqp_sscore uses only unique variable names", {
+  result <-
+    sqp_sscore(
+      sqp_data = sqp_df,
+      df = sample_data,
+      new_name = new_sumscore,
+      V3, V4, V4
+    )
+
+  expect_s3_class(result, "data.frame")
+  expect_s3_class(result, "sqp")
+
+  expect_equal(nrow(result), 4)
+  expect_true(ncol(result) >= 3)
+  expect_is(result[[1]], "character")
+})
+
+
 sqp_df <-
   tibble(question = paste0("V", 1:5),
          quality = c(0.2, 0.3, 0.5, 0.6, 0.9),

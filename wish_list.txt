@@ -4,5 +4,3 @@
 - [] For now we only have an unweighted sum score. For a weighted sum score, i.e. that the variables that form the sum score have weights, we also need to include this weights in the calculcation of the quality. 
 - [] Fow now not done that "we can also calculate the common method variance between the composite score and another variable, using the following equation:
 		cmv(yi,ycs) = ri miΣ[(wk/σcs)mk rk]	equation 7.6 (http://essedunet.nsd.uib.no/cms/topics/measurement/7/1.html)
-
-- If the same variable is specified twice in any of sqp_* functions, use only the unique

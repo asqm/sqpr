@@ -1,6 +1,7 @@
 #' Adjust coefficients for Common Method Variance (CMV)
 #'
-#' \code{sqp_cmv} takes a correlation tibble from \code{\link{sqp_correlate}}
+#' \code{sqp_cmv} accepts a correlation matrix or a correlation
+#' tibble from \code{\link{sqp_correlate}}
 #' and adjusts the coefficients of the variables specified
 #' in  \code{...} with the reliability and validity coefficients given
 #' by \code{\link{sqp_collect}}. All variables specified in \code{...} must
@@ -51,7 +52,7 @@
 #' # correlation matrix changed from -0.137 to -0.282
 #'
 sqp_cmv <- function(x, sqp_data, ...) {
-  cmv_vars <- as.character(substitute(list(...)))[-1]
+  cmv_vars <- unique(as.character(substitute(list(...)))[-1])
 
   if (length(cmv_vars) < 2) {
     stop("You need to supply at least two variables to calculate the common method variance",
@@ -102,13 +103,12 @@ estimate_cmv <- function(sqp_data) {
   first_part <- sqrt(sqp_data[["reliability"]])
   second_part <- sqrt(1 - sqp_data[["validity"]])
 
-  cmv <- purrr::reduce(c(first_part, second_part), `*`)
+  cmv <- prod(c(first_part, second_part))
   cmv
 }
 
-# This function is the one doing the replacing in
-# the correlation matrix. It adjusts only the
-# lower.tri of the matrix.
+# This function is the one doing the replacement of the upper
+# and lower of the correlation matrix.
 corr2cmv <- function(x, cmv, cmv_vars) {
   # Here I sort because if not I would be
   # getting the index of the upper triangle

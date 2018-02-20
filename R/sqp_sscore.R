@@ -71,8 +71,8 @@ sqp_sscore <- function(sqp_data, df, new_name, ..., wt = NULL) {
 
   # Turn all variables into a list and delete the 'list'
   # from the new character vector
-  vars_names <- as.character(substitute(list(...)))[-1]
-  summary_name <- as.character(substitute(new_name))
+  vars_names <- unique(as.character(substitute(list(...)))[-1])
+  summary_name <- unique(as.character(substitute(new_name)))
 
   # Check all variables present in df
   vars_not_matched <- !vars_names %in% names(df)
