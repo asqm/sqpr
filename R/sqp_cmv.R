@@ -1,18 +1,15 @@
 #' Adjust a correlation matrix for Common Method Variance (CMV)
 #'
-#' \code{sqp_cmv} accepts a correlation matrix or a correlation
+#' \code{sqp_cmv} accepts a correlation matrix, a data frame matrix or a correlation
 #' tibble from \code{\link{sqp_correlate}}
 #' and adjusts the coefficients of the variables specified
 #' in  \code{...} with the reliability and validity coefficients given
-#' by \code{\link{sqp_collect}}. All variables specified in \code{...} must
+#' by \code{\link{sqp_data}}. All variables specified in \code{...} must
 #' be present in both \code{x} and \code{sqp_data}. Optionally, you can supply
 #' the cmv coefficient in the argument \code{cmv}.
 #'
 #' @param x a correlation matrix, a correlation data frame or a correlation
-#'  \code{tibble} given by \code{\link{sqp_correlate}}. If any of the previous
-#'  have row names, they're moved as a column called 'rowname'. If they don't
-#'  have row names or a column named 'rowname' a new column is created with
-#'  the column names to mimic a correlation matrix.
+#'  \code{tibble} given by \code{\link{sqp_correlate}}.
 #' @param sqp_data a data frame or tibble of class \code{sqp} given by \code{sqp_collect}.
 #' @param ... two or more variables present in both \code{x} and \code{sqp_data}. Can
 #' be both in bare unquoted names or as character strings.
@@ -24,6 +21,10 @@
 #' @return the same matrix supplied in \code{x} but as a tibble with
 #' the correlation coefficients of the variables supplied in \code{...}
 #' adjusted for their common method variance.
+#' If \code{x}  had row names, they're moved as a column called
+#' 'rowname'. If it doesnt have row names or a column named 'rowname' a new
+#' column is created with the column names to mimic a correlation matrix.
+#'
 #' @export
 #'
 #' @seealso \code{\link{sqp_correlate}} and \code{\link{sqp_collect}} for the correct
