@@ -8,8 +8,11 @@
 #' be present in both \code{x} and \code{sqp_data}. Optionally, you can supply
 #' the cmv coefficient in the argument \code{cmv}.
 #'
-#' @param x a correlation matrix or a correlation \code{tibble}
-#'  given by \code{\link{sqp_correlate}}
+#' @param x a correlation matrix, a correlation data frame or a correlation
+#'  \code{tibble} given by \code{\link{sqp_correlate}}. If any of the previous
+#'  have row names, they're moved as a column called 'rowname'. If they don't
+#'  have row names or a column named 'rowname' a new column is created with
+#'  the column names to mimic a correlation matrix.
 #' @param sqp_data a data frame or tibble of class \code{sqp} given by \code{sqp_collect}.
 #' @param ... two or more variables present in both \code{x} and \code{sqp_data}. Can
 #' be both in bare unquoted names or as character strings.
@@ -60,7 +63,9 @@
 sqp_cmv <- function(x, sqp_data, ..., cmv = NULL) {
   cmv_vars <- unique(as.character(substitute(list(...)))[-1])
 
-  if (!(is.data.frame(x) | is.matrix(x))) stop("`x` must be a correlation data frame or matrix")
+  if (!(is.data.frame(x) | is.matrix(x))) {
+    stop("`x` must be a correlation data frame or matrix")
+  }
 
   if (length(cmv_vars) < 2) {
     stop("You need to supply at least two variables to calculate the Common Method Variance",
@@ -69,7 +74,7 @@ sqp_cmv <- function(x, sqp_data, ..., cmv = NULL) {
 
   sqp_data <- sqp_reconstruct(sqp_data, c("reliability", "validity"))
 
-  if (is.matrix(x)) x <- tibble::as_tibble(x, rownames = "rowname")
+  x <- matrix2tibble(x)
 
   # Check if all supplied variables are present in both
   # dfs
@@ -153,3 +158,25 @@ corr2cmv <- function(x, cmv, cmv_vars) {
 }
 
 
+matrix2tibble <- function(x) {
+  has_rowname_col <- "rowname" %in% names(x)
+
+  # It has a column rowname and is a tibble
+  # then it's porbbaly from sqp_correlate
+  if (tibble::has_name(x, "rowname") && tibble::is_tibble(x)) {
+    return(x)
+  } else if (tibble::has_rownames(x) & !has_rowname_col) {
+    # If it has rownames and doesn't have a row name column
+    # turn into tibble with row name column
+    return(tibble::as_tibble(x, rownames = "rowname"))
+  }
+
+  x <- tibble::as_tibble(x)
+
+  if (!tibble::has_rownames(x) & !has_rowname_col) {
+    x <- tibble::add_column(x,
+                            rowname = names(x),
+                            .before = 1)
+  }
+  x
+}

@@ -7,8 +7,11 @@
 sqp_cmv(x, sqp_data, ..., cmv = NULL)
 }
 \arguments{
-\item{x}{a correlation matrix or a correlation \code{tibble}
-given by \code{\link{sqp_correlate}}}
+\item{x}{a correlation matrix, a correlation data frame or a correlation
+\code{tibble} given by \code{\link{sqp_correlate}}. If any of the previous
+have row names, they're moved as a column called 'rowname'. If they don't
+have row names or a column named 'rowname' a new column is created with
+the column names to mimic a correlation matrix.}
 
 \item{sqp_data}{a data frame or tibble of class \code{sqp} given by \code{sqp_collect}.}
 

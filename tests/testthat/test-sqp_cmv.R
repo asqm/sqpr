@@ -1,6 +1,5 @@
 context("test-sqp_cmv.R")
 
-
 set.seed(2131)
 suppressWarnings(library(tibble))
 
@@ -22,27 +21,85 @@ sqp_df <-
 
 sqp_df <- structure(sqp_df, class = c(class(sqp_df), "sqp"))
 
-test_that("sqp_cmv returns correct output", {
-  cmv_tib <- sqp_cmv(corr_tibble, sqp_df, V4, V5)
-  expect_is(cmv_tib, "data.frame")
+correct_format <- function(p) {
+  expect_is(p, "data.frame")
+
+  expect_equal(names(p)[[1]], "rowname")
 
   # First column is the row names
-  expect_is(cmv_tib[[1]], "character")
+  expect_is(p[[1]], "character")
 
   # All other columns are numeric
-  expect_true(all(vapply(cmv_tib[-1], is.numeric, FUN.VALUE = logical(1))))
+  expect_true(all(vapply(p[-1], is.numeric, FUN.VALUE = logical(1))))
 
   # All row names have a at least one letter, which means
   # that the row names were not extracted raw if `x`
   # was a matrix
-  expect_true(all(grepl("[[:alpha:]]{1,}", cmv_tib[[1]])))
+  expect_true(all(grepl("[[:alpha:]]{1,}", p[[1]])))
 
   # df is symmetric when excluding the rowname variables
-  expect_equal(nrow(cmv_tib), ncol(cmv_tib) - 1)
+  expect_equal(nrow(p), ncol(p) - 1)
+  invisible(TRUE)
+}
+
+test_that("sqp_cmv returns correct output", {
+  cmv_tib <- sqp_cmv(corr_tibble, sqp_df, V4, V5)
+
+  correct_format(cmv_tib)
 
   # Also handles character strings as variables
   expect_identical(cmv_tib,
                    sqp_cmv(corr_tibble, sqp_df, "V4", "V5"))
+})
+
+test_that("`x` argument works fine with matrix", {
+  random_vec <- rnorm(10, sd = 50)
+
+  matr_nothing <- matrix(random_vec, 5, 5)
+
+  matr_row <- matrix(random_vec, 5, 5,
+                     dimnames = list(paste0("V", seq_len(5))))
+
+  matr_col <- matrix(random_vec, 5, 5,
+                     dimnames = list(NULL, paste0("V", seq_len(5))))
+
+  matr_both <- matrix(random_vec, 5, 5,
+                     dimnames = list(paste0("V", seq_len(5)),
+                                     paste0("V", seq_len(5))))
+
+
+  # Matrix no row or col names
+  cmv_matr <- sqp_cmv(matr_nothing, sqp_df, V4, V5)
+  correct_format(cmv_matr)
+
+  # Matrix row names
+  cmv_matr <- sqp_cmv(matr_row, sqp_df, V4, V5)
+  correct_format(cmv_matr)
+
+  # Matrix col names
+  cmv_matr <- sqp_cmv(matr_col, sqp_df, V4, V5)
+  correct_format(cmv_matr)
+
+  # Matrix row and col names
+  cmv_matr <- sqp_cmv(matr_both, sqp_df, V4, V5)
+  correct_format(cmv_matr)
+})
+
+test_that("`x` argument works fine with data frame", {
+  random_vec <- rnorm(10, sd = 50)
+
+  df_no_rows <- as.data.frame(matrix(random_vec, 5, 5))
+
+  # df no row names
+  cmv_matr <- sqp_cmv(df_no_rows, sqp_df, V4, V5)
+  correct_format(cmv_matr)
+
+  rownames(df_no_rows) <- paste0("V", seq_len(5))
+  df_rows <- df_no_rows
+
+  # df row names
+  cmv_matr <- sqp_cmv(df_rows, sqp_df, V4, V5)
+  correct_format(cmv_matr)
 })
 
 test_that("sqp_cmv works with cmv argument", {
