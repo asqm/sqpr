@@ -31,9 +31,3 @@ sqp_collect <- function(...) {
   #
   # sqp_data_fin
 }
-
-
-# Variables to pick from the sqp remote data
-# and with which to create sqp tables
-top_env <- new.env(parent = emptyenv())
-top_env$sqp_columns <- c("quality", "reliability", "validity")
