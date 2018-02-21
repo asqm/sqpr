@@ -152,11 +152,11 @@ estimate_sscore <- function(sqp_data, the_data, wt) {
   # Method effect
   method_e <- sqrt(1 - vy^2)
 
-  # std_data <- purrr::map_dbl(the_data, stats::sd, na.rm = TRUE)
+  std_data <- purrr::map_dbl(the_data, stats::sd, na.rm = TRUE)
 
   # This is the 'quality coefficient obtained by SQP
   # for the observed variable i. (1-qi2)var(yi)
-  q_coef <- qcoef_observed(qy2) # std_data)
+  q_coef <- qcoef_observed(qy2, std_data)
 
   # Here you create
   # all combinations
@@ -180,8 +180,8 @@ estimate_sscore <- function(sqp_data, the_data, wt) {
   1 - (var_ecs / var_composite)
 }
 
-qcoef_observed <- function(quality) {
-  purrr::map_dbl(quality, ~ (1 - .x))
+qcoef_observed <- function(quality, std_data) {
+  purrr::map2_dbl(quality, std_data, ~ (1 - .x) * .y^2)
 }
 
 combn_multiplication <- function(comb, wt, cov_e) {
