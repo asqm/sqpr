@@ -45,6 +45,21 @@ test_that("sqp_cmv returns correct output", {
                    sqp_cmv(corr_tibble, sqp_df, "V4", "V5"))
 })
 
+test_that("sqp_cmv works with cmv argument", {
+  sqp_df <-
+    tibble(question = paste0("V", 1:5),
+           quality = c(0.2, 0.3, 0.5, 0.6, 0.9),
+           reliability = c(0.6, 0.4, 0.5, 0.5, 0.7),
+           validity = c(0.9, 0.5, 0.6, 0.7, 0.8))
+
+  filtered_df <- subset(sqp_df, question %in% c("V4", "V5"))
+
+  cmv_aut <- sqp_cmv(corr_tibble, sqp_df, V4, V5)
+  cmv_manual <- sqp_cmv(corr_tibble, sqp_df, V4, V5, cmv = estimate_cmv(filtered_df))
+
+  expect_equal(cmv_aut, cmv_manual)
+})
+
 test_that("sqp_cmv uses only unique variable names", {
   cmv_tib <- sqp_cmv(corr_tibble, sqp_df, V4, V5, V5)
   expect_is(cmv_tib, "data.frame")
@@ -61,10 +76,10 @@ test_that("sqp_cmv uses only unique variable names", {
 
 test_that("sqp_cmv throws specific errors", {
   expect_error(sqp_cmv(corr_tibble, sqp_df),
-               "You need to supply at least two variables to calculate the common method variance")
+               "You need to supply at least two variables to calculate the Common Method Variance")
 
   expect_error(sqp_cmv(corr_tibble, sqp_df, V2),
-               "You need to supply at least two variables to calculate the common method variance")
+               "You need to supply at least two variables to calculate the Common Method Variance")
 
   expect_error(sqp_cmv(corr_tibble, sqp_df, V2, V3),
                "`sqp_data` must have non-missing values at columns reliability and validity for all variables")

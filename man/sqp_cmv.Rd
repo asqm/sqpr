@@ -4,7 +4,7 @@
 \alias{sqp_cmv}
 \title{Adjust a correlation matrix for Common Method Variance (CMV)}
 \usage{
-sqp_cmv(x, sqp_data, ...)
+sqp_cmv(x, sqp_data, ..., cmv = NULL)
 }
 \arguments{
 \item{x}{a correlation matrix or a correlation \code{tibble}
@@ -14,6 +14,11 @@ given by \code{\link{sqp_correlate}}}
 
 \item{...}{two or more variables present in both \code{x} and \code{sqp_data}. Can
 be both in bare unquoted names or as character strings.}
+
+\item{cmv}{an optional numeric vector of length 1 which contains the
+CMV coefficient of the variables specified in \code{...}. It is strongly
+suggested that this coefficient is estimated via \code{\link{estimate_cmv}}.
+By default, it is set to NULL and it is calculated internally.}
 }
 \value{
 the same matrix supplied in \code{x} but as a tibble with
@@ -26,7 +31,8 @@ tibble from \code{\link{sqp_correlate}}
 and adjusts the coefficients of the variables specified
 in  \code{...} with the reliability and validity coefficients given
 by \code{\link{sqp_collect}}. All variables specified in \code{...} must
-be present in both \code{x} and \code{sqp_data}.
+be present in both \code{x} and \code{sqp_data}. Optionally, you can supply
+the cmv coefficient in the argument \code{cmv}.
 }
 \examples{
 

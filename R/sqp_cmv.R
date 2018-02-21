@@ -5,13 +5,18 @@
 #' and adjusts the coefficients of the variables specified
 #' in  \code{...} with the reliability and validity coefficients given
 #' by \code{\link{sqp_collect}}. All variables specified in \code{...} must
-#' be present in both \code{x} and \code{sqp_data}.
+#' be present in both \code{x} and \code{sqp_data}. Optionally, you can supply
+#' the cmv coefficient in the argument \code{cmv}.
 #'
 #' @param x a correlation matrix or a correlation \code{tibble}
 #'  given by \code{\link{sqp_correlate}}
 #' @param sqp_data a data frame or tibble of class \code{sqp} given by \code{sqp_collect}.
 #' @param ... two or more variables present in both \code{x} and \code{sqp_data}. Can
 #' be both in bare unquoted names or as character strings.
+#' @param cmv an optional numeric vector of length 1 which contains the
+#' CMV coefficient of the variables specified in \code{...}. It is strongly
+#' suggested that this coefficient is estimated via \code{\link{estimate_cmv}}.
+#' By default, it is set to NULL and it is calculated internally.
 #'
 #' @return the same matrix supplied in \code{x} but as a tibble with
 #' the correlation coefficients of the variables supplied in \code{...}
@@ -51,11 +56,11 @@
 #' # The V5*V4 from both the upper/lower triangles
 #' # correlation matrix changed from -0.137 to -0.282
 #'
-sqp_cmv <- function(x, sqp_data, ...) {
+sqp_cmv <- function(x, sqp_data, ..., cmv = NULL) {
   cmv_vars <- unique(as.character(substitute(list(...)))[-1])
 
   if (length(cmv_vars) < 2) {
-    stop("You need to supply at least two variables to calculate the common method variance",
+    stop("You need to supply at least two variables to calculate the Common Method Variance",
          call. = FALSE)
   }
 
@@ -68,7 +73,7 @@ sqp_cmv <- function(x, sqp_data, ...) {
   columns_present(x, sqp_data, cmv_vars)
 
   selected_rows <- sqp_data[[1]] %in% cmv_vars
-  cmv <- estimate_cmv(sqp_data[selected_rows, ])
+  if (is.null(cmv)) cmv <- estimate_cmv(sqp_data[selected_rows, ])
 
   corrected_corr <- tibble::as_tibble(corr2cmv(x, cmv, cmv_vars))
 
@@ -112,7 +117,7 @@ estimate_cmv <- function(sqp_data) {
   }
 
   first_part <- sqrt(sqp_data[[sqp_cols[1]]])
-  second_part <- sqrt(1 - sqp_data[[sqp_cols[1]]])
+  second_part <- sqrt(1 - sqp_data[[sqp_cols[2]]])
 
   cmv <- prod(c(first_part, second_part))
   cmv
