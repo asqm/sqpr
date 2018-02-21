@@ -217,5 +217,5 @@ test_that("sqp_sscore returns the exact result to decimal points", {
                                                                                                                                                                                                                                                                                                                                    -12L))
 
   score <- estimate_sscore(quality[quality$question %in% selected_vars, ], the_data, wt = NULL)
-  expect_equal(score, 0.867985, tolerance = 0.01)
+  expect_equal(score, 0.9758606, tolerance = 0.01)
 })

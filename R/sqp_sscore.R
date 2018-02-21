@@ -152,13 +152,11 @@ estimate_sscore <- function(sqp_data, the_data, wt) {
   # Method effect
   method_e <- sqrt(1 - vy^2)
 
-  std_data <- purrr::map_dbl(the_data, stats::sd, na.rm = TRUE)
+  # std_data <- purrr::map_dbl(the_data, stats::sd, na.rm = TRUE)
 
   # This is the 'quality coefficient obtained by SQP
   # for the observed variable i. (1-qi2)var(yi)
-  q_coef <- qcoef_observed(qy2, std_data)
-
-  weights_by_qcoef <- sum(wt^2 * q_coef)
+  q_coef <- qcoef_observed(qy2) # std_data)
 
   # Here you create
   # all combinations
@@ -168,7 +166,9 @@ estimate_sscore <- function(sqp_data, the_data, wt) {
   # using ri * mi * mj * rj * si * sj
   # It's better not to use this in isolation but call
   # estimate_sscore as a whole.
-  cov_e <- cov_both(comb, std_data, ry, method_e)
+  cov_e <- cov_both(comb, ry, method_e)
+
+  weights_by_qcoef <- sum(wt^2 * q_coef)
 
   # you need to calculate the product of a combination
   # of the weights by the covariance of errors.
@@ -180,8 +180,8 @@ estimate_sscore <- function(sqp_data, the_data, wt) {
   1 - (var_ecs / var_composite)
 }
 
-qcoef_observed <- function(quality, std_data) {
-  purrr::map2_dbl(quality, std_data, ~ (1 - .x) * .y^2)
+qcoef_observed <- function(quality) {
+  purrr::map_dbl(quality, ~ (1 - .x))
 }
 
 combn_multiplication <- function(comb, wt, cov_e) {
@@ -200,14 +200,14 @@ combn_multiplication <- function(comb, wt, cov_e) {
 }
 
 # For an explanation of this see combn_multiplication
-cov_both <- function(combinations, std_data, r_coef, method_e) {
+cov_both <- function(combinations, r_coef, method_e) {
 
   # This formula is not complicated. It's simply the product of
   # the standard deviation of the data, the r_coef and the
   # method effect between all combination of questions.
-  cov_formula <- function(one, two, std_data, r_coef, method_e) {
-    (std_data[one] * r_coef[one] * method_e[one]) *
-    (std_data[two] * r_coef[two] * method_e[two])
+  cov_formula <- function(one, two, r_coef, method_e) {
+    (r_coef[one] * method_e[one]) *
+    (r_coef[two] * method_e[two])
   }
 
   # Here I apply the formula to all combinations. combinations
@@ -217,7 +217,7 @@ cov_both <- function(combinations, std_data, r_coef, method_e) {
     index_one <- index[1]
     index_two <- index[2]
     result <- purrr::map2_dbl(index_one, index_two, cov_formula,
-                              std_data, r_coef, method_e)
+                              r_coef, method_e)
     result
   })
   result
