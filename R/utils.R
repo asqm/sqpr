@@ -7,10 +7,10 @@
 # functions will check whether the data is in right format and assign
 # the class accordingly. It basically makes sure the data is good for
 # later processing.
-sqp_reconstruct <- function(sqp_data) {
+sqp_reconstruct <- function(sqp_data, variables_check = top_env$sqp_columns) {
 
   # If sqp_data is not in the correct format, throw an error
-  check_sqp_data(sqp_data)
+  check_sqp_data(sqp_data, variables_check)
 
   # If it has a correct format, then simply add the sqp class if
   # it doesn't have it
@@ -18,7 +18,7 @@ sqp_reconstruct <- function(sqp_data) {
   sqp_data
 }
 
-check_sqp_data <- function(sqp_data, available_vars = top_env$sqp_columns) {
+check_sqp_data <- function(sqp_data, available_vars) {
   # Check top_env$sqp_columns variables exists
 
   metrics_available <- all(available_vars %in% names(sqp_data))
@@ -37,6 +37,8 @@ check_sqp_data <- function(sqp_data, available_vars = top_env$sqp_columns) {
 
 
 col_checker <- function(x) {
+  if (all(is.na(x))) return(TRUE)
+
   is_numeric <- is.numeric(x)
   is_perc <- all(x >= 0 & x <= 1, na.rm = TRUE)
   if (!is_numeric | !is_perc) {
@@ -45,6 +47,27 @@ col_checker <- function(x) {
          call. = FALSE)
   }
   invisible(TRUE)
+}
+
+columns_present <- function(corr_data, sqp_data, var_names) {
+  sum_corr <- corr_data[[1]] %in% var_names
+  sum_sqp <- sqp_data[[1]] %in% var_names
+
+  vars_corr <- var_names %in% corr_data[[1]]
+  vars_sqp <- var_names %in% sqp_data[[1]]
+
+  if (sum(sum_corr) != length(var_names)) {
+    stop("At least one variable not present in `x`: ",
+         paste0(var_names[!vars_corr], collapse = ", "),
+         call. = FALSE)
+  }
+
+  if ((sum(sum_sqp) != length(var_names))) {
+    stop("At least one variable not present in `sqp_data`: ",
+         paste0(var_names[!vars_sqp], collapse = ", "),
+         call. = FALSE)
+  }
+
 }
 
 # Variables to pick from the sqp remote data

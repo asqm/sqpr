@@ -39,7 +39,7 @@
 #'
 sqp_bind_metrics <- function(sqp_data, question, metrics) {
 
-  check_sqp_data(sqp_data)
+  sqp_reconstruct(sqp_data)
 
   question_name <- as.character(substitute(question))
 

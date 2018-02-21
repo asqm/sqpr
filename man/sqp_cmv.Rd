@@ -2,7 +2,7 @@
 % Please edit documentation in R/sqp_cmv.R
 \name{sqp_cmv}
 \alias{sqp_cmv}
-\title{Adjust coefficients for Common Method Variance (CMV)}
+\title{Adjust a correlation matrix for Common Method Variance (CMV)}
 \usage{
 sqp_cmv(x, sqp_data, ...)
 }
@@ -10,7 +10,7 @@ sqp_cmv(x, sqp_data, ...)
 \item{x}{a correlation matrix or a correlation \code{tibble}
 given by \code{\link{sqp_correlate}}}
 
-\item{sqp_data}{a \code{data frame} or \code{tibble} given by \code{\link{sqp_collect}}}
+\item{sqp_data}{a data frame or tibble of class \code{sqp} given by \code{sqp_collect}.}
 
 \item{...}{two or more variables present in both \code{x} and \code{sqp_data}. Can
 be both in bare unquoted names or as character strings.}
@@ -61,5 +61,5 @@ sqp_cmv(corr_tibble, sqp_df, V4, V5)
 
 }
 \seealso{
-\code{\link{sqp_correlate}}, \code{\link{sqp_collect}}
+\code{\link{sqp_correlate}}, \code{\link{sqp_collect}} and \code{\link{estimate_cmv}}
 }

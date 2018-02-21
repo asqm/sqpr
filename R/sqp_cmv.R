@@ -1,4 +1,4 @@
-#' Adjust coefficients for Common Method Variance (CMV)
+#' Adjust a correlation matrix for Common Method Variance (CMV)
 #'
 #' \code{sqp_cmv} accepts a correlation matrix or a correlation
 #' tibble from \code{\link{sqp_correlate}}
@@ -9,7 +9,7 @@
 #'
 #' @param x a correlation matrix or a correlation \code{tibble}
 #'  given by \code{\link{sqp_correlate}}
-#' @param sqp_data a \code{data frame} or \code{tibble} given by \code{\link{sqp_collect}}
+#' @param sqp_data a data frame or tibble of class \code{sqp} given by \code{sqp_collect}.
 #' @param ... two or more variables present in both \code{x} and \code{sqp_data}. Can
 #' be both in bare unquoted names or as character strings.
 #'
@@ -18,7 +18,7 @@
 #' adjusted for their common method variance.
 #' @export
 #'
-#' @seealso \code{\link{sqp_correlate}}, \code{\link{sqp_collect}}
+#' @seealso \code{\link{sqp_correlate}}, \code{\link{sqp_collect}} and \code{\link{estimate_cmv}}
 #'
 #' @examples
 #'
@@ -59,49 +59,60 @@ sqp_cmv <- function(x, sqp_data, ...) {
          call. = FALSE)
   }
 
-  sqp_data <- sqp_reconstruct(sqp_data)
+  sqp_data <- sqp_reconstruct(sqp_data, c("reliability", "validity"))
 
   if (is.matrix(x)) x <- tibble::as_tibble(x, rownames = "rowname")
 
-  sum_corr <- x[[1]] %in% cmv_vars
-  sum_sqp <- sqp_data[[1]] %in% cmv_vars
+  # Check if all supplied variables are present in both
+  # dfs
+  columns_present(x, sqp_data, cmv_vars)
 
-  vars_corr <- cmv_vars %in% x[[1]]
-  vars_sqp <- cmv_vars %in% sqp_data[[1]]
-
-  if (sum(sum_corr) != length(cmv_vars)) {
-    stop("At least one variable not present in `x`: ",
-         paste0(cmv_vars[!vars_corr], collapse = ", "),
-         call. = FALSE)
-  }
-
-  if ((sum(sum_sqp) != length(cmv_vars))) {
-    stop("At least one variable not present in `sqp_data`: ",
-         paste0(cmv_vars[!vars_sqp], collapse = ", "),
-         call. = FALSE)
-  }
-
-  # If estimate_cmv ends up being exportable, then this needs
-  # to be moved inside estimate_cmv and find a way to pass
-  # cmv_vars to estimate_cmv
-  if (anyNA(sqp_data[sum_sqp, c("reliability", "validity")])) {
-    stop("`sqp_data` must have non-missing values at variable/s: ",
-         paste0(cmv_vars, collapse = ", "))
-  }
-
-  cmv <- estimate_cmv(sqp_data[sum_sqp, ])
+  selected_rows <- sqp_data[[1]] %in% cmv_vars
+  cmv <- estimate_cmv(sqp_data[selected_rows, ])
 
   corrected_corr <- tibble::as_tibble(corr2cmv(x, cmv, cmv_vars))
 
   corrected_corr
 }
 
-# Workhorse of the function. It simply estimates
-# the common method variance of the variables.
 
+#' Estimate the Common Method Variance coefficient of a set of variables
+#'
+#' Use \code{\link{estimate_cmv}} to get the actual CMV coefficient and
+#' \code{\link{sqp_cmv}} to automatically calculate the CMV coefficient
+#' and adjust a correlation matrix.
+#'
+#' @param sqp_data a data frame or tibble of class \code{sqp} given by \code{sqp_collect}
+#'  which contains the desired variables from which to estimate the CMV.
+#'
+#' @return a numeric vector of length one with the estimated coefficient
+#' @export
+#'
+#' @seealso \code{\link{sqp_cmv}} for automatically adjusting a correlation
+#' matrix for the CMV and \code{\link{sqp_collect}} for obtaining SQP data.
+#'
+#' @examples
+#' library(tibble)
+#'
+#' sqp_df <-
+#'  tibble(question = paste0("V", 1:5),
+#'  quality = c(0.2, 0.3, 0.5, 0.6, 0.9),
+#'  reliability = c(0.2, 0.4, 0.5, 0.5, 0.7),
+#'  validity = c(0.5, 0.1, 0.6, 0.7, 0.8))
+#'
+#' estimate_cmv(sqp_df)
+#'
+#'
 estimate_cmv <- function(sqp_data) {
-  first_part <- sqrt(sqp_data[["reliability"]])
-  second_part <- sqrt(1 - sqp_data[["validity"]])
+  sqp_cols <- c("reliability", "validity")
+  sqp_reconstruct(sqp_data, sqp_cols)
+
+  if (anyNA(sqp_data[sqp_cols])) {
+    stop("`sqp_data` must have non-missing values at columns reliability and validity for all variables")
+  }
+
+  first_part <- sqrt(sqp_data[[sqp_cols[1]]])
+  second_part <- sqrt(1 - sqp_data[[sqp_cols[1]]])
 
   cmv <- prod(c(first_part, second_part))
   cmv
