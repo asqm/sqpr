@@ -2,21 +2,19 @@
 % Please edit documentation in R/sqp_cmv.R
 \name{estimate_cmv}
 \alias{estimate_cmv}
-\title{Estimate the Common Method Variance coefficient of a set of variables}
+\title{Estimate the Common Method Variance (CMV) coefficient of a set of variables}
 \usage{
 estimate_cmv(sqp_data)
 }
 \arguments{
-\item{sqp_data}{a data frame or tibble of class \code{sqp} given by \code{sqp_collect}
+\item{sqp_data}{a data frame or tibble of class \code{sqp} given by \code{\link{sqp_collect}}
 which contains the desired variables from which to estimate the CMV.}
 }
 \value{
 a numeric vector of length one with the estimated coefficient
 }
 \description{
-Use \code{\link{estimate_cmv}} to get the actual CMV coefficient and
-\code{\link{sqp_cmv}} to automatically calculate the CMV coefficient
-and adjust a correlation matrix.
+Estimate the Common Method Variance (CMV) coefficient of a set of variables
 }
 \examples{
 library(tibble)
@@ -28,6 +26,19 @@ sqp_df <-
  validity = c(0.5, 0.1, 0.6, 0.7, 0.8))
 
 estimate_cmv(sqp_df)
+
+\dontrun{
+
+sqp_df <-
+ tibble(question = paste0("V", 1:5),
+ quality = c(0.2, 0.3, 0.5, 0.6, 0.9),
+ reliability = c(0.2, 0.4, 0.5, 0.5, 0.7),
+ validity = c(NA, 0.1, 0.6, 0.7, 0.8))
+
+estimate_cmv(sqp_df)
+# Error in estimate_cmv(sqp_df) :
+# `sqp_data` must have non-missing values at columns reliability and validity for all variables
+}
 
 
 }

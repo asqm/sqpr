@@ -23,7 +23,8 @@
 #' adjusted for their common method variance.
 #' @export
 #'
-#' @seealso \code{\link{sqp_correlate}}, \code{\link{sqp_collect}} and \code{\link{estimate_cmv}}
+#' @seealso \code{\link{sqp_correlate}} and \code{\link{sqp_collect}} for the correct
+#' format of the data and \code{\link{estimate_cmv}} for calculating the CMV manually.
 #'
 #' @examples
 #'
@@ -81,13 +82,10 @@ sqp_cmv <- function(x, sqp_data, ..., cmv = NULL) {
 }
 
 
-#' Estimate the Common Method Variance coefficient of a set of variables
+#' Estimate the Common Method Variance (CMV) coefficient of a set of variables
 #'
-#' Use \code{\link{estimate_cmv}} to get the actual CMV coefficient and
-#' \code{\link{sqp_cmv}} to automatically calculate the CMV coefficient
-#' and adjust a correlation matrix.
 #'
-#' @param sqp_data a data frame or tibble of class \code{sqp} given by \code{sqp_collect}
+#' @param sqp_data a data frame or tibble of class \code{sqp} given by \code{\link{sqp_collect}}
 #'  which contains the desired variables from which to estimate the CMV.
 #'
 #' @return a numeric vector of length one with the estimated coefficient
@@ -106,6 +104,19 @@ sqp_cmv <- function(x, sqp_data, ..., cmv = NULL) {
 #'  validity = c(0.5, 0.1, 0.6, 0.7, 0.8))
 #'
 #' estimate_cmv(sqp_df)
+#'
+#' \dontrun{
+#'
+#' sqp_df <-
+#'  tibble(question = paste0("V", 1:5),
+#'  quality = c(0.2, 0.3, 0.5, 0.6, 0.9),
+#'  reliability = c(0.2, 0.4, 0.5, 0.5, 0.7),
+#'  validity = c(NA, 0.1, 0.6, 0.7, 0.8))
+#'
+#' estimate_cmv(sqp_df)
+#' # Error in estimate_cmv(sqp_df) :
+#' # `sqp_data` must have non-missing values at columns reliability and validity for all variables
+#' }
 #'
 #'
 estimate_cmv <- function(sqp_data) {

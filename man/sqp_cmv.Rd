@@ -67,5 +67,6 @@ sqp_cmv(corr_tibble, sqp_df, V4, V5)
 
 }
 \seealso{
-\code{\link{sqp_correlate}}, \code{\link{sqp_collect}} and \code{\link{estimate_cmv}}
+\code{\link{sqp_correlate}} and \code{\link{sqp_collect}} for the correct
+format of the data and \code{\link{estimate_cmv}} for calculating the CMV manually.
 }
