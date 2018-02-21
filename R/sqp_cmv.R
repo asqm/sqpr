@@ -60,6 +60,8 @@
 sqp_cmv <- function(x, sqp_data, ..., cmv = NULL) {
   cmv_vars <- unique(as.character(substitute(list(...)))[-1])
 
+  if (!(is.data.frame(x) | is.matrix(x))) stop("`x` must be a correlation data frame or matrix")
+
   if (length(cmv_vars) < 2) {
     stop("You need to supply at least two variables to calculate the Common Method Variance",
          call. = FALSE)

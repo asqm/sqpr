@@ -75,6 +75,9 @@ test_that("sqp_cmv uses only unique variable names", {
 })
 
 test_that("sqp_cmv throws specific errors", {
+  expect_error(sqp_cmv(list(), sqp_df),
+               "`x` must be a correlation data frame or matrix")
+
   expect_error(sqp_cmv(corr_tibble, sqp_df),
                "You need to supply at least two variables to calculate the Common Method Variance")
 
