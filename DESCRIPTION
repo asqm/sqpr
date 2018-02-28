@@ -12,7 +12,8 @@ Imports:
     purrr,
     dplyr,
     stats,
-    tibble
+    tibble,
+    httr
 RoxygenNote: 6.0.1
 Suggests: 
     testthat
