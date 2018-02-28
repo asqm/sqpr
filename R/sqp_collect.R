@@ -34,59 +34,32 @@ sqp_collect <- function(...) {
 
 library(httr)
 
-myenv <- new.env()
-myenv$hostname <- "http://ec2-52-14-50-91.us-east-2.compute.amazonaws.com:8080"
-myenv$auth <- "api/auth"
-
-
 ## Log in to SQP
 # Check error when user puts wrong name/password
 
-sqp_login <- function(user, pass) {
-  resp <-
-    safe_GET(
-      url = myenv$hostname,
-      config = authenticate(user, pass),
-      path = myenv$auth
-  )
-  
-  error_notjson(resp)
-  content(resp, as = "parsed")
-}
+sqp_login("hey", "ho")
 
-safe_GET <- function(url_handle, config, path) {
-  stop_for_status(
-    GET(url = url_handle,
-        config = authenticate("hey", "ho"),
-        path = path),
-    "connect to the SQP API. Do you have internet connection?"
-  )
+sqp_GET <- function(path, ...) {
+  res <-
+    httr::GET(url = sqp_env$hostname,
+              path = path,
+              httr::add_headers('Authorization' = paste("Bearer",
+                                                                 sqp_env$token)),
+              ...)
+  stop_for_status(res)
+  res
 }
-
-error_notjson <- function(x) {
-  if (http_type(x) != "application/json") {
-    stop("API did not return json", call. = FALSE)
-  }
-}
-
-token <- sqp_login("hey", "ho")$access_token
 
 
 ## Extract questions by study
-myenv$study <- "/api/v1/studies"
-myenv$questions <- "/api/v1/studies/1111111"
+myenv$study <- "/api/v1/studies/1111111"
 
-(url <-
-    modify_url(myenv$hostname, path = myenv$study,
-               query = list(user_id = 1708)))
+sqp_get_studies <- function(query = NULL) {
+  res <- sqp_GET(sqp_env$study, query = list(user_id = 1708,
+                                             query))
+  tibble::as_tibble(jsonlite::fromJSON(content(res, as = "text"))$data)
+}
 
-p <-
-  GET(url = url,
-    # config = authenticate("hey", "ho"),
-    # config = config(httpauth = 1, userpwd = "hey:pw"),
-    add_headers('Authorization' = paste("Bearer", token)))
-
-http_status(p)
-
-myenv$user <- "/api/v1/users/6b99f7bb-4e7f-4c40-9a12-8472d7dff3c6"
-
+sqp_GET(sqp_env$study, query = list(user_id = 1708))
+sqp_GET(sqp_env$questions)
+sqp_GET(sqp_env$ques_props)

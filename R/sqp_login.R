@@ -33,17 +33,21 @@ sqp_pw <- function(x) {
 sqp_env <- new.env()
 sqp_env$hostname <- "http://ec2-52-14-50-91.us-east-2.compute.amazonaws.com:8080"
 sqp_env$auth <- "api/auth"
+sqp_env$study <- "/api/v1/studies"
+sqp_env$questions <- "/api/v1/studies/1/questions/"
+sqp_env$ques_props <- "/api/v1/studies/1/questions/4/completions"
 
-sqp_login()
-sqp_login("hey")
-sqp_login("hey", "ho")
-sqp_env$token <- NULL
-Sys.setenv("SQP_USER" = "hey")
-Sys.setenv("SQP_PW" = "ho")
-sqp_login()
-Sys.setenv("SQP_USER" = "")
-Sys.setenv("SQP_PW" = "")
-sqp_login()
-options(SQP_USER = "hey",
-        SQP_PW = "ho")
-sqp_login()
+
+# sqp_login()
+# sqp_login("hey")
+# sqp_login("hey", "ho")
+# sqp_env$token <- NULL
+# Sys.setenv("SQP_USER" = "hey")
+# Sys.setenv("SQP_PW" = "ho")
+# sqp_login()
+# Sys.setenv("SQP_USER" = "")
+# Sys.setenv("SQP_PW" = "")
+# sqp_login()
+# options(SQP_USER = "hey",
+#         SQP_PW = "ho")
+# sqp_login()
