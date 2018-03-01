@@ -30,6 +30,10 @@ sqp_pw <- function(x) {
   }
 }
 
+check_login <- function() {
+  if (is.null(sqp_env$token)) stop("You need to be logged in to query from the SQP API. See ?sqp_login")
+}
+
 sqp_env <- new.env()
 sqp_env$hostname <- "http://ec2-52-14-50-91.us-east-2.compute.amazonaws.com:8080"
 sqp_env$auth <- "api/auth"

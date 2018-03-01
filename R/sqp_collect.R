@@ -37,14 +37,15 @@ library(httr)
 ## Log in to SQP
 # Check error when user puts wrong name/password
 
-sqp_login("hey", "ho")
+# sqp_login("hey", "ho")
 
 sqp_GET <- function(path, ...) {
+  check_login()
+
   res <-
     httr::GET(url = sqp_env$hostname,
               path = path,
-              httr::add_headers('Authorization' = paste("Bearer",
-                                                                 sqp_env$token)),
+              httr::add_headers('Authorization' = paste("Bearer", sqp_env$token)),
               ...)
   stop_for_status(res)
   res
@@ -52,14 +53,14 @@ sqp_GET <- function(path, ...) {
 
 
 ## Extract questions by study
-myenv$study <- "/api/v1/studies/1111111"
+# sqp_env$study <- "/api/v1/studies/1111111"
 
 sqp_get_studies <- function(query = NULL) {
   res <- sqp_GET(sqp_env$study, query = list(user_id = 1708,
                                              query))
   tibble::as_tibble(jsonlite::fromJSON(content(res, as = "text"))$data)
 }
-
+sqp_login("hey", "ho")
 sqp_GET(sqp_env$study, query = list(user_id = 1708))
 sqp_GET(sqp_env$questions)
 sqp_GET(sqp_env$ques_props)
