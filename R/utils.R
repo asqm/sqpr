@@ -35,7 +35,6 @@ check_sqp_data <- function(sqp_data, available_vars) {
   }
 }
 
-
 col_checker <- function(x) {
   if (all(is.na(x))) return(TRUE)
 
@@ -70,7 +69,61 @@ columns_present <- function(corr_data, sqp_data, var_names) {
 
 }
 
+
+# These functions are aimed at making requests to the SQP API.
+
+# This function allows to retrieve the same requests if
+# no parameters have changed. I have to keep it outside the functions
+# because if defined inside a fun, then it is deleted after
+# the env of the fun is deleted.
+memo_GET <- memoise::memoise(httr::GET)
+
+# Make a general request with the login information
+auth_GET <- function(path, ...) {
+  check_login()
+
+  auth <- httr::add_headers('Authorization' = paste("Bearer", sqp_env$token))
+
+  res <-
+    memo_GET(url = sqp_env$hostname,
+             path = path,
+             config = auth,
+             ...)
+  res
+}
+
+# Wrapper of the previous fun to raise
+# any errors early and clearly
+safe_GET <- function(path, ...) {
+  res <- auth_GET(path, ...)
+  catch_error(res)
+  res
+}
+
+# Wrapper to grab the data from the requests
+object_request <- function(path) {
+  requested <- safe_GET(path)
+  get_content <- httr::content(requested, as = 'text')
+  final_df <- tibble::as_tibble(jsonlite::fromJSON(get_content)$data)
+  final_df
+}
+
+
 # Variables to pick from the sqp remote data
 # and with which to create sqp tables
 top_env <- new.env(parent = emptyenv())
 top_env$sqp_columns <- c("quality", "reliability", "validity")
+
+sqp_env <- new.env()
+sqp_env$hostname <- "http://ec2-52-14-50-91.us-east-2.compute.amazonaws.com:8080"
+sqp_env$auth <- "api/auth"
+sqp_env$study <- "/api/v1/studies"
+sqp_env$questions <- "/questions"
+sqp_env$ques_props <- "/completions"
+
+# Note that the ORDER of these variables matters
+# because I subset by index in the code. If changed, then the
+# indexes need to change as well.
+sqp_env$study_variables <- c("id", "name")
+sqp_env$question_variables <- c("id", "study_id", "short_name", "country_iso", "language_iso")
+

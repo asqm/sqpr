@@ -1,6 +1,6 @@
 check_study <- function(id_study) {
   call_request <- auth_GET(paste0(sqp_env$study, "/", id_study, "/"))
-  res <- content(call_request)
+  res <- httr::content(call_request)
   has_error <- "status" %in% names(res)
   has_length <- length(res) != 0
 
@@ -15,7 +15,7 @@ custom_stop <- function(message) {
 }
 
 catch_error <- function(call_request) {
-  tryCatch(stop_for_status(call_request),
+  tryCatch(httr::stop_for_status(call_request),
            http_401 = function(c) custom_stop("Failed to login with that username/password. Check that account is registered at http://sqp.upf.edu/"),
            http_404 = function(c) custom_stop("URL not found"),
            http_500 = function(c) custom_stop("The SQP API is not working")

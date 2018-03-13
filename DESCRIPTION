@@ -13,7 +13,9 @@ Imports:
     dplyr,
     stats,
     tibble,
-    httr
+    httr,
+    memoise,
+    jsonlite
 RoxygenNote: 6.0.1
 Suggests: 
     testthat
