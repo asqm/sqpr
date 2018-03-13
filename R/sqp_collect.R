@@ -39,13 +39,15 @@ library(httr)
 #
 # sqp_login("hey", "ho")
 
+memo_GET <- memoise::memoise(httr::GET)
+
 auth_GET <- function(path, ...) {
   check_login()
 
   auth <- httr::add_headers('Authorization' = paste("Bearer", sqp_env$token))
 
   res <-
-    httr::GET(url = sqp_env$hostname,
+    memo_GET(url = sqp_env$hostname,
               path = path,
               config = auth,
               ...)
@@ -53,7 +55,7 @@ auth_GET <- function(path, ...) {
 }
 
 safe_GET <- function(path, ...) {
-  res <- sqp_GET(path, ...)
+  res <- auth_GET(path, ...)
   catch_error(res)
   res
 }
@@ -101,5 +103,7 @@ sqp_login("oriol.marti@gmail.com", "omarti0920")
 get_studies()
 id_study <- find_studies('Australia')$id[2]
 
-ess <- get_questions(1)
-ess <- find_questions(1, "tvtot")
+get_questions(1)
+find_questions(1, "tvpol")
+
+
