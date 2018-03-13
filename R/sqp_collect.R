@@ -33,34 +33,73 @@ sqp_collect <- function(...) {
 }
 
 library(httr)
-
-## Log in to SQP
-# Check error when user puts wrong name/password
-
+#
+# ## Log in to SQP
+# # Check error when user puts wrong name/password
+#
 # sqp_login("hey", "ho")
 
-sqp_GET <- function(path, ...) {
+auth_GET <- function(path, ...) {
   check_login()
+
+  auth <- httr::add_headers('Authorization' = paste("Bearer", sqp_env$token))
 
   res <-
     httr::GET(url = sqp_env$hostname,
               path = path,
-              httr::add_headers('Authorization' = paste("Bearer", sqp_env$token)),
+              config = auth,
               ...)
-  stop_for_status(res)
   res
 }
 
-
-## Extract questions by study
-# sqp_env$study <- "/api/v1/studies/1111111"
-
-sqp_get_studies <- function(query = NULL) {
-  res <- sqp_GET(sqp_env$study, query = list(user_id = 1708,
-                                             query))
-  tibble::as_tibble(jsonlite::fromJSON(content(res, as = "text"))$data)
+safe_GET <- function(path, ...) {
+  res <- sqp_GET(path, ...)
+  catch_error(res)
+  res
 }
+
+object_request <- function(path) {
+  requested <- safe_GET(path)
+  get_content <- httr::content(requested, as = 'text')
+  final_df <- tibble::as_tibble(jsonlite::fromJSON(get_content)$data)
+  final_df
+}
+
+# Get all studies
+get_studies <- function() {
+  final_df <- object_request(sqp_env$study)
+  final_df[sqp_env$study_variables]
+}
+
+# Find studies by name
+find_studies <- function(question_name) {
+  studies <- get_studies()
+  studies_names <- studies[[sqp_env$study_variables[2]]]
+  sel_rows <- grepl(question_name, studies_names, ignore.case = TRUE)
+  studies[sel_rows, ]
+}
+
+# get questions by study
+get_questions <- function(id_study) {
+  check_study(id_study)
+  q_studies_path <- paste0(sqp_env$study, "/", id_study, sqp_env$questions)
+  final_df <- object_request(q_studies_path)
+  final_df[sqp_env$question_variables]
+}
+
+# find questions by name in study
+find_questions <- function(id_study, question_name) {
+  questions_df <- get_questions(id_study)
+  all_questions <- questions_df[[sqp_env$question_variables[3]]]
+  sel_rows <- grepl(question_name, all_questions, ignore.case = TRUE)
+  questions_df[sel_rows, ]
+}
+
 sqp_login("hey", "ho")
-sqp_GET(sqp_env$study, query = list(user_id = 1708))
-sqp_GET(sqp_env$questions)
-sqp_GET(sqp_env$ques_props)
+sqp_login("oriol.marti@gmail.com", "omarti0920")
+
+get_studies()
+id_study <- find_studies('Australia')$id[2]
+
+ess <- get_questions(1)
+ess <- find_questions(1, "tvtot")

@@ -6,7 +6,8 @@ sqp_login <- function(username = NULL, password = NULL) {
                      httr::accept_json(),
                      httr::authenticate(username, password),
                      path = sqp_env$auth)
-  httr::stop_for_status(token)
+
+  catch_error(token)
 
   sqp_env$token <- httr::content(token, as = "parsed")$access_token
   invisible(TRUE)
@@ -38,8 +39,13 @@ sqp_env <- new.env()
 sqp_env$hostname <- "http://ec2-52-14-50-91.us-east-2.compute.amazonaws.com:8080"
 sqp_env$auth <- "api/auth"
 sqp_env$study <- "/api/v1/studies"
-sqp_env$questions <- "/api/v1/studies/1/questions/"
-sqp_env$ques_props <- "/api/v1/studies/1/questions/4/completions"
+sqp_env$questions <- "/questions"
+sqp_env$ques_props <- "/completions"
+
+
+sqp_env$study_variables <- c("id", "name")
+sqp_env$question_variables <- c("id", "study_id", "short_name", "country_iso", "language_iso")
+
 
 
 # sqp_login()
