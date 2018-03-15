@@ -101,12 +101,15 @@ safe_GET <- function(path, ...) {
 }
 
 # Wrapper to grab the data from the requests
+# If estimates is TRUE returns a list, otherwise
+# a tibble
 object_request <- function(path, estimates = FALSE) {
   requested <- safe_GET(path)
   get_content <- httr::content(requested, as = 'text')
 
   if (estimates) {
-    json_data <- jsonlite::fromJSON(get_content)$data[[1]]
+    json_data <- jsonlite::fromJSON(get_content, flatten = TRUE)$data
+    return(json_data)
   } else {
     json_data <- jsonlite::fromJSON(get_content)$data
   }
@@ -128,8 +131,16 @@ sqp_env$q_estimates <- "/completions/"
 # indexes need to change as well.
 sqp_env$study_variables <- c("id", "name")
 sqp_env$question_variables <- c("id", "study_id", "short_name", "country_iso", "language_iso")
-sqp_env$estimate_variables <- paste0("prediction.", c("reliability", "validity", "quality"))
 
+sqp_env$short_estimate_variables <- paste0("prediction.", c("reliability", "validity", "quality"))
+
+sqp_env$all_estimate_variables <- c("question", "id", "question_id", "created", "routing_id", "authorized",
+                                    "complete", "error", "errorMessage", "reliability", "validity",
+                                    "quality", "reliabilityCoefficient", "validityCoefficient", "methodEffectCoefficient",
+                                    "qualityCoefficient", "reliabilityCoefficientInterquartileRange",
+                                    "validityCoefficientInterquartileRange", "qualityCoefficientInterquartileRange",
+                                    "reliabilityCoefficientStdError", "validityCoefficientStdError",
+                                    "qualityCoefficientStdError")
 # Variables to pick from the sqp remote data
 # and with which to create sqp tables
 sqp_env$sqp_columns <- c("quality", "reliability", "validity")
