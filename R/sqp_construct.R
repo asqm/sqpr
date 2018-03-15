@@ -71,16 +71,16 @@ sqp_construct_ <- function(question_name, metrics) {
 # added
 columns_sqp <- function(columns_to_fill, replacement) {
 
-  if (!all(columns_to_fill %in% top_env$sqp_columns)) {
+  if (!all(columns_to_fill %in% sqp_env$sqp_columns)) {
     stop("One or more of the specified `metrics` don't match the SQP column names",
          call. = FALSE)
   }
 
   # sqp_columns is a global variable defining
   # the columns that SQP needs to have
-  num_cols <- length(top_env$sqp_columns)
+  num_cols <- length(sqp_env$sqp_columns)
   empty_cols <- purrr::set_names(purrr::rerun(num_cols, NA_real_),
-                                 top_env$sqp_columns)
+                                 sqp_env$sqp_columns)
 
   # iterate through each column/replacement and fill
   # out the empty list

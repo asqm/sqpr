@@ -57,7 +57,7 @@ get_questions <- function(id_study, all_columns = FALSE) {
 
   check_study(id_study)
 
-  q_studies_path <- paste0(sqp_env$study, "/", id_study, sqp_env$questions)
+  q_studies_path <- paste0(sqp_env$study, id_study, "/questions")
 
   final_df <- object_request(q_studies_path)
 

@@ -7,7 +7,7 @@
 # functions will check whether the data is in right format and assign
 # the class accordingly. It basically makes sure the data is good for
 # later processing.
-sqp_reconstruct <- function(sqp_data, variables_check = top_env$sqp_columns) {
+sqp_reconstruct <- function(sqp_data, variables_check = sqp_env$sqp_columns) {
 
   # If sqp_data is not in the correct format, throw an error
   check_sqp_data(sqp_data, variables_check)
@@ -19,7 +19,7 @@ sqp_reconstruct <- function(sqp_data, variables_check = top_env$sqp_columns) {
 }
 
 check_sqp_data <- function(sqp_data, available_vars) {
-  # Check top_env$sqp_columns variables exists
+  # Check sqp_env$sqp_columns variables exists
 
   metrics_available <- all(available_vars %in% names(sqp_data))
 
@@ -41,7 +41,7 @@ col_checker <- function(x) {
   is_numeric <- is.numeric(x)
   is_perc <- all(x >= 0 & x <= 1, na.rm = TRUE)
   if (!is_numeric | !is_perc) {
-    stop(paste0(top_env$sqp_columns, collapse = ", "),
+    stop(paste0(sqp_env$sqp_columns, collapse = ", "),
          " must be numeric columns with values between/including 0 and 1 in `sqp_data`",
          call. = FALSE)
   }
@@ -101,29 +101,35 @@ safe_GET <- function(path, ...) {
 }
 
 # Wrapper to grab the data from the requests
-object_request <- function(path) {
+object_request <- function(path, estimates = FALSE) {
   requested <- safe_GET(path)
   get_content <- httr::content(requested, as = 'text')
-  final_df <- tibble::as_tibble(jsonlite::fromJSON(get_content)$data)
+
+  if (estimates) {
+    json_data <- jsonlite::fromJSON(get_content)$data[[1]]
+  } else {
+    json_data <- jsonlite::fromJSON(get_content)$data
+  }
+
+  final_df <- tibble::as_tibble(json_data)
   final_df
 }
 
 
-# Variables to pick from the sqp remote data
-# and with which to create sqp tables
-top_env <- new.env(parent = emptyenv())
-top_env$sqp_columns <- c("quality", "reliability", "validity")
-
 sqp_env <- new.env()
 sqp_env$hostname <- "http://ec2-52-14-50-91.us-east-2.compute.amazonaws.com:8080"
-sqp_env$auth <- "api/auth"
-sqp_env$study <- "/api/v1/studies"
-sqp_env$questions <- "/questions"
-sqp_env$ques_props <- "/completions"
+sqp_env$auth <- "/api/auth"
+sqp_env$study <- "/api/v1/studies/"
+sqp_env$questions <- "/api/v1/questions/"
+sqp_env$q_estimates <- "/completions/"
 
 # Note that the ORDER of these variables matters
 # because I subset by index in the code. If changed, then the
 # indexes need to change as well.
 sqp_env$study_variables <- c("id", "name")
 sqp_env$question_variables <- c("id", "study_id", "short_name", "country_iso", "language_iso")
+sqp_env$estimate_variables <- paste0("prediction.", c("reliability", "validity", "quality"))
 
+# Variables to pick from the sqp remote data
+# and with which to create sqp tables
+sqp_env$sqp_columns <- c("quality", "reliability", "validity")

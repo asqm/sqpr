@@ -102,11 +102,11 @@ sqp_sscore <- function(sqp_data, df, new_name, ..., wt = NULL) {
   # Select the rows with only the selected variales
   # for the sumscore
   rows_to_pick <- sqp_data[[1]] %in% vars_names
-  sqp_scores <- sqp_data[rows_to_pick, top_env$sqp_columns]
+  sqp_scores <- sqp_data[rows_to_pick, sqp_env$sqp_columns]
 
   if (anyNA(sqp_scores)) {
     stop("`sqp_data` must have non-missing values at variable/s: ",
-         paste0(top_env$sqp_columns, collapse = ", "))
+         paste0(sqp_env$sqp_columns, collapse = ", "))
   }
 
   new_estimate <-
@@ -116,7 +116,7 @@ sqp_sscore <- function(sqp_data, df, new_name, ..., wt = NULL) {
 
   # Bind the unselected questions with the new sumscore
   combined_matrix <- dplyr::bind_rows(sqp_data[!rows_to_pick, ], additional_rows)
-  correct_order <- c("question", top_env$sqp_columns)
+  correct_order <- c("question", sqp_env$sqp_columns)
   new_order <- combined_matrix[c(correct_order, setdiff(names(combined_matrix), correct_order))]
 
   structure(new_order, class = c(class(new_order), "sqp"))
@@ -142,12 +142,12 @@ estimate_sscore <- function(sqp_data, the_data, wt) {
   # 2 is reliability
   # 3 is validity
 
-  qy2 <- sqp_data[[top_env$sqp_columns[1]]]
+  qy2 <- sqp_data[[sqp_env$sqp_columns[1]]]
 
   # By squaring this you actually get the reliability
   # coefficient.
-  ry <- sqrt(sqp_data[[top_env$sqp_columns[2]]])
-  vy <- sqrt(sqp_data[[top_env$sqp_columns[3]]])
+  ry <- sqrt(sqp_data[[sqp_env$sqp_columns[2]]])
+  vy <- sqrt(sqp_data[[sqp_env$sqp_columns[3]]])
 
   # Method effect
   method_e <- sqrt(1 - vy^2)
