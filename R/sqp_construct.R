@@ -108,5 +108,5 @@ generic_sqp <- function(question_name, sqp_metrics) {
   stopifnot(!is.null(names(sqp_metrics)), is.list(sqp_metrics))
 
   sqp_data <- dplyr::as_tibble(c(question = question_name, sqp_metrics))
-  structure(sqp_data, class = c(class(sqp_data), "sqp"))
+  sqp_reconstruct(sqp_data)
 }
