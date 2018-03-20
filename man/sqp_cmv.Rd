@@ -10,7 +10,8 @@ sqp_cmv(x, sqp_data, ..., cmv = NULL)
 \item{x}{a correlation matrix, a correlation data frame or a correlation
 \code{tibble} given by \code{\link{sqp_correlate}}.}
 
-\item{sqp_data}{a data frame or tibble of class \code{sqp} given by \code{sqp_collect}.}
+\item{sqp_data}{a data frame or tibble of class \code{sqp} given by
+\code{\link{get_estimates}}.}
 
 \item{...}{two or more variables present in both \code{x} and \code{sqp_data}. Can
 be both in bare unquoted names or as character strings.}
@@ -47,7 +48,6 @@ library(tibble)
 
 corr_tibble <- sqp_correlate(matrix(rnorm(100, sd = 50), nrow = 20), rnorm(5))
 
-# Note to Jorge: Change this to a sqp df when sqp_collect() works.
 sqp_df <-
  tibble(question = paste0("V", 1:5),
  quality = c(0.2, 0.3, 0.5, 0.6, 0.9),
@@ -70,6 +70,7 @@ sqp_cmv(corr_tibble, sqp_df, V4, V5)
 
 }
 \seealso{
-\code{\link{sqp_correlate}} and \code{\link{sqp_collect}} for the correct
-format of the data and \code{\link{estimate_cmv}} for calculating the CMV manually.
+\code{\link{sqp_correlate}} for calculating correlation matrices,
+\code{\link{get_estimates}} for obtaining the SQP estimates directly into R
+and \code{\link{estimate_cmv}} for calculating the CMV manually.
 }

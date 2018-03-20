@@ -94,3 +94,8 @@ get_question_name(1:10)
 }
 
 }
+\seealso{
+\code{\link{sqp_login}} for loging in to the SQP API through R and
+\code{\link{find_questions}} and \code{\link{find_studies}} for locating
+the variables of interest to use in \code{get_estimates}.
+}

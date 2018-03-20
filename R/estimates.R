@@ -57,6 +57,10 @@
 #' }
 #'
 #'
+#' @seealso \code{\link{sqp_login}} for loging in to the SQP API through R and
+#' \code{\link{find_questions}} and \code{\link{find_studies}} for locating
+#' the variables of interest to use in \code{get_estimates}.
+#'
 #' @return \code{get_estimates} returns a \code{\link[tibble]{tibble}} with the predictions.
 #' The number of columns depends on the \code{all_columns} argument.
 #' \code{get_question_name} returns a character vector with the question name(s).

@@ -10,7 +10,8 @@
 #'
 #' @param x a correlation matrix, a correlation data frame or a correlation
 #'  \code{tibble} given by \code{\link{sqp_correlate}}.
-#' @param sqp_data a data frame or tibble of class \code{sqp} given by \code{sqp_collect}.
+#' @param sqp_data a data frame or tibble of class \code{sqp} given by
+#' \code{\link{get_estimates}}.
 #' @param ... two or more variables present in both \code{x} and \code{sqp_data}. Can
 #' be both in bare unquoted names or as character strings.
 #' @param cmv an optional numeric vector of length 1 which contains the
@@ -27,8 +28,9 @@
 #'
 #' @export
 #'
-#' @seealso \code{\link{sqp_correlate}} and \code{\link{sqp_collect}} for the correct
-#' format of the data and \code{\link{estimate_cmv}} for calculating the CMV manually.
+#' @seealso \code{\link{sqp_correlate}} for calculating correlation matrices,
+#' \code{\link{get_estimates}} for obtaining the SQP estimates directly into R
+#' and \code{\link{estimate_cmv}} for calculating the CMV manually.
 #'
 #' @examples
 #'
@@ -40,7 +42,6 @@
 #'
 #' corr_tibble <- sqp_correlate(matrix(rnorm(100, sd = 50), nrow = 20), rnorm(5))
 #'
-#' # Note to Jorge: Change this to a sqp df when sqp_collect() works.
 #' sqp_df <-
 #'  tibble(question = paste0("V", 1:5),
 #'  quality = c(0.2, 0.3, 0.5, 0.6, 0.9),
@@ -93,14 +94,15 @@ sqp_cmv <- function(x, sqp_data, ..., cmv = NULL) {
 #' Estimate the Common Method Variance (CMV) coefficient of a set of variables
 #'
 #'
-#' @param sqp_data a data frame or tibble of class \code{sqp} given by \code{\link{sqp_collect}}
-#'  which contains the desired variables from which to estimate the CMV.
+#' @param sqp_data a data frame or tibble of class \code{sqp} given by
+#' \code{\link{get_estimates}} which contains the desired variables from
+#' which to estimate the CMV.
 #'
 #' @return a numeric vector of length one with the estimated coefficient
 #' @export
 #'
 #' @seealso \code{\link{sqp_cmv}} for automatically adjusting a correlation
-#' matrix for the CMV and \code{\link{sqp_collect}} for obtaining SQP data.
+#' matrix for the CMV and \code{\link{get_estimate}} for obtaining SQP data.
 #'
 #' @examples
 #' library(tibble)

@@ -7,8 +7,9 @@
 estimate_cmv(sqp_data)
 }
 \arguments{
-\item{sqp_data}{a data frame or tibble of class \code{sqp} given by \code{\link{sqp_collect}}
-which contains the desired variables from which to estimate the CMV.}
+\item{sqp_data}{a data frame or tibble of class \code{sqp} given by
+\code{\link{get_estimates}} which contains the desired variables from
+which to estimate the CMV.}
 }
 \value{
 a numeric vector of length one with the estimated coefficient
@@ -44,5 +45,5 @@ estimate_cmv(sqp_df)
 }
 \seealso{
 \code{\link{sqp_cmv}} for automatically adjusting a correlation
-matrix for the CMV and \code{\link{sqp_collect}} for obtaining SQP data.
+matrix for the CMV and \code{\link{get_estimate}} for obtaining SQP data.
 }
