@@ -1,0 +1,145 @@
+---
+title: "Accessing the SQP API"
+author: "Jorge Cimentada"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = TRUE
+)
+```
+
+```{r, echo = FALSE}
+library(sqpr)
+
+user <- Sys.getenv("SQP_USER")
+pw <- Sys.getenv("SQP_PW")
+
+sqp_login(user, pw)
+```
+
+
+The `sqpr` package allows you to calculate several estimations of the quality of your survey questions and also adjust your estimations for measurement error. But among other things, it also gives you access to the API of the Survey Quality Prediction [website](http://sqp.upf.edu/), a data base that contains over 40,000 predictions on the quality of questions.
+
+### Registration
+
+This vignette will cover how to log in to the API and download data interactively. First things first, you need to register in the [SQP website](http://sqp.upf.edu/accounts/register/) and confirm your registration through your email.
+
+Got that ready? Let's move on.
+
+### Loging in
+
+First, load the package in R with:
+```{r, eval = FALSE}
+library(sqpr)
+```
+
+There's currently three ways of loging in to the API. The first one by setting your credentials as envionrment variables. How do I do that?
+
+```{r, eval = FALSE}
+Sys.setenv(SQP_USER = 'This is where your email goes')
+Sys.setenv(SQP_PW = 'This is where your password goes')
+```
+
+once you executed the previous lines, run `sqp_login()` and if you don't get an error, then you signed up just fine.
+
+```{r, eval = FALSE}
+sqp_login()
+```
+
+
+That easy! The nice thing is that once you executed the previous lines you can erase them from your script and nobody will ever see your account credentials.
+
+Very similarly, you can also set your credentials as options in your R session.
+
+```{r, eval = FALSE}
+options(
+  SQP_USER = 'This is where your email goes'),
+  SQP_PW = 'This is where your password goes'
+)
+sqp_login()
+```
+
+This is very similar to the previous approach in that you can delete the `options(...)` statement and `sqp_login()` will always find it. Note that both approaches only work during your R session. If you're interested in setting the `SQP_USER` and `SQP_PW` variables permanently in your system environment (that means not having to write them down everytime you open/close your session), then you should check out [this chapter](https://csgillespie.github.io/efficientR/r-startup.html#renviron) on environmental variables.
+
+Finally, there is one last approach, which I don't recommend. You can always sign up by placing your credentials inside `sqp_login()`, but that would require for your credentials to be visible to anyone you share your code to. That means any documents shared on Google Drive, Github, Bitbucket or just a simple share over gmail. In any case, here's how you'd do it:
+
+```{r, eval = FALSE}
+sqp_login(
+  'This is where your email goes',
+  'This is where your password goes'
+)
+```
+
+Once you've ran `sqp_login()` once, you're all set to work with the SQP API! No need to run it again unless you close the R session.
+
+## Exploring the SQP API
+
+The SQP API has questions nested into studies. Some of these studies/questions might be in many different languages because the SQP community is very diverse. For that, we need to access the `id`'s of the study and question of interested. Let's look for all the questions that have `tv` at the beginning of the word in the European Social Survey round 4. First, we need to figure out the id of that study. `find_studies()` accepts a string with your study of interest and it searches similar names in the SQP database.
+
+```{r}
+find_studies("ess")
+```
+
+Aha! There it is. Then more specifically..
+```{r}
+study_id <- find_studies("ESS Round 4")$id
+```
+
+`find_studies` is very helpful for finding patterns in the SQP database. However, if you can't find your study, you should use `get_studies()` which will return all the studies in the SQP database and then perform your search manually.
+
+
+Ok, so we have our `study_id`. Which questions are in that study? `find_questions` will do the work for you.
+
+```{r}
+find_questions(study_id, "tv")
+```
+
+That might take a while because it's downloading all of the data to your computer. However, if you run `find_questions` (or any other API related function) once, then any repetition should be instant as it loads everything from your computer rather than downloading it again.
+
+Ok, that search was unsuccesfull, as we can see there are questions that don't begin with `tv`. We can also use regular expressions to find more detailed patterns. For example, `^tv` will find all questions that start (`^`) with `tv`.
+
+```{r}
+tv_qs <- find_questions(study_id, "^tv")
+tv_qs
+```
+
+There it is (you can also supply more than one variable name with a character vector like `c("tvtot", "tvpol")`. We get all the `tv` questions in different languages and for different countries. Let's subset the questions for Spanish only.
+
+```{r}
+sp_tv <- tv_qs[tv_qs$language_iso == "spa", ]
+sp_tv
+```
+
+The hard part is done now. Once we have the `id` of your questions of interest, we supply it to `get_estimates` and it will bring our predictions for those questions.
+
+```{r}
+get_estimates(sp_tv$id)
+```
+
+`get_estimates` will return all question names as lower case for increasing the chances of compatibility with the name in the questionnair of the study. Something very important for using other `sqpr` functions such as `sqp_cmv`, where the function checks that the names in `question` match the column names of the study. Check out the case-study vignette of the `sqpr` package for a more concrete example.
+
+It will also return empty fields for the questions that don't have any predictions. Moreover, `get_estimates` gives the option of grabbing more columns from the SQP API that contain estimations such as standard errors and interquantile ranges of the predictions from above. See `?get_estimates` for a list of all definitions of the columns. You can do that like this:
+
+```{r}
+get_estimates(sp_tv$id, all_columns = TRUE)
+```
+
+The nice thing about `get_estimates` is that once you've explored and found your variables, if you save the id's of the questions in your script, once your restart you R session you can avoid all of this steps and get your estimates with only `sqp_login(); get_estimates(question_ids)`, assuming you placed your login information as environmental variables (or options) and your question ids are in a vector named `question_ids`.
+
+I hope that gives a general idea of how to explore the SQP interactively. For more examples on how this blends with the other `sqpr` related functions, check out the case-study vignette of the `sqpr` package.
+
+
+
+
+
+
+
