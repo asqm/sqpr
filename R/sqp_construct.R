@@ -7,6 +7,10 @@
 #' @param metrics a list containing new SQP metrics. Currently it only
 #' supports quality, reliability and validity. Can also specify one of the metrics
 #' and the remaining are set to NA by default
+#' @param all_columns if \code{TRUE} will return all columns (quite a few) that can be
+#' returned by the \code{\link{get_estimates}} function. See \code{\link{get_estimates}}
+#' for the description of which variables would be created. If \code{FALSE} (default) it
+#' will return only columns \code{quality}, \code{reliability} and \code{validity}.
 #'
 #' @return a \code{\link[tibble]{tibble}} of one row with the supplied metrics. It also has
 #' class \code{sqp} for further manipulations within the \code{sqpr} package.
@@ -32,14 +36,14 @@
 #'
 #' # Currently only quality, reliability and validity are allowed.
 #'
-sqp_construct <- function(question_name, metrics) {
+sqp_construct <- function(question_name, metrics, all_columns = FALSE) {
   question <- as.character(substitute(question_name))
-  sqp_construct_(question, metrics)
+  sqp_construct_(question, metrics, all_columns)
 }
 
 #' @rdname sqp_construct
 #' @export
-sqp_construct_ <- function(question_name, metrics) {
+sqp_construct_ <- function(question_name, metrics, all_columns = FALSE) {
 
   question <- question_name
 
@@ -60,7 +64,10 @@ sqp_construct_ <- function(question_name, metrics) {
          call. = FALSE)
   }
 
-  sqp_metrics <- columns_sqp(names(metrics), unlist(metrics))
+  sqp_metrics <-
+    columns_sqp(names(metrics),
+                unlist(metrics),
+                all_columns = all_columns)
 
   generic_sqp(question, sqp_metrics)
 }
@@ -69,18 +76,20 @@ sqp_construct_ <- function(question_name, metrics) {
 # replacements
 # returns a named list with the replacements
 # added
-columns_sqp <- function(columns_to_fill, replacement) {
+columns_sqp <- function(columns_to_fill, replacement, all_columns = FALSE) {
 
-  if (!all(columns_to_fill %in% sqp_env$sqp_columns)) {
+  sqp_cols <- if (all_columns) sqp_env$all_estimate_variables else sqp_env$sqp_columns
+
+  if (!all(columns_to_fill %in% sqp_cols)) {
     stop("One or more of the specified `metrics` don't match the SQP column names",
          call. = FALSE)
   }
 
   # sqp_columns is a global variable defining
   # the columns that SQP needs to have
-  num_cols <- length(sqp_env$sqp_columns)
+  num_cols <- length(sqp_cols)
   empty_cols <- purrr::set_names(purrr::rerun(num_cols, NA_real_),
-                                 sqp_env$sqp_columns)
+                                 sqp_cols)
 
   # iterate through each column/replacement and fill
   # out the empty list

@@ -5,9 +5,9 @@
 \alias{sqp_construct_}
 \title{Construct an SQP tibble manually}
 \usage{
-sqp_construct(question_name, metrics)
+sqp_construct(question_name, metrics, all_columns = FALSE)
 
-sqp_construct_(question_name, metrics)
+sqp_construct_(question_name, metrics, all_columns = FALSE)
 }
 \arguments{
 \item{question_name}{a character string that will be used as the question name}
@@ -15,6 +15,11 @@ sqp_construct_(question_name, metrics)
 \item{metrics}{a list containing new SQP metrics. Currently it only
 supports quality, reliability and validity. Can also specify one of the metrics
 and the remaining are set to NA by default}
+
+\item{all_columns}{if \code{TRUE} will return all columns (quite a few) that can be
+returned by the \code{\link{get_estimates}} function. See \code{\link{get_estimates}}
+for the description of which variables would be created. If \code{FALSE} (default) it
+will return only columns \code{quality}, \code{reliability} and \code{validity}.}
 }
 \value{
 a \code{\link[tibble]{tibble}} of one row with the supplied metrics. It also has
