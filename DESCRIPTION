@@ -1,7 +1,7 @@
 Package: sqpr
-Version: 0.0.0.9000
-Title: What the Package Does (one line, title case)
-Description: What the package does (one paragraph).
+Version: 0.1.0
+Title: Obtain and analyze the quality of your survey questions with the SQP API
+Description: Using the database of the SQP API, sqpr allows downloading data on the quality of over 40,000 questions, adjust for the Common Method Variance (CMV) of several variables, calculate the quality of the sumscore of several variables and adjust your modeling estimations for a variables measurement error.
 Authors@R: person("First", "Last", , "first.last@example.com", c("aut", "cre"))
 License: What license it uses
 Encoding: UTF-8
@@ -20,5 +20,6 @@ RoxygenNote: 6.0.1
 Suggests: 
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    ess
 VignetteBuilder: knitr

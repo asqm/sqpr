@@ -60,7 +60,7 @@
 #' sqp_data = sqp_df,
 #' df = sample_data,
 #' new_name = new_sumscore,
-#' "V1", "V2", "V3"
+#' "V1", "V2"
 #' )
 #'
 #'
@@ -119,7 +119,8 @@ sqp_sscore <- function(sqp_data, df, new_name, ..., wt = NULL) {
   correct_order <- c("question", sqp_env$sqp_columns)
   new_order <- combined_matrix[c(correct_order, setdiff(names(combined_matrix), correct_order))]
 
-  structure(new_order, class = c(class(new_order), "sqp"))
+  final_df <- sqp_reconstruct(new_order)
+  final_df
 }
 
 # This is not supposed to be used in isolation.

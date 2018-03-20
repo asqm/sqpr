@@ -9,12 +9,23 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = TRUE
 )
 ```
+
+```{r, echo = FALSE}
+library(sqpr)
+
+user <- Sys.getenv("SQP_USER")
+pw <- Sys.getenv("SQP_PW")
+
+sqp_login(user, pw)
+```
+
 
 The `sqpr` package allows you to calculate several estimations of the quality of your survey questions and also adjust your estimations for measurement error. But among other things, it also gives you access to the API of the Survey Quality Prediction [website](http://sqp.upf.edu/), a data base that contains over 40,000 predictions on the quality of questions.
 
@@ -27,7 +38,7 @@ Got that ready? Let's move on.
 ### Loging in
 
 First, load the package in R with:
-```{r}
+```{r, eval = FALSE}
 library(sqpr)
 ```
 
@@ -40,7 +51,7 @@ Sys.setenv(SQP_PW = 'This is where your password goes')
 
 once you executed the previous lines, run `sqp_login()` and if you don't get an error, then you signed up just fine.
 
-```{r}
+```{r, eval = FALSE}
 sqp_login()
 ```
 

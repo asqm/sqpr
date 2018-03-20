@@ -4,7 +4,7 @@
 #' tibble from \code{\link{sqp_correlate}}
 #' and adjusts the coefficients of the variables specified
 #' in  \code{...} with the reliability and validity coefficients given
-#' by \code{\link{sqp_data}}. All variables specified in \code{...} must
+#' by \code{\link{get_estimates}}. All variables specified in \code{...} must
 #' be present in both \code{x} and \code{sqp_data}. Optionally, you can supply
 #' the cmv coefficient in the argument \code{cmv}.
 #'
@@ -102,7 +102,7 @@ sqp_cmv <- function(x, sqp_data, ..., cmv = NULL) {
 #' @export
 #'
 #' @seealso \code{\link{sqp_cmv}} for automatically adjusting a correlation
-#' matrix for the CMV and \code{\link{get_estimate}} for obtaining SQP data.
+#' matrix for the CMV and \code{\link{get_estimates}} for obtaining SQP data.
 #'
 #' @examples
 #' library(tibble)
@@ -125,7 +125,7 @@ sqp_cmv <- function(x, sqp_data, ..., cmv = NULL) {
 #'
 #' estimate_cmv(sqp_df)
 #' # Error in estimate_cmv(sqp_df) :
-#' # `sqp_data` must have non-missing values at columns reliability and validity for all variables
+#' # sqp_data must have non-missing values at columns reliability and validity for all variables
 #' }
 #'
 #'

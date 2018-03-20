@@ -7,19 +7,18 @@
 sqp_bind_metrics(sqp_data, question, metrics)
 }
 \arguments{
-\item{sqp_data}{a \code{data frame} or \code{tibble} given by \code{\link{sqp_collect}}}
+\item{sqp_data}{a \code{data frame} or \code{tibble} given by \code{\link{get_estimates}}}
 
 \item{question}{a character string that will be used as the question name}
 
 \item{metrics}{a list containing new SQP metrics. Currently it only
-supports quality, reliability and validity. Can also specify one of the metrics
+supports 'quality', 'reliability' and 'validity'. Can also specify one of the metrics
 and the remaining are set to NA by default}
 }
 \value{
 \code{sqp_data} with a new row that contains the new question name
 and the metrics as columns. Metrics must match existing names from SQP data
-such as quality, reliability and validity. See \code{\link{sqp_construct}}
-for details.
+such as 'quality', 'reliability' and 'validity'.
 }
 \description{
 Manually bind new rows to an SQP data frame

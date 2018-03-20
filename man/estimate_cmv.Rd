@@ -38,12 +38,12 @@ sqp_df <-
 
 estimate_cmv(sqp_df)
 # Error in estimate_cmv(sqp_df) :
-# `sqp_data` must have non-missing values at columns reliability and validity for all variables
+# sqp_data must have non-missing values at columns reliability and validity for all variables
 }
 
 
 }
 \seealso{
 \code{\link{sqp_cmv}} for automatically adjusting a correlation
-matrix for the CMV and \code{\link{get_estimate}} for obtaining SQP data.
+matrix for the CMV and \code{\link{get_estimates}} for obtaining SQP data.
 }

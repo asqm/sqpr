@@ -34,7 +34,7 @@ column is created with the column names to mimic a correlation matrix.
 tibble from \code{\link{sqp_correlate}}
 and adjusts the coefficients of the variables specified
 in  \code{...} with the reliability and validity coefficients given
-by \code{\link{sqp_data}}. All variables specified in \code{...} must
+by \code{\link{get_estimates}}. All variables specified in \code{...} must
 be present in both \code{x} and \code{sqp_data}. Optionally, you can supply
 the cmv coefficient in the argument \code{cmv}.
 }

@@ -48,7 +48,7 @@ of all columns:
 \item authorized: Whether it is an 'authorized' prediction or not. See the details section
 \item complete: Whether all fields of the coding are complete
 \item error: Whether there was an error in making the prediction. For an example,
- see \link{http://sqp.upf.edu/loadui/#questionPrediction/12552/42383}
+ see \url{http://sqp.upf.edu/loadui/#questionPrediction/12552/42383}
 \item errorMessage: The error message, if there was an error
 \item reliability: The strenght between the true score factor and the observed
  variable or 1 - proportion random error in the observed variance. Computed as
