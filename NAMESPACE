@@ -3,6 +3,8 @@
 export(estimate_cmv)
 export(find_questions)
 export(find_studies)
+export(get_estimates)
+export(get_question_name)
 export(sqp_bind_metrics)
 export(sqp_cmv)
 export(sqp_construct)

@@ -69,7 +69,7 @@ sqp_construct_ <- function(question_name, metrics, all_columns = FALSE) {
                 unlist(metrics),
                 all_columns = all_columns)
 
-  generic_sqp(question, sqp_metrics)
+  generic_sqp(question, sqp_metrics, all_columns = all_columns)
 }
 
 # Specify columns that should be in the SQP data and
@@ -104,9 +104,14 @@ columns_sqp <- function(columns_to_fill, replacement, all_columns = FALSE) {
 
 # Create a tibble with the question name and
 # the sqp matrics. Returns the tibble
-generic_sqp <- function(question_name, sqp_metrics) {
+generic_sqp <- function(question_name, sqp_metrics, all_columns = FALSE) {
   stopifnot(!is.null(names(sqp_metrics)), is.list(sqp_metrics))
 
-  sqp_data <- dplyr::as_tibble(c(question = question_name, sqp_metrics))
+  if (all_columns) {
+    sqp_data <- dplyr::as_tibble(sqp_metrics)
+    sqp_data$question <- question_name
+  } else {
+    sqp_data <- dplyr::as_tibble(c(question = question_name, sqp_metrics))
+  }
   sqp_reconstruct(sqp_data)
 }
