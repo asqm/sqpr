@@ -13,9 +13,9 @@ get_questions(id_study, all_columns = FALSE)
 \item{id_study}{a numeric value that specifies the desired study. Find with
 \code{\link{find_studies}} or \code{\link{get_studies}}.}
 
-\item{question_name}{A string specifying the variable name. A search is performed
-for similar names from all variables in the study. Upper or lower case is ignored
-and regular expressions are supported.}
+\item{question_name}{A vector of strings specifying the variable names.
+A search is performed for similar names from all variables in the study.
+Upper or lower case is ignored and regular expressions are supported.}
 
 \item{all_columns}{\code{TRUE} or \code{FALSE} stating whether to return all
 columns. By default it returns the `id` of the question, the `study_id`, the
@@ -42,6 +42,7 @@ find_questions(1, "tvtot")
 
 find_questions(1, "tvpol")
 
+
 # If that doesn't fit, then use get_questions and search for the question
 # manually through filtering:
 
@@ -50,6 +51,15 @@ get_questions(1) \%>\%
    filter(country_iso == "ES",
           language_iso == "spa",
           grepl("Tot", .$short_name))
+
+# Can also search for several variables in one call
+
+find_questions(1, c("tvpol", "tvtot"))
+
+# Or use regular expressions. For example, to find all variables
+# that begin with tv
+
+find_questions(1, "^tv")
 }
 
 }

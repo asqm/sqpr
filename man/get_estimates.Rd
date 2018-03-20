@@ -11,18 +11,69 @@ get_question_name(id)
 }
 \arguments{
 \item{id}{a numeric vector containing the id(s) of variable(s) of interest. Can
-be a one or more id's.}
+be one or more id's.}
 
 \item{all_columns}{a logical stating whether to extract all available
 columns from the SQP database. See the details section for a list of all possible variables.}
 }
 \value{
-\code{get_estimates} returns \code{\link[tibble]{tibble}} with the predictions.
+\code{get_estimates} returns a \code{\link[tibble]{tibble}} with the predictions.
 The number of columns depends on the \code{all_columns} argument.
 \code{get_question_name} returns a character vector with the question name(s).
 }
 \description{
 Extract variable estimates from the SQP prediction algorithm
+}
+\details{
+SQP predictions can have both 'authorized' predictions, which are
+performed by the SQP software and 'crowd-sourced' predictions which are
+added to the database by other users. By default, \code{get_estimates}
+always returns the 'authorized' prediction when it is available. When
+it is not, it returns the first non-authorized prediction, and so on.
+If neither 'authorized' nor 'crowd-sourced' predictions are available it raises
+an error.
+
+\code{get_estimates} returns a four column \code{\link[tibble]{tibble}} with
+the question name and the estimates for \code{quality}, \code{reliability} and
+\code{validity}. However, if \code{all_columns} is set to \code{TRUE} the returned
+\code{\link[tibble]{tibble}} contains new columns. Below you can find the description
+of all columns:
+
+\itemize{
+\item question: the literal name of the question in the questionnaire of the study
+\item question_id: the API internal ID of the question
+\item id: this is the coding ID, that is, the coding of the authorized prediction
+\item created: Date of the API request
+\item routing_id: Version of the coding scheme applied to get that prediction.
+\item authorized: Whether it is an 'authorized' prediction or not. See the details section
+\item complete: Whether all fields of the coding are complete
+\item error: Whether there was an error in making the prediction. For an example,
+ see \link{http://sqp.upf.edu/loadui/#questionPrediction/12552/42383}
+\item errorMessage: The error message, if there was an error
+\item reliability: The strenght between the true score factor and the observed
+ variable or 1 - proportion random error in the observed variance. Computed as
+ the squared of the reliability coefficient
+\item validity: The strength between the latent concept factor and the
+ true score factor or 1 - proportion method error variance in the true
+ score variance. Computed as the squared of the validity coefficient
+\item quality: The strength between the latent concept factor and the
+ observed variable or 1 - proportion of random and method error variance
+ in the latent concept's variance. Computed as the product of reliability
+  and validity.
+\item reliabilityCoefficient: The effect between the true score factor and
+ the observed variable
+\item validityCoefficient: The effect between the latent concept factor and
+ the true score factor
+\item methodEffectCoefficient: The effect between the method factor and the
+ true score factor
+\item qualityCoefficient: It is computed as the squared root of the quality
+\item reliabilityCoefficientInterquartileRange: Interquartile range for the reliability coefficient
+\item validityCoefficientInterquartileRange: Interquartile range for the validity coefficient
+\item qualityCoefficientInterquartileRange: Interquartile range for the quality coefficient
+\item reliabilityCoefficientStdError: Predicted standard error of the reliability coefficient
+\item validityCoefficientStdError: Predicted standard error of the validity coefficient
+\item qualityCoefficientStdError: Predicted standard error of the quality coefficient
+}
 }
 \examples{
 

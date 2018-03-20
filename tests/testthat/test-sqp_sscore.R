@@ -194,9 +194,16 @@ test_that("sqp_sscore checks that there's non_NA's in important arguments", {
 
 test_that("sqp_sscore returns the exact result to decimal points", {
   selected_vars <- c("trstprl", "trstplt", "trstprt")
-  the_data <- ess::ess_country("Spain", 7, "cimentadaj@gmail.com")[selected_vars]
+  the_data <-
+    ess::recode_missings(
+    ess::ess_country("Spain", 7, "cimentadaj@gmail.com")[selected_vars]
+    )
 
-  the_data <-  purrr::map_dfc(the_data, ~ {.x[.x > 10] <- NA; .x})
+  sqp_login()
+
+  all_qs <- c("ppltrst", "polintr", "psppsgv",
+              "psppipl", "ptcpplt", "stflife", "stfeco", "stfedu", "stfhlth",
+              "trstprl", "trstplt", "trstprt")
 
   # # Quality estimates
   quality <-

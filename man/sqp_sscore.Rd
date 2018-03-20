@@ -57,7 +57,7 @@ sample_data <-
   replicate(5, rbinom(1000, 5, 0.6), simplify = FALSE),
  paste0("V", 1:5))
  )
-#
+
 
 sqp_sscore(
 sqp_data = sqp_df,
