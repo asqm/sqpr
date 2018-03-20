@@ -139,16 +139,16 @@ estimate_sscore <- function(sqp_data, the_data, wt) {
     stop("`wt` must be a non-NA numeric vector with the same length as the number of variables")
   }
 
-  # 1 is validity
-  # 2 is reliability
-  # 3 is validity
+  reliability <- grep("^r", sqp_env$sqp_columns, value = TRUE)
+  validity <- grep("^v", sqp_env$sqp_columns, value = TRUE)
+  quality <- grep("^q", sqp_env$sqp_columns, value = TRUE)
 
-  qy2 <- sqp_data[[sqp_env$sqp_columns[1]]]
+  qy2 <- sqp_data[[quality]]
 
   # By squaring this you actually get the reliability
   # coefficient.
-  ry <- sqrt(sqp_data[[sqp_env$sqp_columns[2]]])
-  vy <- sqrt(sqp_data[[sqp_env$sqp_columns[3]]])
+  ry <- sqrt(sqp_data[[reliability]])
+  vy <- sqrt(sqp_data[[validity]])
 
   # Method effect
   method_e <- sqrt(1 - vy^2)

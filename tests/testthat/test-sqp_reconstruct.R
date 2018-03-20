@@ -2,6 +2,7 @@ context("test-sqp_reconstruct.R")
 
 
 test_that("sqp_reconstruct checks data format", {
+  variables <- paste0(sqp_env$sqp_columns, collapse = ", ")
 
   sqp_df <-
     tibble(question = paste0("V", 1:3),
@@ -11,7 +12,7 @@ test_that("sqp_reconstruct checks data format", {
 
   expect_error(
     sqp_reconstruct(sqp_df),
-    "Variables quality, reliability, validity must be available in `sqp_data`"
+    paste0("Variables ",  variables," must be available in `sqp_data`")
   )
 
   sqp_df <-
@@ -22,7 +23,9 @@ test_that("sqp_reconstruct checks data format", {
 
   expect_error(
     sqp_reconstruct(sqp_df),
-    "quality, reliability, validity must be numeric columns with values between/including 0 and 1 in `sqp_data`"
+    paste0(variables,
+           " must be numeric columns with values between/including 0 and 1 in `sqp_data`"
+           )
   )
 
   sqp_df <-

@@ -154,7 +154,9 @@ test_that("sqp_sscore checks that there's non_NA's in important arguments", {
     new_name = new_sumscore,
     V1, V2
   ),
-  "`sqp_data` must have non-missing values at variable/s: quality, reliability, validity")
+  paste0("`sqp_data` must have non-missing values at variable/s: ",
+         paste0(sqp_env$sqp_columns, collapse = ", "))
+  )
 
   sqp_df$validity[is.na(sqp_df$validity)] <- 0.5
 
