@@ -1,11 +1,10 @@
 Package: sqpr
 Version: 0.1.0
-Title: Obtain and analyze the quality of your survey questions with the SQP API
-Description: Using the database of the SQP API, sqpr allows downloading data on the quality of over 40,000 questions, adjust for the Common Method Variance (CMV) of several variables, calculate the quality of the sumscore of several variables and adjust your modeling estimations for a variables measurement error.
+Title: Extract and Analyze the Quality of your Survey Questions with SQP
+Description: Using the database of the SQP API, sqpr allows downloading data on the quality of over 40,000 questions, adjust for the Common Method Variance (CMV) of several variables, calculate the quality of the sumscore of several variables and adjust your model estimations for measurement error.
 Authors@R: c(
         person("Jorge", "Cimentada", , "cimentadaj@gmail.com", c("aut", "cre")),
-        person("Willem", "Saris", , role = "aut"),
-        person("Pompeu Fabra University", role = c("cph", "fnd"))
+        person("Wiebke", "Weber", , role = c("aut"))
         )
 License: What license it uses
 Encoding: UTF-8

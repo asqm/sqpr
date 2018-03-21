@@ -4,21 +4,16 @@
 \name{sqpr-package}
 \alias{sqpr}
 \alias{sqpr-package}
-\title{sqpr: Obtain and analyze the quality of your survey questions with the SQP API}
+\title{sqpr: Extract and Analyze the Quality of your Survey Questions with SQP}
 \description{
-Using the database of the SQP API, sqpr allows downloading data on the quality of over 40,000 questions, adjust for the Common Method Variance (CMV) of several variables, calculate the quality of the sumscore of several variables and adjust your modeling estimations for a variables measurement error.
+Using the database of the SQP API, sqpr allows downloading data on the quality of over 40,000 questions, adjust for the Common Method Variance (CMV) of several variables, calculate the quality of the sumscore of several variables and adjust your model estimations for measurement error.
 }
 \author{
 \strong{Maintainer}: Jorge Cimentada \email{cimentadaj@gmail.com}
 
 Authors:
 \itemize{
-  \item Willem Saris
-}
-
-Other contributors:
-\itemize{
-  \item Pompeu Fabra University [copyright holder, funder]
+  \item Wiebke Weber
 }
 
 }
