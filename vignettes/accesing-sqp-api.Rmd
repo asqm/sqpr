@@ -83,7 +83,7 @@ Once you've ran `sqp_login()` once, you're all set to work with the SQP API! No 
 
 ## Exploring the SQP API
 
-The SQP API has questions nested into studies. Some of these studies/questions might be in many different languages because the SQP community is very diverse. For that, we need to access the `id`'s of the study and question of interested. Let's look for all the questions that have `tv` at the beginning of the word in the European Social Survey round 4. First, we need to figure out the id of that study. `find_studies()` accepts a string with your study of interest and it searches similar names in the SQP database.
+The SQP API has questions nested into studies. Some of these studies/questions might be in many different languages because the SQP community is very diverse. For that, we need to access the `id`'s of the study and question of interest. Let's look for all the questions that have `tv` at the beginning of the word in the European Social Survey round 4. First, we need to figure out the id of that study. `find_studies()` accepts a string with your study of interest and it searches for similar names in the SQP database.
 
 ```{r}
 find_studies("ess")
@@ -112,14 +112,14 @@ tv_qs <- find_questions(study_id, "^tv")
 tv_qs
 ```
 
-There it is (you can also supply more than one variable name with a character vector like `c("tvtot", "tvpol")`. We get all the `tv` questions in different languages and for different countries. Let's subset the questions for Spanish only.
+There it is (you can also supply more than one variable name with a character vector like `c("tvtot", "tvpol")`). We get all the `tv` questions in different languages and for different countries. Let's subset the questions for Spanish only.
 
 ```{r}
 sp_tv <- tv_qs[tv_qs$language_iso == "spa", ]
 sp_tv
 ```
 
-The hard part is done now. Once we have the `id` of your questions of interest, we supply it to `get_estimates` and it will bring our predictions for those questions.
+The hard part is done now. Once we have the `id` of your questions of interest, we supply it to `get_estimates` and it will bring the quality predictions for those questions.
 
 ```{r}
 get_estimates(sp_tv$id)
@@ -127,13 +127,13 @@ get_estimates(sp_tv$id)
 
 `get_estimates` will return all question names as lower case for increasing the chances of compatibility with the name in the questionnair of the study. Something very important for using other `sqpr` functions such as `sqp_cmv`, where the function checks that the names in `question` match the column names of the study. Check out the case-study vignette of the `sqpr` package for a more concrete example.
 
-It will also return empty fields for the questions that don't have any predictions. Moreover, `get_estimates` gives the option of grabbing more columns from the SQP API that contain estimations such as standard errors and interquantile ranges of the predictions from above. See `?get_estimates` for a list of all definitions of the columns. You can do that like this:
+It will also return empty fields for the questions that don't have any predictions, like `tvpol` in the example above. Moreover, `get_estimates` gives the option of grabbing more columns from the SQP API that contain estimations such as standard errors and interquantile ranges of the predictions from above. See `?get_estimates` for a list of all available columns. You can do that like this:
 
 ```{r}
 get_estimates(sp_tv$id, all_columns = TRUE)
 ```
 
-The nice thing about `get_estimates` is that once you've explored and found your variables, if you save the id's of the questions in your script, once your restart you R session you can avoid all of this steps and get your estimates with only `sqp_login(); get_estimates(question_ids)`, assuming you placed your login information as environmental variables (or options) and your question ids are in a vector named `question_ids`.
+The nice thing about `get_estimates` is that once you've explored and found your variables, if you save the id's of the questions in your script, once your restart your R session you can avoid all most of the steps above and get your estimates with only `sqp_login(); get_estimates(question_ids)`, assuming you placed your login information as environmental variables (or options) and your question ids are in a vector named `question_ids`.
 
 I hope that gives a general idea of how to explore the SQP interactively. For more examples on how this blends with the other `sqpr` related functions, check out the case-study vignette of the `sqpr` package.
 
