@@ -24,6 +24,17 @@ test_that("get_estimates returns all columns correctly", {
   expect_true(all(sqp_env$all_estimate_variables %in% names(sqp_data)))
 })
 
+test_that("get_estimates returns unauthorized predictions", {
+  sqp_login()
+  set.seed(1231)
+  sqp_data <- get_estimates(4, all_columns = TRUE, authorized = FALSE)
+
+  expect_length(sqp_data, length(sqp_env$all_estimate_variables))
+  expect_is(sqp_data, "sqp")
+  expect_true(nrow(sqp_data) > 1)
+  expect_true(all(sqp_env$all_estimate_variables %in% names(sqp_data)))
+})
+
 
 # Here I chose one variable that was empty at the time.
 # If this raises an error, then just find another empty variables

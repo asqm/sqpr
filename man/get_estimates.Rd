@@ -5,7 +5,7 @@
 \alias{get_question_name}
 \title{Extract variable estimates from the SQP prediction algorithm}
 \usage{
-get_estimates(id, all_columns = FALSE)
+get_estimates(id, all_columns = FALSE, authorized = TRUE)
 
 get_question_name(id)
 }
@@ -15,6 +15,10 @@ be one or more id's.}
 
 \item{all_columns}{a logical stating whether to extract all available
 columns from the SQP database. See the details section for a list of all possible variables.}
+
+\item{authorized}{\code{TRUE} to return \strong{only} the authorized prediction or
+\code{FALSE} return all available predictions. The user should then pick which
+prediction to use based on the \code{user_id} or \code{user_username} columns.}
 }
 \value{
 \code{get_estimates} returns a \code{\link[tibble]{tibble}} with the predictions.
@@ -31,7 +35,8 @@ added to the database by other users. By default, \code{get_estimates}
 always returns the 'authorized' prediction when it is available. When
 it is not, it returns the first non-authorized prediction, and so on.
 If neither 'authorized' nor 'crowd-sourced' predictions are available it raises
-an error.
+an error. If the user wants to choose a specific prediction, then
+\code{authorized = FALSE} will return all available predictions for each question.
 
 \code{get_estimates} returns a four column \code{\link[tibble]{tibble}} with
 the question name and the estimates for \code{quality}, \code{reliability} and
@@ -47,6 +52,8 @@ of all columns:
 \item routing_id: Version of the coding scheme applied to get that prediction.
 \item authorized: Whether it is an 'authorized' prediction or not. See the details section
 \item complete: Whether all fields of the coding are complete
+\item user_id: The id of the user that crowd-sourced the prediction
+\item user_username: The account name of the user that crowd-sourced the prediction
 \item error: Whether there was an error in making the prediction. For an example,
  see \url{http://sqp.upf.edu/loadui/#questionPrediction/12552/42383}
 \item errorMessage: The error message, if there was an error

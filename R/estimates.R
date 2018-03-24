@@ -4,6 +4,9 @@
 #' be one or more id's.
 #' @param all_columns a logical stating whether to extract all available
 #' columns from the SQP database. See the details section for a list of all possible variables.
+#' @param authorized \code{TRUE} to return \strong{only} the authorized prediction or
+#' \code{FALSE} return all available predictions. The user should then pick which
+#' prediction to use based on the \code{user_id} or \code{user_username} columns.
 #'
 #' @details
 #' SQP predictions can have both 'authorized' predictions, which are
@@ -12,7 +15,8 @@
 #' always returns the 'authorized' prediction when it is available. When
 #' it is not, it returns the first non-authorized prediction, and so on.
 #' If neither 'authorized' nor 'crowd-sourced' predictions are available it raises
-#' an error.
+#' an error. If the user wants to choose a specific prediction, then
+#' \code{authorized = FALSE} will return all available predictions for each question.
 #'
 #' \code{get_estimates} returns a four column \code{\link[tibble]{tibble}} with
 #' the question name and the estimates for \code{quality}, \code{reliability} and
@@ -28,6 +32,8 @@
 #' \item routing_id: Version of the coding scheme applied to get that prediction.
 #' \item authorized: Whether it is an 'authorized' prediction or not. See the details section
 #' \item complete: Whether all fields of the coding are complete
+#' \item user_id: The id of the user that crowd-sourced the prediction
+#' \item user_username: The account name of the user that crowd-sourced the prediction
 #' \item error: Whether there was an error in making the prediction. For an example,
 #'  see \url{http://sqp.upf.edu/loadui/#questionPrediction/12552/42383}
 #' \item errorMessage: The error message, if there was an error
@@ -84,7 +90,7 @@
 #'
 #' }
 #'
-get_estimates <- function(id, all_columns = FALSE) {
+get_estimates <- function(id, all_columns = FALSE, authorized = TRUE) {
   stopifnot(is.numeric(id), length(id) >= 1)
 
   collapsed_id <- paste0(id, collapse = ",")
@@ -95,7 +101,8 @@ get_estimates <- function(id, all_columns = FALSE) {
 
   list_data <- purrr::pmap(list(raw_data, q_name, id),
                            make_estimate_df,
-                           all_columns = all_columns)
+                           all_columns = all_columns,
+                           authorized = authorized)
 
   final_df <- tibble::as_tibble(do.call(rbind, list_data))
 
@@ -117,7 +124,7 @@ get_question_name <- function(id) {
   q_name <- tolower(jsonlite::fromJSON(almost_q_name)$short_name)
 }
 
-make_estimate_df <- function(raw_data, var_name, id, all_columns = FALSE) {
+make_estimate_df <- function(raw_data, var_name, id, all_columns = FALSE, authorized = TRUE) {
 
   # If empty estimates..
   if (all(c(1, 1) == dim(raw_data))) {
@@ -142,8 +149,13 @@ make_estimate_df <- function(raw_data, var_name, id, all_columns = FALSE) {
   # If two authorized predictions
   # are added, always returns the first one
   # in order
-  row_to_pick <- ifelse(any(raw_data$authorized),
-                        which(raw_data$authorized), 1)
+
+  if (authorized) {
+    row_to_pick <- ifelse(any(raw_data$authorized),
+                          which(raw_data$authorized), 1)
+  } else {
+    row_to_pick <- seq_len(nrow(raw_data))
+  }
 
   cols_to_pick <- if (all_columns) names(raw_data) else sqp_env$short_estimate_variables
   final_df <- raw_data[row_to_pick, cols_to_pick]

@@ -140,7 +140,7 @@ sqp_env$all_estimate_variables <- c("question", "id", "question_id", "created", 
                                     "qualityCoefficient", "reliabilityCoefficientInterquartileRange",
                                     "validityCoefficientInterquartileRange", "qualityCoefficientInterquartileRange",
                                     "reliabilityCoefficientStdError", "validityCoefficientStdError",
-                                    "qualityCoefficientStdError")
+                                    "qualityCoefficientStdError", "user_id", "user_username")
 # Variables to pick from the sqp remote data
 # and with which to create sqp tables
 sqp_env$sqp_columns <- c("reliability", "validity", "quality")
