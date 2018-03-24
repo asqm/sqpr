@@ -1,5 +1,4 @@
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
 sqpr <img src="man/figures/sqpr_logo.png" align="right" />
 ==========================================================
 
