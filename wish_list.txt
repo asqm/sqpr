@@ -6,3 +6,4 @@
 		cmv(yi,ycs) = ri miΣ[(wk/σcs)mk rk]	equation 7.6 (http://essedunet.nsd.uib.no/cms/topics/measurement/7/1.html)
 
 - [] Change Github username in README.Rmd when the repo is moved to Github
+- [] Update README.Rmd with sqpr logo when moved to github

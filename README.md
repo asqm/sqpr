@@ -2,6 +2,7 @@
 sqpr
 ====
 
+<!-- # sqpr <img src="man/figures/sqpr_logo.png" align="right" /> -->
 The `sqpr` package allows you to calculate several estimations of the quality of your survey questions and also adjust your estimations for measurement error. Moreover, it gives easy access to the API of the Survey Quality Prediction [website](http://sqp.upf.edu/), a data base that contains over 40,000 predictions on the quality of questions.
 
 Installation
