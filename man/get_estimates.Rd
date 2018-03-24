@@ -29,13 +29,12 @@ The number of columns depends on the \code{all_columns} argument.
 Extract variable estimates from the SQP prediction algorithm
 }
 \details{
-SQP predictions can have both 'authorized' predictions, which are
+SQP predictions can be both 'authorized' predictions, which are
 performed by the SQP software and 'crowd-sourced' predictions which are
 added to the database by other users. By default, \code{get_estimates}
 always returns the 'authorized' prediction when it is available. When
 it is not, it returns the first non-authorized prediction, and so on.
-If neither 'authorized' nor 'crowd-sourced' predictions are available it raises
-an error. If the user wants to choose a specific prediction, then
+If the user wants to choose a specific prediction, then
 \code{authorized = FALSE} will return all available predictions for each question.
 
 \code{get_estimates} returns a four column \code{\link[tibble]{tibble}} with
@@ -62,7 +61,7 @@ of all columns:
  the squared of the reliability coefficient
 \item validity: The strength between the latent concept factor and the
  true score factor or 1 - proportion method error variance in the true
- score variance. Computed as the squared of the validity coefficient
+ score variance. Computed as the square of the validity coefficient
 \item quality: The strength between the latent concept factor and the
  observed variable or 1 - proportion of random and method error variance
  in the latent concept's variance. Computed as the product of reliability
@@ -73,7 +72,7 @@ of all columns:
  the true score factor
 \item methodEffectCoefficient: The effect between the method factor and the
  true score factor
-\item qualityCoefficient: It is computed as the squared root of the quality
+\item qualityCoefficient: It is computed as the square root of the quality
 \item reliabilityCoefficientInterquartileRange: Interquartile range for the reliability coefficient
 \item validityCoefficientInterquartileRange: Interquartile range for the validity coefficient
 \item qualityCoefficientInterquartileRange: Interquartile range for the quality coefficient
@@ -102,7 +101,7 @@ get_question_name(1:10)
 
 }
 \seealso{
-\code{\link{sqp_login}} for loging in to the SQP API through R and
+\code{\link{sqp_login}} for logging in to the SQP API through R and
 \code{\link{find_questions}} and \code{\link{find_studies}} for locating
 the variables of interest to use in \code{get_estimates}.
 }

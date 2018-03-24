@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
 
 
 # sqpr
+
 <!-- # sqpr <img src="man/figures/sqpr_logo.png" align="right" /> -->
 
 
