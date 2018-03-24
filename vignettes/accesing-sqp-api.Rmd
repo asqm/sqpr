@@ -42,10 +42,10 @@ First, load the package in R with:
 library(sqpr)
 ```
 
-There's currently three ways of loging in to the API. The first one by setting your credentials as envionrment variables. How do I do that?
+There's currently three ways of loging in to the API. The first one by setting your credentials as enviroment variables. How do I do that?
 
 ```{r, eval = FALSE}
-Sys.setenv(SQP_USER = 'This is where your email goes')
+Sys.setenv(SQP_USER = 'This is where your email or username goes')
 Sys.setenv(SQP_PW = 'This is where your password goes')
 ```
 
@@ -62,7 +62,7 @@ Very similarly, you can also set your credentials as options in your R session.
 
 ```{r, eval = FALSE}
 options(
-  SQP_USER = 'This is where your email goes'),
+  SQP_USER = 'This is where your email or username goes'),
   SQP_PW = 'This is where your password goes'
 )
 sqp_login()
@@ -74,7 +74,7 @@ Finally, there is one last approach, which I don't recommend. You can always sig
 
 ```{r, eval = FALSE}
 sqp_login(
-  'This is where your email goes',
+  'This is where your email or username goes',
   'This is where your password goes'
 )
 ```

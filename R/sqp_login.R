@@ -1,20 +1,21 @@
 #' Login to the SQP API
 #'
-#' Login to the SQP API directly from R. Make sure that your username and password
+#' Login to the SQP API directly from R. Make sure that your username/email and password
 #' are previously registered at \url{http://sqp.upf.edu/accounts/login/?next=/loadui/}
 #'
-#' @param username your user name as a string
+#' @param username your username or email as a string
 #' @param password your password as a string
 #'
 #' @details Currently \code{sqp_login} offers three possible ways to log in. The first
-#' is by placing your username and password as environment variables with names
-#' \code{SQP_USER} and \code{SQP_PW}. The second is placing your username and password as variables in
-#'  \code{options()} with the same names. And finally, the third, and most insecure way,
-#' is by providing your username and password as arguments to \code{sqp_login}.
-#' We discourage users to use the third option because it might pose security
-#' threats if the code is shared. See the examples below for practical explanations.
+#' is by placing your username/email and password as environment variables with names
+#' \code{SQP_USER} and \code{SQP_PW}. The second is placing your username/email and
+#' password as variables in \code{options()} with the same names. And finally,
+#' the third, and most insecure, is by providing your username/email and password as
+#' arguments to \code{sqp_login}. We discourage users to use the third option because
+#' it might pose security threats if the code is shared. See the examples below for
+#' practical explanations.
 #'
-#' Note that if the username or password is incorrect, the function will throw an error.
+#' Note that if the username/email or password is incorrect, the function will throw an error.
 #' Make sure you can log in at \url{http://sqp.upf.edu/accounts/login/?next=/loadui/}
 #' first.
 #'

@@ -35,7 +35,7 @@ library("sqpr")
 your_email <- Sys.getenv("your_email")
 ```
 
-Let's read in the data from the European Social Survey using the `ess` package and create a sum score of a number of variables. A sum score is literally the `sum` of a number of variables to create a composite score. Remember to replace your email in the argument `your_email`.
+Let's read in the data from the European Social Survey using the `ess` package and create a sum score of a number of variables. A sum score is literally the `sum` of a number of variables to create a composite score. Remember to replace your email as a character string instead of the argument `your_email`.
 
 ```{r, results = 'hide'}
 ess7es<-
@@ -69,7 +69,7 @@ ess7es
 Let's read in the SQP data. First we login with `sqp_login()` and for that to work we need to execute these two lines with our valid SQP credentials:
 
 ```{r, eval = FALSE}
-Sys.setenv(SQP_USER = 'your_username')
+Sys.setenv(SQP_USER = 'your_username or your_email')
 Sys.setenv(SQP_PW = 'your_pw')
 ```
 
