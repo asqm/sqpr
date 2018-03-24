@@ -33,6 +33,7 @@ question.
 \examples{
 \dontrun{
 # Set login information here. See ?sqp_login
+sqp_login()
 
 # 1 is ESS round 1
 find_questions(1, "tvtot")

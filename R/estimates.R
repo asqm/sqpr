@@ -76,6 +76,7 @@
 #' \dontrun{
 #'
 #' # Log in with sqp_login first. See ?sqp_login
+#' sqp_login()
 #'
 #' get_estimates(c(1, 2, 86))
 #'

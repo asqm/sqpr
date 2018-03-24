@@ -40,7 +40,8 @@ in \code{...}.
 }
 \examples{
 
-# Prepare data
+# Toy data
+
 library(tibble)
 sqp_df <-
 tibble(question = paste0("V", 1:5),

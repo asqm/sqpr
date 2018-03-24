@@ -25,7 +25,9 @@ Manually bind new rows to an SQP data frame
 }
 \examples{
 
+# Toy dataset
 library(tibble)
+
 sqp_df <-
  tibble(question = paste0("V", 1:5),
  quality = c(0.2, 0.3, 0.5, 0.6, 0.9),
@@ -40,8 +42,12 @@ sqp_bind_metrics(sqp_df, new_question, list(quality = 0.7, reliability = 0.2))
 
 # Specifying a wrong metric name results in error
 
-# sqp_bind_metrics(sqp_df, new_question, list(wrong_metric = 0.7))
+\dontrun{
+
+sqp_bind_metrics(sqp_df, new_question, list(wrong_metric = 0.7))
 # Error: One or more of the specified `metrics` don't match the SQP column names
+
+}
 
 # Currently only quality, reliability and validity are allowed.
 

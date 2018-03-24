@@ -34,14 +34,12 @@
 #'
 #' @examples
 #'
-#' # Note to Jorge: Must be changed to a valid correlation matrix
-#' # that has same name in the SQP data base
-#' # Also change ALL of this in thte tests doc
 #' set.seed(2131)
 #' library(tibble)
 #'
 #' corr_tibble <- sqp_correlate(matrix(rnorm(100, sd = 50), nrow = 20), rnorm(5))
 #'
+#' # Toy dataset
 #' sqp_df <-
 #'  tibble(question = paste0("V", 1:5),
 #'  quality = c(0.2, 0.3, 0.5, 0.6, 0.9),

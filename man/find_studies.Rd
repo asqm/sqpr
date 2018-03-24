@@ -40,6 +40,7 @@ using \code{\link{get_questions}} and \code{\link{find_questions}}.
 \dontrun{
 
 # Set your login information here. See ?sqp_login
+sqp_login()
 
 find_studies("ess")
 find_studies("australia")

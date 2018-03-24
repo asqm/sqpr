@@ -28,6 +28,7 @@
 #' \dontrun{
 #'
 #' # Set your login information here. See ?sqp_login
+#' sqp_login()
 #'
 #' find_studies("ess")
 #' find_studies("australia")

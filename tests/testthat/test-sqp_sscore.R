@@ -192,14 +192,14 @@ test_that("sqp_sscore checks that there's non_NA's in important arguments", {
   )
 })
 
-
+ess_email <- Sys.getenv("ess_email")
 
 test_that("sqp_sscore returns the exact result to decimal points", {
   selected_vars <- c("trstprl", "trstplt", "trstprt")
 
   the_data  <-
     ess::recode_missings(
-      ess::ess_country("Spain", 7, "cimentadaj@gmail.com")[selected_vars]
+      ess::ess_country("Spain", 7, ess_email)[selected_vars]
     )
 
   all_qs <- c("ppltrst", "polintr", "psppsgv",
