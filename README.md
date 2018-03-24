@@ -1,5 +1,5 @@
 
-sqpr <img src="man/figures/sqpr_logo.png" align="right" />
+sqpr
 ----
 ==========================================================
 
