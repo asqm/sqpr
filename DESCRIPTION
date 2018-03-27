@@ -24,7 +24,7 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
-    ess,
+    essurvey,
     lavaan,
     tidyverse
 VignetteBuilder: knitr

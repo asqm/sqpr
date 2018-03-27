@@ -25,21 +25,21 @@ We'll begin by loading the packages we'll use and the `sqpr` package.
 ```{r}
 library("lavaan")
 library("tidyverse")
-library("ess")
+library("essurvey")
 library("sqpr")
 ```
 
 ## Read the data
 
 ```{r, echo = FALSE}
-your_email <- Sys.getenv("your_email")
+your_email <- Sys.getenv("ess_email")
 ```
 
 Let's read in the data from the European Social Survey using the `ess` package and create a sum score of a number of variables. A sum score is literally the `sum` of a number of variables to create a composite score. Remember to replace your email as a character string instead of the argument `your_email`.
 
 ```{r, results = 'hide'}
-ess7es<-
-  ess_country("Spain", 7, your_email) %>%
+ess7es <-
+  import_country("Spain", 7, your_email) %>%
   recode_missings() 
 
 # Create composite scores

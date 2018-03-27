@@ -198,8 +198,8 @@ test_that("sqp_sscore returns the exact result to decimal points", {
   selected_vars <- c("trstprl", "trstplt", "trstprt")
 
   the_data  <-
-    ess::recode_missings(
-      ess::ess_country("Spain", 7, ess_email)[selected_vars]
+    essurvey::recode_missings(
+      essurvey::import_country("Spain", 7, ess_email)[selected_vars]
     )
 
   all_qs <- c("ppltrst", "polintr", "psppsgv",
