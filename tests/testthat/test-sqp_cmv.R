@@ -6,9 +6,6 @@ suppressWarnings(library(tibble))
 corr_tibble <-
   sqp_correlate(matrix(rnorm(100, sd = 50), nrow = 20),
                 rnorm(5))
-
-# Note to Jorge: Change this to a sqp df when sqp_collect() works.
-
 # test missing:
 # When y is not from sqp_collect(), sqp_cmv must throw an error
 # Show that when y is not from sqp class, there's an error

@@ -7,7 +7,7 @@
 sqp_sscore(sqp_data, df, new_name, ..., wt = NULL)
 }
 \arguments{
-\item{sqp_data}{a data frame given by \code{sqp_collect} containing
+\item{sqp_data}{a data frame given by \code{get_estimates} containing
 quality estimates from the variables specified in \code{...}.}
 
 \item{df}{a data frame which contains data for the variables specified
@@ -35,7 +35,7 @@ and the sum score.
 }
 \description{
 \code{sqp_sscore} takes a data frame with quality estimates from
-\code{sqp_collect} and estimates a sum score for selected variables
+\code{get_estimates} and estimates a sum score for selected variables
 in \code{...}.
 }
 \examples{

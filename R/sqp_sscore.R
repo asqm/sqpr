@@ -1,10 +1,10 @@
 #' Calculate sum score of selected variables
 #'
 #' \code{sqp_sscore} takes a data frame with quality estimates from
-#' \code{sqp_collect} and estimates a sum score for selected variables
+#' \code{get_estimates} and estimates a sum score for selected variables
 #' in \code{...}.
 #'
-#' @param sqp_data a data frame given by \code{sqp_collect} containing
+#' @param sqp_data a data frame given by \code{get_estimates} containing
 #' quality estimates from the variables specified in \code{...}.
 #' @param df a data frame which contains data for the variables specified
 #' in \code{...}.
