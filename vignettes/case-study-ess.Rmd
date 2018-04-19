@@ -23,23 +23,23 @@ In this case study we will go through an applied example of the capabilities of 
 We'll begin by loading the packages we'll use and the `sqpr` package.
 
 ```{r}
-library("lavaan")
-library("tidyverse")
-library("essurvey")
-library("sqpr")
+library(lavaan)
+library(tidyverse)
+library(essurvey)
+library(sqpr)
 ```
 
 ## Read the data
 
 ```{r, echo = FALSE}
-your_email <- Sys.getenv("ess_email")
+ess_email <- Sys.getenv("ess_email")
 ```
 
 Let's read in the data from the European Social Survey using the `ess` package and create a sum score of a number of variables. A sum score is literally the `sum` of a number of variables to create a composite score. Remember to replace your email as a character string instead of the argument `your_email`.
 
 ```{r, results = 'hide'}
 ess7es <-
-  import_country("Spain", 7, your_email) %>%
+  import_country("Spain", 7, ess_email) %>%
   recode_missings() 
 
 # Create composite scores
@@ -193,7 +193,7 @@ corr_q2
 
 It's the same correlation coefficients but with the diagonal set to the quality of the estimates. But **note** that both the order of the variables `Quality` and the order of the variables in `ess7corr` should be the same! Otherwise we might confuse quality coefficients between variables.
 
-We often want to calculate the Common Method Variance (CMV) of some of these variables because they share common methods such as likert scales, etc. The `sqpr` package makes this very easy using the `sqpr_cmv` function. Supply the same `sqp_data`, the `Quality` dataset and `sqp_cmv` estimates the CMV between the variables specified (here only two)
+We often want to calculate the Common Method Variance (CMV) of some of these observed variables because they share common methods such as likert scales, etc. The `sqpr` package makes this very easy using the `sqpr_cmv` function. Supply the same `sqp_data`, the `Quality` dataset and `sqp_cmv` estimates the CMV between the variables specified (here only two)
 
 ```{r}
 #subtract the cmv from the observed correlation
@@ -229,7 +229,7 @@ Here we have a corrected matrix for both measurement error and for the common me
 
 ## Regression model
 
-Let's run two arbitrary regression models and see how the results differ.
+Let's run two regression models taken from Weber & Werner (2018) and see how the results differ.
 
 ```{r}
 model<- "poltrst ~ ppltrst + stflife + polintr + stfeco + serv + systmrsp + agea + eisced"
@@ -286,3 +286,6 @@ R2 - R2_uncorr
 ```
 
 This case-study shows how adjusting for measurement error and Common Method Variance (CMV) can improve your estimates. We hope that you find the `sqpr` package useful for your estimations.
+
+* Wiebke Weber and Hannah Werner (under review). "The correct(ed) political trust. A step-by-step explanation to correct for measurement error in the study of trust in political institutions.", Social Indicators Research.
+
