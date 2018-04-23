@@ -16,6 +16,8 @@ knitr::opts_chunk$set(
 
 # sqpr
 
+[![CRAN status](https://www.r-pkg.org/badges/version/sqpr)](https://cran.r-project.org/package=sqpr)
+
 [![Travis build status](https://travis-ci.org/asqm/sqpr.svg?branch=master)](https://travis-ci.org/asqm/sqpr)
 
 [![Coverage status](https://codecov.io/gh/asqm/sqpr/branch/master/graph/badge.svg)](https://codecov.io/github/asqm/sqpr?branch=master)
