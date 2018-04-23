@@ -3,3 +3,4 @@
 ^wish_list.txt$
 ^sqp-rest.*$
 ^README\.Rmd$
+^\.travis\.yml$
