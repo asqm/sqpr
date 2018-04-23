@@ -120,7 +120,7 @@ object_request <- function(path, estimates = FALSE) {
 
 
 sqp_env <- new.env()
-sqp_env$hostname <- "http://10.60.110.24/"
+sqp_env$hostname <- "http://84.89.134.24/"
 sqp_env$auth <- "/api/auth"
 sqp_env$study <- "/api/v1/studies/"
 sqp_env$questions <- "/api/v1/questions/"
