@@ -26,5 +26,6 @@ Suggests:
     rmarkdown,
     essurvey,
     lavaan,
-    tidyverse
+    tidyverse,
+    covr
 VignetteBuilder: knitr
