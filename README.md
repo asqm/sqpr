@@ -12,7 +12,7 @@ Installation
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("recsm/sqpr")
+devtools::install_github("asqm/sqpr")
 ```
 
 Example

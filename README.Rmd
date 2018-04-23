@@ -25,9 +25,9 @@ The `sqpr` package allows you to calculate several estimations of the quality of
 
 `sqpr` is not currently on CRAN but you can install the developing version of from Github with:
 
-```r
+```{r, eval = FALSE}
 # install.packages("devtools")
-devtools::install_github("recsm/sqpr")
+devtools::install_github("asqm/sqpr")
 ```
 
 ## Example
