@@ -2,12 +2,9 @@
 # sqpr
 
 [![CRAN
-status](https://www.r-pkg.org/badges/version/sqpr)](https://cran.r-project.org/package=sqpr)
-
-[![Travis build
-status](https://travis-ci.org/asqm/sqpr.svg?branch=master)](https://travis-ci.org/asqm/sqpr)
-
-[![Coverage
+status](https://www.r-pkg.org/badges/version/sqpr)](https://cran.r-project.org/package=sqpr)[![Travis
+build
+status](https://travis-ci.org/asqm/sqpr.svg?branch=master)](https://travis-ci.org/asqm/sqpr)[![Coverage
 status](https://codecov.io/gh/asqm/sqpr/branch/master/graph/badge.svg)](https://codecov.io/github/asqm/sqpr?branch=master)
 
 <!-- # sqpr <img src="man/figures/sqpr_logo.png" align="right" /> -->
@@ -52,8 +49,8 @@ sqp_login()
 For details on the login process see the `Accessing the SQP API
 vignette` from the package.
 
-Once you’ve ran `sqp_login()` once, you’re all set to work with the SQP
-API\! No need to run it again unless you close the R session.
+Once you’ve ran `sqp_login()`, you’re all set to work with the SQP API\!
+No need to run it again unless you close the R session.
 
 ## Exploring the SQP API
 
