@@ -1,7 +1,12 @@
-^sqpr\.Rproj$
+^.*\.Rproj$
 ^\.Rproj\.user$
-^wish_list.txt$
-^sqp-rest.*$
-^README\.Rmd$
+^\.Rprofile$
+^README.Rmd
 ^\.travis\.yml$
+^cran-comments\.md$
 ^codecov\.yml$
+^LICENSE\.md$
+^docs$
+^\.github$
+^.*\.json$
+^.*\.txt$
