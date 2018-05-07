@@ -47,6 +47,7 @@ find_studies <- function(study) {
 }
 
 #' @rdname find_studies
+#' @export
 get_studies <- function() {
   final_df <- object_request(sqp_env$study)
   final_df[sqp_env$study_variables]
