@@ -66,6 +66,7 @@ find_questions <- function(id_study, question_name, all_columns = FALSE) {
 }
 
 #' @rdname find_questions
+#' @export
 get_questions <- function(id_study, all_columns = FALSE) {
   stopifnot(is.numeric(id_study), length(id_study) != 0)
 
