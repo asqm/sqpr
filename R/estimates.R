@@ -93,6 +93,10 @@
 get_estimates <- function(id, all_columns = FALSE, authorized = TRUE) {
   stopifnot(is.numeric(id), length(id) >= 1)
 
+  if (length(id) > 100) {
+    stop("The SQP API only accepts 100 requests per call and `id` has length greater than 100")
+  }
+
   collapsed_id <- paste0(id, collapse = ",")
   url_id <- paste0(sqp_env$questions, collapsed_id, sqp_env$q_estimates)
 

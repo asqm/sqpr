@@ -27,8 +27,8 @@ specific wording of the question, answer options, etc..}
 a \code{\link[tibble]{tibble}}
 }
 \description{
-Using the id of a particular study, extract information on a given
-question.
+Use find_question to search for information on a given question
+in a study and get_questions to return all the question in a study.
 }
 \examples{
 \dontrun{

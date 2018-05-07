@@ -1,7 +1,7 @@
 #' Extract question information from specific studies
 #'
-#' Using the id of a particular study, extract information on a given
-#' question.
+#' Use find_question to search for information on a given question
+#' in a study and get_questions to return all the question in a study.
 #'
 #' @param id_study a numeric value that specifies the desired study. Find with
 #' \code{\link{find_studies}} or \code{\link{get_studies}}.
