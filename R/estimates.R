@@ -122,6 +122,7 @@ get_question_name <- function(id) {
     )
 
   q_name <- tolower(jsonlite::fromJSON(almost_q_name)$short_name)
+  q_name
 }
 
 make_estimate_df <- function(raw_data, var_name, id, all_columns = FALSE, authorized = TRUE) {
