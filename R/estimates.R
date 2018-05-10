@@ -108,7 +108,7 @@ get_estimates <- function(id, all_columns = FALSE, authorized = TRUE) {
                            all_columns = all_columns,
                            authorized = authorized)
 
-  final_df <- tibble::as_tibble(do.call(rbind, list_data))
+  final_df <- tibble::as_tibble(bind_rows(list_data))
 
   final_df <- sqp_reconstruct(final_df)
   final_df
