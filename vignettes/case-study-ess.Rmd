@@ -217,7 +217,7 @@ cmv <-
 However, I don't advise any user to use `sqpr:::estimate_cmv` because it has not been developed for public use. The ready-for use version is `sqp_cmv`.
 
 
-To finish off correcting for the measurement error, we need to turn that correlation matrix into a covariance matrix.
+To finish off correcting for the measurement error, we transform the correlation to a covariance matrix, which is in itself a correlation matrix.
 
 ```{r}
 corrected_corr <- corr_q2_cmv %>% select(-rowname) %>% as.matrix() %>% cov2cor()
