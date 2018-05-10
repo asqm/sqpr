@@ -19,6 +19,10 @@
 #' specified in \code{...}. This will be used as weights in calculating the
 #' sum scores of all variable. Be default, all variables are given the same weight.
 #'
+#' @param drop a logical stating whether to drop the questions that compose
+#' the sum score. If \code{FALSE} it retains the original questions
+#' and the composite score.
+#'
 #' @return a \code{\link[tibble]{tibble}} similar to \code{sqp_data} but
 #' with a new row containing the sum score with the name specified in
 #' \code{new_name}. The result excludes the variables specified in
@@ -65,7 +69,7 @@
 #' )
 #'
 #'
-sqp_sscore <- function(sqp_data, df, new_name, ..., wt = NULL) {
+sqp_sscore <- function(sqp_data, df, new_name, ..., wt = NULL, drop = TRUE) {
 
   # Check SQP data has correct class and formats
   sqp_data <- sqp_reconstruct(sqp_data)
@@ -116,7 +120,13 @@ sqp_sscore <- function(sqp_data, df, new_name, ..., wt = NULL) {
   additional_rows <- generic_sqp(summary_name, new_estimate)
 
   # Bind the unselected questions with the new sumscore
-  combined_matrix <- dplyr::bind_rows(sqp_data[!rows_to_pick, ], additional_rows)
+
+  if (!drop) {
+    rows_to_pick <- rep(TRUE, length(rows_to_pick))
+  } else {
+    rows_to_pick <- !rows_to_pick
+  }
+  combined_matrix <- dplyr::bind_rows(sqp_data[rows_to_pick, ], additional_rows)
   correct_order <- c("question", sqp_env$sqp_columns)
   new_order <- combined_matrix[c(correct_order, setdiff(names(combined_matrix), correct_order))]
 

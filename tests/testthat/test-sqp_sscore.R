@@ -52,6 +52,22 @@ test_that("sqp_sscore uses only unique variable names", {
   expect_is(result[[1]], "character")
 })
 
+test_that("sqp_sscore keeps variables that compose the sum score", {
+  result <-
+    sqp_sscore(
+      sqp_data = sqp_df,
+      df = sample_data,
+      new_name = new_sumscore,
+      V3, V4, V4,
+      drop = FALSE
+    )
+
+  expect_s3_class(result, "data.frame")
+  expect_s3_class(result, "sqp")
+
+  expect_equal(nrow(result), nrow(sqp_df) + 1)
+})
+
 
 sqp_df <-
   tibble(question = paste0("V", 1:5),
