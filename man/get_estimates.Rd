@@ -17,8 +17,9 @@ be one or more id's.}
 columns from the SQP database. See the details section for a list of all possible variables.}
 
 \item{authorized}{\code{TRUE} to return \strong{only} the authorized prediction or
-\code{FALSE} return all available predictions. The user should then pick which
-prediction to use based on the \code{user_id} or \code{user_username} columns.}
+\code{FALSE} return all available predictions. If set to \code{FALSE} a
+a warning is issued reminding the user to pick one prediction for each variable
+based on the \code{user_id} and \code{user_username} columns.}
 }
 \value{
 \code{get_estimates} returns a \code{\link[tibble]{tibble}} with the predictions.

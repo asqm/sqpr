@@ -5,8 +5,9 @@
 #' @param all_columns a logical stating whether to extract all available
 #' columns from the SQP database. See the details section for a list of all possible variables.
 #' @param authorized \code{TRUE} to return \strong{only} the authorized prediction or
-#' \code{FALSE} return all available predictions. The user should then pick which
-#' prediction to use based on the \code{user_id} or \code{user_username} columns.
+#' \code{FALSE} return all available predictions. If set to \code{FALSE} a
+#' a warning is issued reminding the user to pick one prediction for each variable
+#' based on the \code{user_id} and \code{user_username} columns.
 #'
 #' @details
 #' SQP predictions can be both 'authorized' predictions, which are
@@ -108,7 +109,7 @@ get_estimates <- function(id, all_columns = FALSE, authorized = TRUE) {
                            all_columns = all_columns,
                            authorized = authorized)
 
-  if (!authorized) message("Authorized was set to FALSE, remember to pick only one single estimate for all variables")
+  if (!authorized) message("Authorized was set to FALSE, remember to pick only one single prediction for all questions")
 
   final_df <- tibble::as_tibble(do.call(rbind, list_data))
 
