@@ -108,6 +108,8 @@ get_estimates <- function(id, all_columns = FALSE, authorized = TRUE) {
                            all_columns = all_columns,
                            authorized = authorized)
 
+  if (!authorized) message("Authorized was set to FALSE, remember to pick only one single estimate for all variables")
+
   final_df <- tibble::as_tibble(do.call(rbind, list_data))
 
   final_df <- sqp_reconstruct(final_df)
@@ -162,7 +164,16 @@ make_estimate_df <- function(raw_data, var_name, id, all_columns = FALSE, author
     row_to_pick <- seq_len(nrow(raw_data))
   }
 
-  cols_to_pick <- if (all_columns) names(raw_data) else sqp_env$short_estimate_variables
+  if (all_columns) {
+    # To preserve consistency I place the sqp vars in front
+    # and grab the unique columns to delete the same variables
+    # that are in the middle.
+    cols_to_pick <-
+      unique(c(sqp_env$short_estimate_variables, names(raw_data)))
+  } else {
+    cols_to_pick <- sqp_env$short_estimate_variables
+  }
+
   final_df <- raw_data[row_to_pick, cols_to_pick]
 
   final_df <- purrr::set_names(final_df, ~ gsub("prediction.", "", .x))
