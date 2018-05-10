@@ -26,7 +26,7 @@ specified in \code{...}. This will be used as weights in calculating the
 sum scores of all variable. Be default, all variables are given the same weight.}
 
 \item{drop}{a logical stating whether to drop the questions that compose
-the sum score. If \code{FALSE} it retains the original questions
+ the sumscore (specified in \code{...}) If \code{FALSE} it retains the original questions
 and the composite score.}
 }
 \value{

@@ -20,7 +20,7 @@
 #' sum scores of all variable. Be default, all variables are given the same weight.
 #'
 #' @param drop a logical stating whether to drop the questions that compose
-#' the sum score. If \code{FALSE} it retains the original questions
+#'  the sumscore (specified in \code{...}) If \code{FALSE} it retains the original questions
 #' and the composite score.
 #'
 #' @return a \code{\link[tibble]{tibble}} similar to \code{sqp_data} but
