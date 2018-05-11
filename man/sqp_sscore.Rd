@@ -2,7 +2,7 @@
 % Please edit documentation in R/sqp_sscore.R
 \name{sqp_sscore}
 \alias{sqp_sscore}
-\title{Calculate sum score of selected variables}
+\title{Calculate quality of sum score of selected variables}
 \usage{
 sqp_sscore(sqp_data, df, new_name, ..., wt = NULL, drop = TRUE)
 }
@@ -17,30 +17,28 @@ in \code{...}.}
 of the new sum score.}
 
 \item{...}{bare unquoted names or separate strings specifying
-the variable names from which to estimate the sum score. They all
-must be present in \code{sqp_data} and \code{df}. At minimum, it must
-be two or more variable names.}
+the variable names from which to estimate quality of their sum score.
+They all must be present in \code{sqp_data} and \code{df}. At minimum,
+it must be two or more variable names.}
 
 \item{wt}{a non-NA numeric vector of the same length as the variables
 specified in \code{...}. This will be used as weights in calculating the
-sum scores of all variable. Be default, all variables are given the same weight.}
+sum scores of all variable. Be default, all variables are given the same
+weight.}
 
 \item{drop}{a logical stating whether to drop the questions that compose
- the sumscore (specified in \code{...}) If \code{FALSE} it retains the original questions
+the sum score (specified in \code{...}) If \code{FALSE} it retains the original questions
 and the composite score.}
 }
 \value{
 a \code{\link[tibble]{tibble}} similar to \code{sqp_data} but
-with a new row containing the sum score with the name specified in
-\code{new_name}. The result excludes the variables specified in
-\code{...} and only shows the new sum score. In future releases
-there might be an option to keep both the variables in \code{...}
-and the sum score.
+with a new row containing the quality of a sum score with the name
+specified in \code{new_name}.
 }
 \description{
 \code{sqp_sscore} takes a data frame with quality estimates from
-\code{get_estimates} and estimates a sum score for selected variables
-in \code{...}.
+\code{get_estimates} and estimates the quality of a sum score for
+ selected variables in \code{...}.
 }
 \examples{
 
