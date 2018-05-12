@@ -96,7 +96,7 @@ To wrap the SQP API related business, let's grab the predicted estimates with `g
 
 ```{r}
 sqp_data <-
-  get_estimates(questions$id, all_columns = TRUE) %>%
+  get_estimates(questions$id) %>%
   arrange(question)
 ```
 
