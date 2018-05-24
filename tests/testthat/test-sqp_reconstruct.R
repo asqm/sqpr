@@ -27,17 +27,6 @@ test_that("sqp_reconstruct checks data format", {
            " must be numeric columns with values between/including 0 and 1 in `sqp_data`"
            )
   )
-
-  sqp_df <-
-    tibble(question = 1:3,
-           quality = c(0.2, 0.3, 0.5),
-           reliability = c(NA, 0.4, 0.5),
-           validity = c(NA, NA, 0.2))
-
-  expect_error(
-    sqp_reconstruct(sqp_df),
-    "First column in `sqp_data` must contain the question names as strings"
-  )
 })
 
 test_that("sqp_reconstruct assigns sqp class if everything is fine", {

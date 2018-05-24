@@ -95,19 +95,3 @@ sqp_pw <- function(x) {
 check_login <- function() {
   if (is.null(sqp_env$token)) stop("You need to be logged in to query from the SQP API. See ?sqp_login")
 }
-
-
-
-# sqp_login()
-# sqp_login("hey")
-# sqp_login("hey", "ho")
-# sqp_env$token <- NULL
-# Sys.setenv("SQP_USER" = "hey")
-# Sys.setenv("SQP_PW" = "ho")
-# sqp_login()
-# Sys.setenv("SQP_USER" = "")
-# Sys.setenv("SQP_PW" = "")
-# sqp_login()
-# options(SQP_USER = "hey",
-#         SQP_PW = "ho")
-# sqp_login()

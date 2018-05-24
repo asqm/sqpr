@@ -18,6 +18,9 @@ sqp_reconstruct <- function(sqp_data, variables_check = sqp_env$sqp_columns) {
   sqp_data
 }
 
+
+# This should ONLY be used when you want to check an existing sqp
+# df
 check_sqp_data <- function(sqp_data, available_vars) {
   # Check sqp_env$sqp_columns variables exists
 
@@ -30,9 +33,6 @@ check_sqp_data <- function(sqp_data, available_vars) {
   }
 
   purrr::walk(sqp_data[available_vars], col_checker)
-  if (!is.character(sqp_data[[1]])) {
-    stop("First column in `sqp_data` must contain the question names as strings")
-  }
 }
 
 col_checker <- function(x) {
