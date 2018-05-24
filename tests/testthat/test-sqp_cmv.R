@@ -3,8 +3,9 @@ context("test-sqp_cmv.R")
 set.seed(2131)
 suppressWarnings(library(tibble))
 
+original_df <- as.data.frame(matrix(rnorm(100, sd = 50), nrow = 20))
 corr_tibble <-
-  sqp_correlate(matrix(rnorm(100, sd = 50), nrow = 20),
+  sqp_correlate(original_df,
                 rnorm(5))
 # test missing:
 # When y is not from sqp_collect(), sqp_cmv must throw an error
@@ -177,6 +178,29 @@ test_that("sqp_sscore adds sqp class to valid sqp_data", {
   )
   expect_identical(valid_class, noclass)
 })
+
+test_that("sqp_cmv calculates standardized CMV", {
+  expect_error(sqp_cmv(corr_tibble,
+                       sqp_df, V4, V5,
+                       standardized = TRUE),
+               "Argument `standardized` was set to `TRUE` but the `original_data` argument was not supplied")
+
+  expect_error(sqp_cmv(corr_tibble,
+                       sqp_df, V4, V5,
+                       standardized = TRUE,
+                       original_data = as.matrix(original_df)),
+               "is.data.frame(.*) is not TRUE")
+
+  # Check that variables specified in `...` are in original_data
+  # by supplying a random data set
+  expect_error(sqp_cmv(corr_tibble,
+                       sqp_df, V4, V5,
+                       standardized = TRUE,
+                       original_data = mtcars),
+               "Variables .+ are not preset in `original_data`")
+
+})
+
 
 test_that("estimate_cmv returns correct output", {
   sqp_df <-

@@ -4,7 +4,7 @@
 \alias{sqp_cmv}
 \title{Adjust a correlation matrix for Common Method Variance (CMV)}
 \usage{
-sqp_cmv(x, sqp_data, ..., cmv = NULL)
+sqp_cmv(x, sqp_data, ..., standardized = FALSE, original_data, cmv = NULL)
 }
 \arguments{
 \item{x}{a correlation matrix, a correlation data frame or a correlation
@@ -15,6 +15,17 @@ sqp_cmv(x, sqp_data, ..., cmv = NULL)
 
 \item{...}{two or more variables present in both \code{x} and \code{sqp_data}. Can
 be both in bare unquoted names or as character strings.}
+
+\item{standardized}{A logical stating whether to calculate a standardized Common Method Variance.
+This step multiplies the original CMV coefficient by the standard deviation of the variables
+in \code{original_data}. Whenever \code{standardized} is set to \code{TRUE}, \code{original_data}
+must be a non-missing argument with a data frame that contains the variables specified in
+\code{...}. If \code{standardized} is \code{FALSE} then \code{original_data} is ignored
+even if supplied.}
+
+\item{original_data}{A data frame containing the original data for variables specified
+in \code{...}. For example, the original columns of the variables from the correlation
+matrix supplied in \code{x}.}
 
 \item{cmv}{an optional numeric vector of length 1 which contains the
 CMV coefficient of the variables specified in \code{...}. It is strongly
@@ -43,7 +54,8 @@ the cmv coefficient in the argument \code{cmv}.
 set.seed(2131)
 library(tibble)
 
-corr_tibble <- sqp_correlate(matrix(rnorm(100, sd = 50), nrow = 20), rnorm(5))
+original_df <- as.data.frame(matrix(rnorm(100, sd = 50), nrow = 20))
+corr_tibble <- sqp_correlate(original_df, rnorm(5))
 
 # Toy dataset
 sqp_df <-
@@ -64,7 +76,14 @@ corr_tibble
 sqp_cmv(corr_tibble, sqp_df, V4, V5)
 
 # The V5*V4 from both the upper/lower triangles
-# correlation matrix changed from -0.137 to -0.282
+# correlation matrix changed from -0.05 to -0.203
+
+# If you want to get a standardized CMV, then supply
+# `standardized = TRUE` and `original_data`.
+
+sqp_cmv(corr_tibble, sqp_df, V4, V5,
+        standardized = TRUE,
+        original_data = original_df)
 
 }
 \seealso{

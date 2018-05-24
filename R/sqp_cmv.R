@@ -14,6 +14,16 @@
 #' \code{\link{get_estimates}}.
 #' @param ... two or more variables present in both \code{x} and \code{sqp_data}. Can
 #' be both in bare unquoted names or as character strings.
+#' @param standardized A logical stating whether to calculate a standardized Common Method Variance.
+#' This step multiplies the original CMV coefficient by the standard deviation of the variables
+#' in \code{original_data}. Whenever \code{standardized} is set to \code{TRUE}, \code{original_data}
+#' must be a non-missing argument with a data frame that contains the variables specified in
+#' \code{...}. If \code{standardized} is \code{FALSE} then \code{original_data} is ignored
+#' even if supplied.
+#'
+#' @param original_data A data frame containing the original data for variables specified
+#' in \code{...}. For example, the original columns of the variables from the correlation
+#' matrix supplied in \code{x}.
 #' @param cmv an optional numeric vector of length 1 which contains the
 #' CMV coefficient of the variables specified in \code{...}. It is strongly
 #' suggested that this coefficient is estimated via \code{\link{estimate_cmv}}.
@@ -37,7 +47,8 @@
 #' set.seed(2131)
 #' library(tibble)
 #'
-#' corr_tibble <- sqp_correlate(matrix(rnorm(100, sd = 50), nrow = 20), rnorm(5))
+#' original_df <- as.data.frame(matrix(rnorm(100, sd = 50), nrow = 20))
+#' corr_tibble <- sqp_correlate(original_df, rnorm(5))
 #'
 #' # Toy dataset
 #' sqp_df <-
@@ -58,9 +69,16 @@
 #' sqp_cmv(corr_tibble, sqp_df, V4, V5)
 #'
 #' # The V5*V4 from both the upper/lower triangles
-#' # correlation matrix changed from -0.137 to -0.282
+#' # correlation matrix changed from -0.05 to -0.203
 #'
-sqp_cmv <- function(x, sqp_data, ..., cmv = NULL) {
+#' # If you want to get a standardized CMV, then supply
+#' # `standardized = TRUE` and `original_data`.
+#'
+#' sqp_cmv(corr_tibble, sqp_df, V4, V5,
+#'         standardized = TRUE,
+#'         original_data = original_df)
+#'
+sqp_cmv <- function(x, sqp_data, ..., standardized = FALSE, original_data, cmv = NULL) {
   cmv_vars <- unique(as.character(substitute(list(...)))[-1])
 
   if (!(is.data.frame(x) | is.matrix(x))) {
@@ -82,6 +100,24 @@ sqp_cmv <- function(x, sqp_data, ..., cmv = NULL) {
 
   selected_rows <- sqp_data[[1]] %in% cmv_vars
   if (is.null(cmv)) cmv <- estimate_cmv(sqp_data[selected_rows, ])
+
+  # Check that if standardized is TRUE and original data is there
+  if (standardized && missing(original_data)) {
+    stop("Argument `standardized` was set to `TRUE` but the `original_data` argument was not supplied")
+
+  } else if (standardized && !missing(original_data)) {
+    # If both args are there, check that it's a data frame and that all variables are there
+    stopifnot(is.data.frame(original_data))
+
+    if (!all(cmv_vars %in% names(original_data))) {
+      stop("Variables ",
+           paste(cmv_vars[!cmv_vars %in% names(original_data)], collapse = ", "),
+           " are not preset in `original_data`")
+    }
+
+    # Calculate standardized cmv
+    cmv <- prod(cmv, vapply(original_data[cmv_vars], stats::sd, FUN.VALUE = numeric(1)))
+  }
 
   corrected_corr <- tibble::as_tibble(corr2cmv(x, cmv, cmv_vars))
 
