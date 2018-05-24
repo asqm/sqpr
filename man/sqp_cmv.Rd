@@ -4,7 +4,7 @@
 \alias{sqp_cmv}
 \title{Adjust a correlation matrix for Common Method Variance (CMV)}
 \usage{
-sqp_cmv(x, sqp_data, ..., standardized = FALSE, original_data, cmv = NULL)
+sqp_cmv(x, sqp_data, ..., standardized = TRUE, original_data, cmv = NULL)
 }
 \arguments{
 \item{x}{a correlation matrix, a correlation data frame or a correlation
@@ -17,10 +17,11 @@ sqp_cmv(x, sqp_data, ..., standardized = FALSE, original_data, cmv = NULL)
 be both in bare unquoted names or as character strings.}
 
 \item{standardized}{A logical stating whether to calculate a standardized Common Method Variance.
-This step multiplies the original CMV coefficient by the standard deviation of the variables
-in \code{original_data}. Whenever \code{standardized} is set to \code{TRUE}, \code{original_data}
+By default it's calculated as standardized. If \code{standardized} is set to \code{FALSE} then
+the original CMV coefficient is multiplied by the standard deviation of the variables
+in \code{original_data}. Whenever \code{standardized} is set to \code{FALSE}, \code{original_data}
 must be a non-missing argument with a data frame that contains the variables specified in
-\code{...}. If \code{standardized} is \code{FALSE} then \code{original_data} is ignored
+\code{...}. If \code{standardized} is \code{TRUE} then \code{original_data} is ignored
 even if supplied.}
 
 \item{original_data}{A data frame containing the original data for variables specified
@@ -79,10 +80,10 @@ sqp_cmv(corr_tibble, sqp_df, V4, V5)
 # correlation matrix changed from -0.05 to -0.203
 
 # If you want to get a standardized CMV, then supply
-# `standardized = TRUE` and `original_data`.
+# `standardized = FALSE` and `original_data`.
 
 sqp_cmv(corr_tibble, sqp_df, V4, V5,
-        standardized = TRUE,
+        standardized = FALSE,
         original_data = original_df)
 
 }

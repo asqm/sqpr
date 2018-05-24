@@ -182,12 +182,12 @@ test_that("sqp_sscore adds sqp class to valid sqp_data", {
 test_that("sqp_cmv calculates standardized CMV", {
   expect_error(sqp_cmv(corr_tibble,
                        sqp_df, V4, V5,
-                       standardized = TRUE),
-               "Argument `standardized` was set to `TRUE` but the `original_data` argument was not supplied")
+                       standardized = FALSE),
+               "Argument `standardized` was set to `FALSE` but the `original_data` argument was not supplied")
 
   expect_error(sqp_cmv(corr_tibble,
                        sqp_df, V4, V5,
-                       standardized = TRUE,
+                       standardized = FALSE,
                        original_data = as.matrix(original_df)),
                "is.data.frame(.*) is not TRUE")
 
@@ -195,7 +195,7 @@ test_that("sqp_cmv calculates standardized CMV", {
   # by supplying a random data set
   expect_error(sqp_cmv(corr_tibble,
                        sqp_df, V4, V5,
-                       standardized = TRUE,
+                       standardized = FALSE,
                        original_data = mtcars),
                "Variables .+ are not preset in `original_data`")
 

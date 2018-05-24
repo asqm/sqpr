@@ -15,15 +15,17 @@
 #' @param ... two or more variables present in both \code{x} and \code{sqp_data}. Can
 #' be both in bare unquoted names or as character strings.
 #' @param standardized A logical stating whether to calculate a standardized Common Method Variance.
-#' This step multiplies the original CMV coefficient by the standard deviation of the variables
-#' in \code{original_data}. Whenever \code{standardized} is set to \code{TRUE}, \code{original_data}
+#' By default it's calculated as standardized. If \code{standardized} is set to \code{FALSE} then
+#' the original CMV coefficient is multiplied by the standard deviation of the variables
+#' in \code{original_data}. Whenever \code{standardized} is set to \code{FALSE}, \code{original_data}
 #' must be a non-missing argument with a data frame that contains the variables specified in
-#' \code{...}. If \code{standardized} is \code{FALSE} then \code{original_data} is ignored
+#' \code{...}. If \code{standardized} is \code{TRUE} then \code{original_data} is ignored
 #' even if supplied.
 #'
 #' @param original_data A data frame containing the original data for variables specified
 #' in \code{...}. For example, the original columns of the variables from the correlation
 #' matrix supplied in \code{x}.
+#'
 #' @param cmv an optional numeric vector of length 1 which contains the
 #' CMV coefficient of the variables specified in \code{...}. It is strongly
 #' suggested that this coefficient is estimated via \code{\link{estimate_cmv}}.
@@ -72,13 +74,13 @@
 #' # correlation matrix changed from -0.05 to -0.203
 #'
 #' # If you want to get a standardized CMV, then supply
-#' # `standardized = TRUE` and `original_data`.
+#' # `standardized = FALSE` and `original_data`.
 #'
 #' sqp_cmv(corr_tibble, sqp_df, V4, V5,
-#'         standardized = TRUE,
+#'         standardized = FALSE,
 #'         original_data = original_df)
 #'
-sqp_cmv <- function(x, sqp_data, ..., standardized = FALSE, original_data, cmv = NULL) {
+sqp_cmv <- function(x, sqp_data, ..., standardized = TRUE, original_data, cmv = NULL) {
   cmv_vars <- unique(as.character(substitute(list(...)))[-1])
 
   if (!(is.data.frame(x) | is.matrix(x))) {
@@ -101,11 +103,11 @@ sqp_cmv <- function(x, sqp_data, ..., standardized = FALSE, original_data, cmv =
   selected_rows <- sqp_data[[1]] %in% cmv_vars
   if (is.null(cmv)) cmv <- estimate_cmv(sqp_data[selected_rows, ])
 
-  # Check that if standardized is TRUE and original data is there
-  if (standardized && missing(original_data)) {
-    stop("Argument `standardized` was set to `TRUE` but the `original_data` argument was not supplied")
+  # Check that if standardized is FALSE and original data is there
+  if (!standardized && missing(original_data)) {
+    stop("Argument `standardized` was set to `FALSE` but the `original_data` argument was not supplied")
 
-  } else if (standardized && !missing(original_data)) {
+  } else if (!standardized && !missing(original_data)) {
     # If both args are there, check that it's a data frame and that all variables are there
     stopifnot(is.data.frame(original_data))
 
