@@ -58,17 +58,7 @@ sqp_login()
 
 That easy! The nice thing is that once you executed the previous lines you can erase them from your script and nobody will ever see your account credentials.
 
-Very similarly, you can also set your credentials as options in your R session.
-
-```{r, eval = FALSE}
-options(
-  SQP_USER = 'This is where your email or username goes'),
-  SQP_PW = 'This is where your password goes'
-)
-sqp_login()
-```
-
-This is very similar to the previous approach in that you can delete the `options(...)` statement and `sqp_login()` will always find it. Note that both approaches only work during your R session. If you're interested in setting the `SQP_USER` and `SQP_PW` variables permanently in your system environment (that means not having to write them down everytime you open/close your session), then you should check out [this chapter](https://csgillespie.github.io/efficientR/r-startup.html#renviron) on environmental variables.
+Note that this approach only works during your R session. If you're interested in setting the `SQP_USER` and `SQP_PW` variables permanently in your system environment (that means not having to write them down everytime you open/close your session), then you should check out [this chapter](https://csgillespie.github.io/efficientR/r-startup.html#renviron) on environmental variables.
 
 Finally, there is one last approach, which I don't recommend. You can always sign up by placing your credentials inside `sqp_login()`, but that would require for your credentials to be visible to anyone you share your code to. That means any documents shared on Google Drive, Github, Bitbucket or just a simple share over gmail. In any case, here's how you'd do it:
 
@@ -133,7 +123,7 @@ It will also return empty fields for the questions that don't have any predictio
 get_estimates(sp_tv$id, all_columns = TRUE)
 ```
 
-The nice thing about `get_estimates` is that once you've explored and found your variables, if you save the id's of the questions in your script, once your restart your R session you can avoid all most of the steps above and get your estimates with only `sqp_login(); get_estimates(question_ids)`, assuming you placed your login information as environmental variables (or options) and your question ids are in a vector named `question_ids`.
+The nice thing about `get_estimates` is that once you've explored and found your variables, if you save the id's of the questions in your script, once your restart your R session you can avoid all of the steps above and get your estimates with only `sqp_login(); get_estimates(question_ids)`, assuming you placed your login information as environmental variables (or options) and your question ids are in a vector named `question_ids`.
 
 I hope that gives a general idea of how to explore the SQP interactively. For more examples on how this blends with the other `sqpr` related functions, check out the case-study vignette of the `sqpr` package.
 

@@ -43,18 +43,12 @@ First, load the package in R and provide your registered credentials.
 
 ```{r, echo = FALSE}
 library(sqpr)
+sqp_login()
 ```
 
 ```{r, eval = FALSE}
 library(sqpr)
-Sys.setenv(SQP_USER = 'This is where your email goes')
-Sys.setenv(SQP_PW = 'This is where your password goes')
-```
-
-Effectively login with `sqpr_login`.
-
-```{r}
-sqp_login()
+sqp_login('your username', 'your password')
 ```
 
 For details on the login process see the `Accessing the SQP API vignette` from the package.
