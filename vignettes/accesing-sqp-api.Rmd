@@ -125,7 +125,7 @@ The hard part is done now. Once we have the `id` of your questions of interest, 
 get_estimates(sp_tv$id)
 ```
 
-`get_estimates` will return all question names as lower case for increasing the chances of compatibility with the name in the questionnaire of the study. Something very important for using other `sqpr` functions such as `sqp_cmv`, where the function checks that the names in `question` match the column names of the study. Check out the case-study vignette of the `sqpr` package for a more concrete example.
+`get_estimates` will return all question names as lower case for increasing the chances of compatibility with the name in the questionnaire of the study. Something very important for using other `sqpr` functions such as `sqp_cmv_cor`, where the function checks that the names in `question` match the column names of the study. Check out the case-study vignette of the `sqpr` package for a more concrete example.
 
 It will also return empty fields for the questions that don't have any predictions, like `tvpol` in the example above. Moreover, `get_estimates` gives the option of grabbing more columns from the SQP API that contain estimations such as standard errors and interquantile ranges of the predictions from above. See `?get_estimates` for a list of all available columns. You can do that like this:
 

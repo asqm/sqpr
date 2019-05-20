@@ -194,29 +194,28 @@ corr_q2
 
 It's the same correlation coefficients but with the diagonal set to the quality of the estimates. But **note** that both the order of the variables `Quality` and the order of the variables in `ess7corr` should be the same! Otherwise we might confuse quality coefficients between variables.
 
-We often want to calculate the Common Method Variance (CMV) of some of these observed variables because they share common methods such as likert scales, etc. The `sqpr` package makes this very easy using the `sqpr_cmv` function. Supply the same `sqp_data`, the `Quality` dataset and `sqp_cmv` estimates the CMV between the variables specified (here only two)
+We often want to calculate the Common Method Variance (CMV) of some of these observed variables because they share common methods such as likert scales, etc. The `sqpr` package makes this very easy using the `sqpr_cmv_cor` function. Supply the the correlation data frame, the `Quality` dataset with quality estimates and `sqp_cmv_cor` estimates the CMV between the variables specified (here only two) and subtracts it from the correlation.
 
 ```{r}
 #subtract the cmv from the observed correlation
 corr_q2_cmv <-
-  sqp_cmv(x = corr_q2,
-          sqp_data = Quality,
-          stfeco, stflife)
+  sqp_cmv_cor(x = corr_q2,
+              sqp_data = Quality,
+              stfeco, stflife)
 
 corr_q2_cmv
 ```
-Perhaps you can't see it but the coefficient of the `stfeco` and `stflife` combination has gone down from `0.27` to `0.20`. More concretely, `sqp_cmv` calculates the CMV and subtracts it from the correlation coefficient. A more directly example is:
+
+Perhaps you can't see it but the coefficient of the `stfeco` and `stflife` combination has gone down from `0.27` to `0.203`. More concretely, `sqp_cmv_cor` calculates the CMV and subtracts it from the correlation coefficient. A more directly example is:
 
 ```{r}
 cmv <-
   Quality %>%
   filter(question %in% c("stflife", "stfeco")) %>%
-  sqpr:::estimate_cmv()
+  sqpr::estimate_cmv()
 
 0.27 - cmv
 ```
-However, I don't advise any user to use `sqpr:::estimate_cmv` because it has not been developed for public use. The ready-for use version is `sqp_cmv`.
-
 
 To finish off correcting for the measurement error, we transform the correlation to a covariance matrix, which is in itself a correlation matrix.
 
