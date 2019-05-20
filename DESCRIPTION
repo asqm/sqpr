@@ -12,6 +12,7 @@ LazyData: true
 ByteCompile: true
 Imports: 
     stats,
+    dplyr,
     tibble,
     httr,
     memoise,
