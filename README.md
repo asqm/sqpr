@@ -2,9 +2,12 @@
 # sqpr
 
 [![CRAN
-status](https://www.r-pkg.org/badges/version/sqpr)](https://cran.r-project.org/package=sqpr)[![Travis
-build
-status](https://travis-ci.org/asqm/sqpr.svg?branch=master)](https://travis-ci.org/asqm/sqpr)[![Coverage
+status](https://www.r-pkg.org/badges/version/sqpr)](https://cran.r-project.org/package=sqpr)
+[![Travis build
+status](https://travis-ci.org/asqm/sqpr.svg?branch=master)](https://travis-ci.org/asqm/sqpr)
+[![AppVeyor build
+status](https://ci.appveyor.com/api/projects/status/github/asqm/sqpr?branch=master&svg=true)](https://ci.appveyor.com/project/asqm/sqpr)
+[![Coverage
 status](https://codecov.io/gh/asqm/sqpr/branch/master/graph/badge.svg)](https://codecov.io/github/asqm/sqpr?branch=master)
 
 <!-- # sqpr <img src="man/figures/sqpr_logo.png" align="right" /> -->
@@ -36,14 +39,7 @@ First, load the package in R and provide your registered credentials.
 
 ``` r
 library(sqpr)
-Sys.setenv(SQP_USER = 'This is where your email goes')
-Sys.setenv(SQP_PW = 'This is where your password goes')
-```
-
-Effectively login with `sqpr_login`.
-
-``` r
-sqp_login()
+sqp_login('your username', 'your password')
 ```
 
 For details on the login process see the `Accessing the SQP API
@@ -102,9 +98,9 @@ predictions
 #> # A tibble: 3 x 4
 #>   question reliability validity quality
 #>   <chr>          <dbl>    <dbl>   <dbl>
-#> 1 tvtot          0.713    0.926   0.660
-#> 2 tvpol         NA       NA      NA    
-#> 3 prtvtxx       NA       NA      NA
+#> 1 tvtot          0.713    0.926    0.66
+#> 2 tvpol         NA       NA       NA   
+#> 3 prtvtxx       NA       NA       NA
 ```
 
 `get_estimates` will return all question names as lower case for

@@ -14,11 +14,15 @@ test_that("login succeeds with environment variables", {
 
 sqp_env$token <- NULL
 
-user <- Sys.getenv("SQP_USER")
-pw <- Sys.getenv("SQP_PW")
-
 test_that("login succeeds with variables as", {
+  user <- Sys.getenv("SQP_USER")
+  pw <- Sys.getenv("SQP_PW")
+
   options(SQP_USER = user, SQP_PW = pw)
+
   expect_silent(sqp_login())
   expect_false(sqp_env$token == "")
+
+  Sys.setenv("SQP_USER" = user)
+  Sys.setenv("SQP_PW" = pw)
 })

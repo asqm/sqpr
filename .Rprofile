@@ -1,1 +1,3 @@
-message("Remember that to run `devtools::check` you need to Sys.setenv on SQP_USER, SQP_PW and ess_email before. `env_vars` doesn't seem to work well.")
+if (interactive()) {
+  message("Remember to specify Sys.setenv(SQP_USER = ''); Sys.setenv(SQP_PW = ''); Sys.setenv(ess_email = '') as environment variables to run `devtools::check()`")
+}
