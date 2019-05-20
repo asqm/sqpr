@@ -69,14 +69,16 @@ ess7es
 Let's read in the SQP data. First we login with `sqp_login()` and for that to work we need to execute these two lines with our valid SQP credentials:
 
 ```{r, eval = FALSE}
-Sys.setenv(SQP_USER = 'your_username or your_email')
-Sys.setenv(SQP_PW = 'your_pw')
+sqp_login("your user name", "your password")
 ```
 
-Once that's done, we can run `sqp_login()` and continue with accessing the data.
+```{r, echo = FALSE}
+sqp_login()
+```
+
+Once that's done, we can continue with accessing the data.
 
 ```{r}
-sqp_login()
 study_id <- find_studies("ESS Round 7")$id
 
 questions <-
@@ -162,7 +164,6 @@ variables_order <- c("poltrst",
 Quality <- Quality[match(variables_order, Quality$question), ]
 ```
 
-
 Briefly, let's also select these variables for ESS data.
 
 ```{r}
@@ -179,7 +180,7 @@ original_corr_2 <- cor(ess7escorr, use = "complete.obs", method = "pearson")
 original_corr_2
 ```
 
-`sqpr` has a very similar function to `cor` but allows to replace the diagonal. In our analysis we can use it to replace the diagonal with the quality estimates of all the variables.
+`sqpr` has a very similar function to `cor` but allows to replace the diagonal. In our analysis we can use it to multiply the diagonal with the quality estimates of all the variables.
 
 ```{r}
 corr_q2 <-
