@@ -96,7 +96,7 @@ sqp_sscore <- function(sqp_data, df, new_name, ..., wt = NULL, drop = TRUE) {
   the_vars <- df[vars_names]
 
   # Check all variables are numeric and there are at least two columns in the df data
-  if (!all(purrr::map_lgl(the_vars, is.numeric))) {
+  if (!all(vapply(the_vars, is.numeric, FUN.VALUE = logical(1)))) {
     stop(paste0(vars_names, collapse = ", "), " must be numeric variables in `df`")
   }
 
@@ -162,7 +162,7 @@ estimate_sscore <- function(sqp_data, the_data, wt) {
   # Method effect
   method_e <- sqrt(1 - vy^2)
 
-  std_data <- purrr::map_dbl(the_data, stats::sd, na.rm = TRUE)
+  std_data <- vapply(the_data, stats::sd, na.rm = TRUE, FUN.VALUE = numeric(1))
 
   # This is the 'quality coefficient obtained by SQP
   # for the observed variable i. (1-qi2)var(yi)
@@ -191,22 +191,24 @@ estimate_sscore <- function(sqp_data, the_data, wt) {
 }
 
 qcoef_observed <- function(quality, std_data) {
-  purrr::map2_dbl(quality, std_data, ~ (1 - .x) * .y^2)
+  qcoef_formula <- function(i) (1 - quality[i]) * std_data[i]^2
+  vapply(seq_along(quality), qcoef_formula, FUN.VALUE = numeric(1))
 }
 
 combn_multiplication <- function(comb, wt, cov_e) {
-  # This might seem confusing but it's actually not that hard.
-  intm <- purrr::map2_dbl(comb, seq_along(comb), function(both_combn, the_seq) {
+
+  intm <- vapply(seq_along(comb), function(i) {
     # both_combn is the combination of variables like 1:2, 2:3 and c(3, 1)
     # below I grab both ends
-    separ_first <- both_combn[1]
-    separ_second <- both_combn[2]
+    separ_first <- comb[[i]][1]
+    separ_second <- comb[[i]][2]
 
     # and the multiply the weigghts with the cov_e
     # so for example wt[1] * wt[2] * cov_e[1]
     # so for example wt[1] * wt[3] * cov_e[3]
-    purrr::map2_dbl(separ_first, separ_second, ~ wt[.x] * wt[.y] * cov_e[the_seq])
-  })
+    wt[separ_first] * wt[separ_second] * cov_e[i]
+
+  }, FUN.VALUE = numeric(1))
 }
 
 # For an explanation of this see combn_multiplication
@@ -216,19 +218,18 @@ cov_both <- function(combinations, r_coef, method_e) {
   # the standard deviation of the data, the r_coef and the
   # method effect between all combination of questions.
   cov_formula <- function(one, two, r_coef, method_e) {
-    (r_coef[one] * method_e[one]) *
-    (r_coef[two] * method_e[two])
+    (r_coef[one] * method_e[one]) * (r_coef[two] * method_e[two])
   }
 
   # Here I apply the formula to all combinations. combinations
   # must be a list where each slot is of length 2 with a pair
   # combination. The whole list must contain all combinations
-  result <- purrr::map_dbl(combinations, function(index) {
+  result <- vapply(combinations, function(index) {
     index_one <- index[1]
     index_two <- index[2]
-    result <- purrr::map2_dbl(index_one, index_two, cov_formula,
-                              r_coef, method_e)
+    result <- cov_formula(index_one, index_two, r_coef, method_e)
     result
-  })
+  }, FUN.VALUE = numeric(1))
+
   result
 }

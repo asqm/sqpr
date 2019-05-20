@@ -24,7 +24,8 @@ We'll begin by loading the packages we'll use and the `sqpr` package.
 
 ```{r}
 library(lavaan)
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
 library(essurvey)
 library(sqpr)
 ```
@@ -252,9 +253,9 @@ Let's look at how much the coefficients differ
 ```{r, fig.width = 7, fig.with = 9}
 coef_table <-
   list(fit, fit.corrected) %>%
-  map(parameterestimates) %>%
-  map(~ filter(.x, lhs == "poltrst")) %>%
-  map(~ select(.x, rhs, est, ci.lower, ci.upper)) %>%
+  lapply(parameterestimates) %>%
+  lapply(function(.x) filter(.x, lhs == "poltrst")) %>%
+  lapply(function(.x) select(.x, rhs, est, ci.lower, ci.upper)) %>%
   bind_rows() %>%
   mutate(model = rep(c("original", "corrected"), each = 9))
 

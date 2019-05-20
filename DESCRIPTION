@@ -11,9 +11,6 @@ Encoding: UTF-8
 LazyData: true
 ByteCompile: true
 Imports: 
-    readr,
-    purrr,
-    dplyr,
     stats,
     tibble,
     httr,
@@ -26,6 +23,7 @@ Suggests:
     rmarkdown,
     essurvey,
     lavaan,
-    tidyverse,
+    dplyr,
+    ggplot2,
     covr
 VignetteBuilder: knitr

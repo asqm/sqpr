@@ -39,3 +39,4 @@ test_that("sqp_reconstruct assigns sqp class if everything is fine", {
   expect_s3_class(sqp_reconstruct(sqp_df), "sqp")
 
 })
+

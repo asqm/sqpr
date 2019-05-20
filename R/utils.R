@@ -32,7 +32,7 @@ check_sqp_data <- function(sqp_data, available_vars) {
          call. = FALSE)
   }
 
-  purrr::walk(sqp_data[available_vars], col_checker)
+  for (i in sqp_data[available_vars]) col_checker(i)
 }
 
 col_checker <- function(x) {

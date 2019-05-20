@@ -98,5 +98,5 @@ cor_cov_matrix <- function(fun, x, diag_adj, use, method) {
 
   formatted_matrix <- tibble::rownames_to_column(as.data.frame(obj_matrix))
 
-  dplyr::as_tibble(formatted_matrix)
+  tibble::as_tibble(formatted_matrix)
 }

@@ -104,10 +104,12 @@ get_estimates <- function(id, all_columns = FALSE, authorized = TRUE) {
   q_name <- get_question_name(id)
   raw_data <- object_request(url_id, estimates = TRUE)
 
-  list_data <- purrr::pmap(list(raw_data, q_name, id),
-                           make_estimate_df,
-                           all_columns = all_columns,
-                           authorized = authorized)
+  list_data <- Map(
+    function(x, y, z) make_estimate_df(x, y, z, all_columns = all_columns, authorized = authorized),
+    raw_data,
+    q_name,
+    id
+  )
 
   if (!authorized) message("Authorized was set to FALSE, remember to pick only one single prediction for all questions")
 
@@ -177,7 +179,7 @@ make_estimate_df <- function(raw_data, var_name, id, all_columns = FALSE, author
 
   final_df <- raw_data[row_to_pick, cols_to_pick]
 
-  final_df <- purrr::set_names(final_df, ~ gsub("prediction.", "", .x))
+  names(final_df) <- gsub("prediction.", "", names(final_df))
 
   final_df <- tibble::add_column(final_df, question = var_name, .before = 1)
   final_df

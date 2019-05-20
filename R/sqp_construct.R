@@ -90,8 +90,7 @@ columns_sqp <- function(columns_to_fill, replacement, all_columns = FALSE) {
   # sqp_columns is a global variable defining
   # the columns that SQP needs to have
   num_cols <- length(sqp_cols)
-  empty_cols <- purrr::set_names(purrr::rerun(num_cols, NA_real_),
-                                 sqp_cols)
+  empty_cols <- stats::setNames(rep(list(NA_real_), num_cols), sqp_cols)
 
   # iterate through each column/replacement and fill
   # out the empty list
@@ -110,10 +109,10 @@ generic_sqp <- function(question_name, sqp_metrics, all_columns = FALSE) {
   stopifnot(!is.null(names(sqp_metrics)), is.list(sqp_metrics))
 
   if (all_columns) {
-    sqp_data <- dplyr::as_tibble(sqp_metrics)
+    sqp_data <- tibble::as_tibble(sqp_metrics)
     sqp_data$question <- question_name
   } else {
-    sqp_data <- dplyr::as_tibble(c(question = question_name, sqp_metrics))
+    sqp_data <- tibble::as_tibble(c(question = question_name, sqp_metrics))
   }
   sqp_reconstruct(sqp_data)
 }
