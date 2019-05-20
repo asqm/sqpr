@@ -84,7 +84,7 @@ sqp_covariance <- function(x, diag_adj = 1, use = "complete.obs", method = "pear
 cor_cov_matrix <- function(fun, x, diag_adj, use, method) {
   if (!is.numeric(diag_adj)) stop("`diag_adj` must be numeric")
   obj_matrix <- fun(x = x, use = use, method = method)
-  diag_adj <- if (length(diag_adj) == 1) rep(diag_aj) * ncol(obj_matrix) else diag_adj
+  diag_adj <- if (length(diag_adj) == 1) rep(diag_adj, ncol(obj_matrix)) else diag_adj
   if (length(diag_adj) != ncol(obj_matrix)) stop("`diag_adj` must be the same length as the number of columns in `x`")
 
   diag(obj_matrix) <- diag_adj * diag(obj_matrix)
