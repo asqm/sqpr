@@ -11,6 +11,7 @@ sqp_correlate(x, diag_adj = 1, use = "complete.obs",
 \item{x}{a matrix or data frame with numeric columns.}
 
 \item{diag_adj}{a numeric vector with length equal to the number of columns of \code{x} to be multiplied by the diagonal.
+Alternatively, it can be of length 1 which will be repeated through the whole diagonal.
 By default it multiplies by 1, giving the same diagonal.}
 
 \item{use}{an optional character string giving a method for computing covariances

@@ -4,7 +4,8 @@
 \alias{sqp_cmv}
 \title{Adjust a correlation matrix for Common Method Variance (CMV)}
 \usage{
-sqp_cmv(x, sqp_data, ..., standardized = TRUE, original_data, cmv = NULL)
+sqp_cmv(x, sqp_data, ..., standardized = TRUE, original_data,
+  cmv = NULL)
 }
 \arguments{
 \item{x}{a correlation matrix, a correlation data frame or a correlation
