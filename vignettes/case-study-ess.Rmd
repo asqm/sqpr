@@ -4,7 +4,7 @@ author: "Jorge Cimentada and Wiebke Weber"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Case-study: Correcting for measurement error in the European Social Survey}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
