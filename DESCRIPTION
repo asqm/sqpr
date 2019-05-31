@@ -24,7 +24,6 @@ Suggests:
     rmarkdown,
     essurvey,
     lavaan,
-    dplyr,
     ggplot2,
     covr
 VignetteBuilder: knitr

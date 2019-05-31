@@ -18,7 +18,6 @@ sqp_reconstruct <- function(sqp_data, variables_check = sqp_env$sqp_columns) {
   sqp_data
 }
 
-
 # This should ONLY be used when you want to check an existing sqp
 # df
 check_sqp_data <- function(sqp_data, available_vars) {
@@ -134,13 +133,33 @@ sqp_env$question_variables <- c("id", "study_id", "short_name", "country_iso", "
 
 sqp_env$short_estimate_variables <- paste0("prediction.", c("reliability", "validity", "quality"))
 
-sqp_env$all_estimate_variables <- c("question", "id", "question_id", "created", "routing_id", "authorized",
-                                    "complete", "error", "errorMessage", "reliability", "validity",
-                                    "quality", "reliabilityCoefficient", "validityCoefficient", "methodEffectCoefficient",
-                                    "qualityCoefficient", "reliabilityCoefficientInterquartileRange",
-                                    "validityCoefficientInterquartileRange", "qualityCoefficientInterquartileRange",
-                                    "reliabilityCoefficientStdError", "validityCoefficientStdError",
-                                    "qualityCoefficientStdError", "user_id", "user_username")
+
+sqp_env$all_estimate_variables <- c("question",
+                                    "reliability",
+                                    "validity",
+                                    "quality",
+                                    "question_id",
+                                    "id",
+                                    "created",
+                                    "routing_id",
+                                    "authorized",
+                                    "complete",
+                                    "user_id",
+                                    "user_username",
+                                    "error",
+                                    "errorMessage",
+                                    "reliabilityCoefficient",
+                                    "validityCoefficient",
+                                    "methodEffectCoefficient",
+                                    "qualityCoefficient",
+                                    "reliabilityCoefficientInterquartileRange",
+                                    "validityCoefficientInterquartileRange",
+                                    "qualityCoefficientInterquartileRange",
+                                    "reliabilityCoefficientStdError",
+                                    "validityCoefficientStdError",
+                                    "qualityCoefficientStdError"
+                                    )
+
 # Variables to pick from the sqp remote data
 # and with which to create sqp tables
 sqp_env$sqp_columns <- c("reliability", "validity", "quality")

@@ -51,10 +51,23 @@ test_that("get_estimates converts empty estimates into missing tibble", {
   expect_equivalent(sum(is.na(sqp_data)), length(sqp_env$all_estimate_variables) - 2)
 })
 
+test_that("get_estimates doesn't accept more than 100 id's", {
+  expect_error(get_estimates(1:101), regexp= "The SQP API only accepts 100 requests per call and `id` has length greater than 100")  
+})
 
-test_that("get_question_name and get_estimates stop at length 0 numerics", {
-  expect_error(get_question_name(numeric(0)),
-               "length(.+) >= 1 is not TRUE")
-  expect_error(get_estimates(numeric(0)),
-               "length(.+) >= 1 is not TRUE")
+
+test_that("get_question_name and get_estimates only accept numeric id's", {
+  expect_error(get_question_name(character()), "is.numeric\\(id\\) is not TRUE")
+  expect_error(get_estimates(character()), "is.numeric\\(id\\) is not TRUE")  
+})
+
+test_that("get_question_name and get_estimates return empty objects when id is of length 0", {
+
+  short_cols <- sqp_construct("empty", list(quality = NA_real_))[0, ]
+  long_cols <- sqp_construct("empty", list(quality = NA_real_), all_columns = TRUE)[0, ]
+  
+  expect_identical(get_estimates(id = numeric()), short_cols)
+  expect_identical(get_estimates(id = numeric(), all_columns = TRUE), long_cols)
+  expect_identical(get_question_name(numeric()), character())
+  
 })

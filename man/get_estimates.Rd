@@ -23,15 +23,17 @@ based on the \code{user_id} and \code{user_username} columns.}
 }
 \value{
 \code{get_estimates} returns a \code{\link[tibble]{tibble}} with the predictions.
-The number of columns depends on the \code{all_columns} argument.
-\code{get_question_name} returns a character vector with the question name(s).
+If \code{id} is of length 0, \code{get_estimates} returns an empty data frame.
+In both situations, the number of columns depends on the \code{all_columns} argument.
+\code{get_question_name} returns a character vector with the question name(s) unless
+id is of length 0 where it returns an empty character.
 }
 \description{
 Extract variable estimates from the SQP prediction algorithm
 }
 \details{
 SQP predictions can be both 'authorized' predictions, which are
-performed by the SQP software and 'crowd-sourced' predictions which are
+performed by the SQP software, and 'crowd-sourced' predictions which are
 added to the database by other users. By default, \code{get_estimates}
 always returns the 'authorized' prediction when it is available. When
 it is not, it returns the first non-authorized prediction, and so on.

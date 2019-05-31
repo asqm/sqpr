@@ -11,13 +11,13 @@
 #'
 #' @details
 #' SQP predictions can be both 'authorized' predictions, which are
-#' performed by the SQP software and 'crowd-sourced' predictions which are
+#' performed by the SQP software, and 'crowd-sourced' predictions which are
 #' added to the database by other users. By default, \code{get_estimates}
 #' always returns the 'authorized' prediction when it is available. When
 #' it is not, it returns the first non-authorized prediction, and so on.
 #' If the user wants to choose a specific prediction, then
 #' \code{authorized = FALSE} will return all available predictions for each question.
-#'
+#' 
 #' \code{get_estimates} returns a four column \code{\link[tibble]{tibble}} with
 #' the question name and the estimates for \code{quality}, \code{reliability} and
 #' \code{validity}. However, if \code{all_columns} is set to \code{TRUE} the returned
@@ -68,8 +68,10 @@
 #' the variables of interest to use in \code{get_estimates}.
 #'
 #' @return \code{get_estimates} returns a \code{\link[tibble]{tibble}} with the predictions.
-#' The number of columns depends on the \code{all_columns} argument.
-#' \code{get_question_name} returns a character vector with the question name(s).
+#' If \code{id} is of length 0, \code{get_estimates} returns an empty data frame.
+#' In both situations, the number of columns depends on the \code{all_columns} argument.
+#' \code{get_question_name} returns a character vector with the question name(s) unless
+#' id is of length 0 where it returns an empty character.
 #' @export
 #'
 #' @examples
@@ -92,8 +94,14 @@
 #' }
 #'
 get_estimates <- function(id, all_columns = FALSE, authorized = TRUE) {
-  stopifnot(is.numeric(id), length(id) >= 1)
+  stopifnot(is.numeric(id))
 
+  if (length(id) < 1) {
+    empty_df <- sqp_construct("empty", list(quality = NA_real_), all_columns = all_columns)[0, ]
+    return(empty_df)
+  }
+
+    
   if (length(id) > 100) {
     stop("The SQP API only accepts 100 requests per call and `id` has length greater than 100")
   }
@@ -122,7 +130,9 @@ get_estimates <- function(id, all_columns = FALSE, authorized = TRUE) {
 #' @rdname get_estimates
 #' @export
 get_question_name <- function(id) {
-  stopifnot(is.numeric(id), length(id) >= 1)
+  stopifnot(is.numeric(id))
+
+  if (length(id) < 1) return(character())
 
   collapsed_id <- paste0(id, collapse = ",")
   almost_q_name <-

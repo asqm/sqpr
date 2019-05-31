@@ -19,14 +19,14 @@ and the remaining are set to NA by default}
 \item{all_columns}{if \code{TRUE} will return all columns (quite a few) that can be
 returned by the \code{\link{get_estimates}} function. See \code{\link{get_estimates}}
 for the description of which variables would be created. If \code{FALSE} (default) it
-will return only columns \code{quality}, \code{reliability} and \code{validity}.}
+will return only columns \code{question},  \code{quality}, \code{reliability} and \code{validity}.}
 }
 \value{
 a \code{\link[tibble]{tibble}} of one row with the supplied metrics. It also has
 class \code{sqp} for further manipulations within the \code{sqpr} package.
 }
 \description{
-\code{sqp_construct} is designed to to create SQP tibbles
+\code{sqp_construct} is designed to create SQP tibbles
 by manually inserting new metrics such as quality or validity.
 }
 \details{
