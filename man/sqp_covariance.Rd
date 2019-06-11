@@ -4,7 +4,7 @@
 \alias{sqp_covariance}
 \title{Calculate a covariance matrix with an adjusted diagonal}
 \usage{
-sqp_covariance(x, diag_adj = 1, use = "complete.obs",
+sqp_covariance(x, diag_adj = 1, wt = NULL, use = "complete.obs",
   method = "pearson")
 }
 \arguments{
@@ -12,7 +12,14 @@ sqp_covariance(x, diag_adj = 1, use = "complete.obs",
 
 \item{diag_adj}{a numeric vector with length equal to the number of columns of \code{x} to be multiplied by the diagonal.
 Alternatively, it can be of length 1 which will be repeated through the whole diagonal.
-By default it multiplies by 1, giving the same diagonal.}
+If the argument \code{wt} is used, then the length of \code{diag_adj} must be the same
+as \code{x} excluding the weight column. By default it multiplies by 1, giving the same diagonal.}
+
+\item{wt}{the name of the column which contains the weights as bare unquoted
+names or as character vector or length 1. Note that when the weight argument
+is specified, the estimation is done using \code{\link[stats]{cov.wt}} instead
+of \code{\link[stats]{cor}} or \code{\link[stats]{cov}}. This means that the
+arguments \code{use} and \code{method} are ignored.}
 
 \item{use}{an optional character string giving a method for computing covariances
 in the presence of missing values. This must be (an abbreviation of) one of
@@ -43,8 +50,10 @@ sqp_covariance(mtcars, new_diagonal)
 
 sqp_covariance(mtcars, new_diagonal, method = "kendall")
 
+diagonal_wout_weight <- rnorm(ncol(mtcars) - 1)
+sqp_covariance(mtcars, diagonal_wout_weight, wt = mpg)
 }
 \seealso{
-\code{\link[stats]{cov}} for the workhorse behind the function and for
-details on the \code{use} and \code{method} arguments.
+\code{\link[stats]{cov}} for the workhorse behind the function and
+\code{\link[stats]{cov.wt}} for the function used for the weighting.
 }
