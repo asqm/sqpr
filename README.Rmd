@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
-
+ 
 ## sqpr <img src="man/figures/sqpr_logo.jpg" align="right" width="200" height="200" />
 
 [![CRAN status](https://www.r-pkg.org/badges/version/sqpr)](https://cran.r-project.org/package=sqpr)
