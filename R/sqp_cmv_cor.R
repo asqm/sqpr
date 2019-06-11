@@ -143,10 +143,10 @@ estimate_cmv <- function(sqp_data) {
     stop("`sqp_data` must have non-missing values at columns reliability and validity for all variables")
   }
 
-  first_part <- sqrt(sqp_data[[sqp_cols[1]]])
-  second_part <- sqrt(1 - sqp_data[[sqp_cols[2]]])
+  reliability_coef <- sqrt(sqp_data[[sqp_cols[1]]])
+  validity_coef <- sqrt(1 - sqp_data[[sqp_cols[2]]])
 
-  cmv <- prod(c(first_part, second_part))
+  cmv <- prod(c(reliability_coef, validity_coef))
   cmv
 }
 
