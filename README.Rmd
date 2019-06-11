@@ -8,21 +8,17 @@ output:
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/README-",
+  fig.path = "README-",
   out.width = "100%"
 )
 ```
 
-
-# sqpr
+## sqpr <img src="man/figures/sqpr_logo.jpg" align="right" width="200" height="100" />
 
 [![CRAN status](https://www.r-pkg.org/badges/version/sqpr)](https://cran.r-project.org/package=sqpr)
 [![Travis build status](https://travis-ci.org/asqm/sqpr.svg?branch=master)](https://travis-ci.org/asqm/sqpr)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/asqm/sqpr?branch=master&svg=true)](https://ci.appveyor.com/project/asqm/sqpr)
 [![Coverage status](https://codecov.io/gh/asqm/sqpr/branch/master/graph/badge.svg)](https://codecov.io/github/asqm/sqpr?branch=master)
-
-<!-- # sqpr <img src="man/figures/sqpr_logo.png" align="right" /> -->
-
 
 The `sqpr` package allows you to calculate several estimations of the quality of your survey questions and also adjust your estimations for measurement error. Moreover, it gives easy access to the API of the Survey Quality Prediction [website](http://sqp.upf.edu/), a data base that contains over 40,000 predictions on the quality of questions.
 
