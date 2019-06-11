@@ -153,6 +153,14 @@ estimate_cmv <- function(sqp_data) {
 # This function is the one doing the replacement of the upper
 # and lower of the correlation matrix.
 replace_matrix_cmv <- function(x, cmv, cmv_vars) {
+
+  # In case the order of rows is shuffled,
+  # recode the initial order, order the data frame
+  # calculate everything and then reorder back
+  # when return the x data frame
+  order_rows <- x[[1]]
+  x  <- x[order(x[[1]]), ]
+
   x_row_low <- sort(match(cmv_vars, x[[1]]))
   x_col_low <- sort(match(cmv_vars, names(x)))
 
@@ -163,7 +171,7 @@ replace_matrix_cmv <- function(x, cmv, cmv_vars) {
   p[upper.tri(p)] <- p[upper.tri(p)] - cmv # adjust the upper.tri
   x[x_row_low, x_col_low] <- p # replace in the original data.frame
 
-  x
+  x[match(order_rows, x[[1]]), ]
 }
 
 

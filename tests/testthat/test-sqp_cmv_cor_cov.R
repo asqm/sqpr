@@ -118,6 +118,13 @@ test_cor_cov <- function(fun, fun_str) {
     expect_equal(cmv_aut, cmv_manual)
   })
 
+  test_that(paste0(fun_str, " gives same result when variables are shuffled"), {
+
+    sqp_df
+    
+
+  })
+  
   test_that(paste0(fun_str, " uses only unique variable names"), {
     cmv_tib <- fun(corr_tibble, sqp_df, V4, V5, V5)
     expect_is(cmv_tib, "data.frame")
@@ -214,27 +221,28 @@ ess7es <- import_country("Spain", 7, ess_email)[c(selected_vars, "pspwght", "pwe
 ess7es <- ess7es[complete.cases(ess7es), ]
 ess7es3var <- ess7es[selected_vars]
 
+## Using sqpr
+sqp_login()
+study_id <- find_studies("ESS Round 7")$id
+
+question_ids <- find_questions(study_id, selected_vars)
+question_ids <- question_ids[with(question_ids, country_iso == "ES" & language_iso == "spa"), "id", drop = TRUE]
+
+sqp_df <- get_estimates(question_ids)
+sqp_df <- sqp_df[order(sqp_df$question), ]
+
 test_that("sqp_cmv_cor returns correct calculation",  {
   ## Apply weighted correlation with pspwght
   # wt_cor_cv <- cov.wt(ess7es3var, wt = ess7es$pspwght, cor = TRUE)
   # original_corr_weighted <- wt_cor_cv$cor
   original_corr <- cor(ess7es3var)
 
-  ## Using sqpr
-  sqp_login()
-  study_id <- find_studies("ESS Round 7")$id
-
-  question_ids <- find_questions(study_id, selected_vars)
-  question_ids <- question_ids[with(question_ids, country_iso == "ES" & language_iso == "spa"), "id", drop = TRUE]
-
-  sqp_df <- get_estimates(question_ids)
-  sqp_df <- sqp_df[order(sqp_df$question), ]
   diag(original_corr) <- sqp_df$quality
   # diag(original_corr_weighted) <- sqp_df$quality
 
   tst_cmv <- sqp_cmv_cor(original_corr, sqp_df, ppltrst, trstplt)
-  tmp_corrected_cor <- tibble::as_tibble(cov2cor(as.matrix(tst_cmv[, selected_vars])))
-  tmp_corrected_cor <- tibble::add_column(tmp_corrected_cor, rowname = tst_cmv$rowname, .before = 1)
+  tmp_corrected_cor <- as_tibble(cov2cor(as.matrix(tst_cmv[, selected_vars])))
+  tmp_corrected_cor <- add_column(tmp_corrected_cor, rowname = tst_cmv$rowname, .before = 1)
   tmp_corrected_cor <- as.data.frame(tmp_corrected_cor)
 
   correct_df <- data.frame(stringsAsFactors=FALSE,
@@ -245,4 +253,32 @@ test_that("sqp_cmv_cor returns correct calculation",  {
                            )
 
   expect_equivalent(tmp_corrected_cor, correct_df)
+})
+
+test_that("sqp_cmv_cov returns correct calculation", {
+
+  original_cov <- cov(ess7es3var, use = "complete.obs", method = "pearson")
+  wt_cor_cv <- cov.wt(ess7es3var, wt = ess7es$pspwght, cor = TRUE)
+  
+  ## Apply weighted covariance with pspwght
+  original_cov_weighted <- wt_cor_cv$cov
+
+  #### Using `sqpr`
+  diag(original_cov_weighted) <- diag(original_cov_weighted) * sqp_df$quality  
+  tst_corrected_cov <-
+    sqp_cmv_cov(original_cov_weighted,
+                sqp_df,
+                ppltrst,
+                trstplt,
+                original_data = ess7es3var)
+  tmp_corrected_cov <- as.data.frame(tst_corrected_cov)
+
+  correct_df <- data.frame(stringsAsFactors=FALSE,
+     rowname = c("polintr", "ppltrst", "trstplt"),
+     polintr = c(0.536047529655009, -0.419466267364113, -0.35995941514413),
+     ppltrst = c(-0.419466267364113, 3.14154466545579, 0.716657167759028),
+     trstplt = c(-0.35995941514413, 0.716657167759028, 4.08409798275177)
+     )
+
+  expect_equivalent(tmp_corrected_cov, correct_df)
 })
