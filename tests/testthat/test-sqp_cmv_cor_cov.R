@@ -15,7 +15,7 @@ sqp_df <-
          quality = c(0.2, 0.3, 0.5, 0.6, 0.9),
          reliability = c(NA, 0.4, 0.5, 0.5, 0.7),
          validity = c(NA, NA, 0.6, 0.7, 0.8)
-  )
+         )
 
 sqp_df <- structure(sqp_df, class = c(class(sqp_df), "sqp"))
 
@@ -204,3 +204,45 @@ test_input_errors <- function(fun, fun_str) {
 
 test_input_errors(sqp_cmv_cor, "sqp_cmv_cor")
 test_input_errors(partial_cov, "sqp_cmv_cov")
+
+
+library(essurvey)
+selected_vars <- c("polintr", "ppltrst", "trstplt")
+ess_email <- Sys.getenv("ess_email")
+ess7es <- import_country("Spain", 7, ess_email)[c(selected_vars, "pspwght", "pweight")]
+
+ess7es <- ess7es[complete.cases(ess7es), ]
+ess7es3var <- ess7es[selected_vars]
+
+test_that("sqp_cmv_cor returns correct calculation",  {
+  ## Apply weighted correlation with pspwght
+  # wt_cor_cv <- cov.wt(ess7es3var, wt = ess7es$pspwght, cor = TRUE)
+  # original_corr_weighted <- wt_cor_cv$cor
+  original_corr <- cor(ess7es3var)
+
+  ## Using sqpr
+  sqp_login()
+  study_id <- find_studies("ESS Round 7")$id
+
+  question_ids <- find_questions(study_id, selected_vars)
+  question_ids <- question_ids[with(question_ids, country_iso == "ES" & language_iso == "spa"), "id", drop = TRUE]
+
+  sqp_df <- get_estimates(question_ids)
+  sqp_df <- sqp_df[order(sqp_df$question), ]
+  diag(original_corr) <- sqp_df$quality
+  # diag(original_corr_weighted) <- sqp_df$quality
+
+  tst_cmv <- sqp_cmv_cor(original_corr, sqp_df, ppltrst, trstplt)
+  tmp_corrected_cor <- tibble::as_tibble(cov2cor(as.matrix(tst_cmv[, selected_vars])))
+  tmp_corrected_cor <- tibble::add_column(tmp_corrected_cor, rowname = tst_cmv$rowname, .before = 1)
+  tmp_corrected_cor <- as.data.frame(tmp_corrected_cor)
+
+  correct_df <- data.frame(stringsAsFactors=FALSE,
+                           rowname = c("polintr", "ppltrst", "trstplt"),
+                           polintr = c(1, -0.307183576911697, -0.246956866582566),
+                           ppltrst = c(-0.307183576911697, 1, 0.195267934255757),
+                           trstplt = c(-0.246956866582566, 0.195267934255757, 1)
+                           )
+
+  expect_equivalent(tmp_corrected_cor, correct_df)
+})
