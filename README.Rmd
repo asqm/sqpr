@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-## sqpr <img src="man/figures/sqpr_logo.jpg" align="right" width="200" height="100" />
+## sqpr <img src="man/figures/sqpr_logo.jpg" align="right" width="200" height="200" />
 
 [![CRAN status](https://www.r-pkg.org/badges/version/sqpr)](https://cran.r-project.org/package=sqpr)
 [![Travis build status](https://travis-ci.org/asqm/sqpr.svg?branch=master)](https://travis-ci.org/asqm/sqpr)
