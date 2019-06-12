@@ -138,7 +138,7 @@ sqp_sscore <- function(sqp_data, df, new_name, ..., wt = NULL, drop = TRUE) {
 # the correct format, etc..
 estimate_sscore <- function(sqp_data, the_data, wt) {
 
-  if (is.null(wt)) wt <- rep(1, length(the_data))
+  if (is.null(wt)) wt <- rep(1L, length(the_data))
 
   is_numeric <- is.numeric(wt)
   is_na <- anyNA(wt)
@@ -152,9 +152,9 @@ estimate_sscore <- function(sqp_data, the_data, wt) {
   validity <- grep("^v", sqp_env$sqp_columns, value = TRUE)
   quality <- grep("^q", sqp_env$sqp_columns, value = TRUE)
 
-  qy2 <- sqp_data[[quality]]
+  qy <- sqrt(sqp_data[[quality]])
 
-  # By squaring this you actually get the reliability
+  # by squaring this you actually get the reliability
   # coefficient.
   ry <- sqrt(sqp_data[[reliability]])
   vy <- sqrt(sqp_data[[validity]])
@@ -163,11 +163,13 @@ estimate_sscore <- function(sqp_data, the_data, wt) {
   method_e <- sqrt(1 - vy^2)
 
   std_data <- vapply(the_data, stats::sd, na.rm = TRUE, FUN.VALUE = numeric(1))
+  std_sscore <- sd(rowSums(the_data, na.rm = TRUE), na.rm = TRUE)
 
-  # This is the 'quality coefficient obtained by SQP
-  # for the observed variable i. (1-qi2)var(yi)
-  q_coef <- qcoef_observed(qy2, std_data)
-
+  # Calculate weight / std dev of the sumscore multiplied by
+  # the quality squared.
+  var_quality_adj <- ((wt / std_sscore) * qy)^2
+  sum_var_qual_adj <- sum(var_quality_adj)
+  
   # Here you create
   # all combinations
   comb <- utils::combn(seq_along(the_data), 2, simplify = FALSE)
@@ -177,17 +179,21 @@ estimate_sscore <- function(sqp_data, the_data, wt) {
   # It's better not to use this in isolation but call
   # estimate_sscore as a whole.
   cov_e <- cov_both(comb, ry, method_e)
+  est_matrix <- cov(the_data, use = 'complete.obs')
+  cov_coefs <- vapply(comb,
+                      function(.x) est_matrix[.x[1], .x[2]],
+                      FUN.VALUE = numeric(1))
 
-  weights_by_qcoef <- sum(wt^2 * q_coef)
+  observed_matrix <- cov_coefs - cov_e
 
+  
   # you need to calculate the product of a combination
-  # of the weights by the covariance of errors.
-  intm <- sum(combn_multiplication(comb, wt, cov_e)) * 2
-
-  var_ecs <- weights_by_qcoef + intm
-  var_composite <- stats::var(rowSums(the_data, na.rm = TRUE))
-
-  1 - (var_ecs / var_composite)
+  # of the weights by the std of the sscore and observed cor/cov
+  # estimate.
+  intm <- combn_multiplication(comb, wt, observed_matrix, std_sscore)
+  twice_sum <- sum(intm) * 2
+  final_sum <- sum_var_qual_adj + twice_sum
+  final_sum
 }
 
 qcoef_observed <- function(quality, std_data) {
@@ -195,20 +201,26 @@ qcoef_observed <- function(quality, std_data) {
   vapply(seq_along(quality), qcoef_formula, FUN.VALUE = numeric(1))
 }
 
-combn_multiplication <- function(comb, wt, cov_e) {
+combn_multiplication <- function(comb, wt, matrix_est, std_sscore) {
 
-  intm <- vapply(seq_along(comb), function(i) {
+  final_mult <- vapply(seq_along(comb), function(i) {
     # both_combn is the combination of variables like 1:2, 2:3 and c(3, 1)
     # below I grab both ends
     separ_first <- comb[[i]][1]
     separ_second <- comb[[i]][2]
 
-    # and the multiply the weigghts with the cov_e
-    # so for example wt[1] * wt[2] * cov_e[1]
-    # so for example wt[1] * wt[3] * cov_e[3]
-    wt[separ_first] * wt[separ_second] * cov_e[i]
+    # and the multiply the weights with the std of the sscore
+    # so for example (wt[1] / std_sscore) * (wt[2] / std_sscore)
+    # for example (wt[1] / std_sscore) * (wt[3] / std_sscore)
+    wt_adj <- (wt[separ_first] / std_sscore) * (wt[separ_second] / std_sscore)
+
+    # And then multiply these weight adjustments with the cor/cov estimates
+    # and multiply it by the square of the std of the sscore
+    matrix_est[i] * wt_adj * std_sscore^2
 
   }, FUN.VALUE = numeric(1))
+
+  final_mult
 }
 
 # For an explanation of this see combn_multiplication
