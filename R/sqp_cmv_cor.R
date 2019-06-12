@@ -91,9 +91,16 @@ sqp_cmv_cor <- function(x, sqp_data, ..., cmv = NULL) {
   # are already standardized
   cmv <- prod(cmv)
 
-  corrected_corr <- tibble::as_tibble(replace_matrix_cmv(x, cmv, cmv_vars))
+  corrected_corr <- tibble::as_tibble(replace_matrix_cmv(x, cmv, cmv_vars),
+                                      .name_repair = 'minimal')
+
+  # Turn the covariance back to a correlation for he diagonal
+  # to be one
+  ## corrected_cor[, -1] <- stats::cov2cor(as.matrix(corrected_cor[, -1]))
   corrected_corr
 }
+
+
 
 
 #' Estimate the Common Method Variance (CMV) coefficient of a set of variables

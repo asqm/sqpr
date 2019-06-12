@@ -100,6 +100,7 @@ sqp_cmv_cov <- function(x, sqp_data, ..., original_data, cmv = NULL) {
   # This way, we unstandardize them to get an unstandardized cmv
   cmv <- prod(cmv, vapply(original_data[cmv_vars], stats::sd, na.rm = TRUE, FUN.VALUE = numeric(1)))
 
-  corrected_cov <- tibble::as_tibble(replace_matrix_cmv(x, cmv, cmv_vars))
+  corrected_cov <- tibble::as_tibble(replace_matrix_cmv(x, cmv, cmv_vars),
+                                     .name_repair = 'minimal')
   corrected_cov
 }

@@ -120,9 +120,20 @@ test_cor_cov <- function(fun, fun_str) {
 
   test_that(paste0(fun_str, " gives same result when variables are shuffled"), {
 
-    sqp_df
-    
+    sqp_df <-
+      tibble(question = paste0("V", 1:5),
+             quality = c(0.2, 0.3, 0.5, 0.6, 0.9),
+             reliability = c(0.6, 0.4, 0.5, 0.5, 0.7),
+             validity = c(0.9, 0.5, 0.6, 0.7, 0.8))
 
+    shuffled_corr <- corr_tibble[c(1, 3, 5, 4, 2), ]
+    original_corr <- corr_tibble
+    
+    cmv_shuffled <- fun(shuffled_corr, sqp_df, V3, V4, V5)
+    cmv_original <- fun(corr_tibble, sqp_df, V3, V4, V5)
+
+    expect_equivalent(cmv_original,
+                      cmv_shuffled[order(cmv_shuffled$rowname), ])
   })
   
   test_that(paste0(fun_str, " uses only unique variable names"), {
