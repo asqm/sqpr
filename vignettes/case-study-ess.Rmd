@@ -36,7 +36,15 @@ library(sqpr)
 ess_email <- Sys.getenv("ess_email")
 ```
 
-Let's read in the data from the European Social Survey using the `essurvey` package and create a sum score of a number of variables. A sum score is literally the `sum` of a number of variables to create a composite score. Remember to replace your email as a character string instead of the argument `your_email`.
+Let's read in the data from the European Social Survey using the `essurvey` package and create a sum score of a number of variables. A sum score is literally the weighted $(w)$ `sum` of a number of variables $(y_1, y_2, ..., y_k)$ to create a composite score $(CS)$:
+
+$$
+\begin{align}
+	Y_{cs} = \sum_{i=1}^{k}\frac{w_i}{{\delta_y}_{cs}} Y_i  && \text{where $\frac{w_i}{{\delta_y}_{cs}}$ is the weight of the $i$th observed variable}\\
+\end{align}
+$$
+
+Remember to replace your email as a character string instead of the argument `ess_email`.
 
 ```{r, results = 'hide'}
 ess7es <-
@@ -58,16 +66,16 @@ selected_vars <- c("trstprl", "trstplt", "trstprt",
 
 composite_scores <- c("poltrst", "serv", "systmrsp")
 
-all_vars <- c(composite_scores, selected_vars) # for using later
+all_vars <- c(composite_scores, selected_vars) # for later use
 ```
 
-So far we the original `tibble` with a few extra columns containing the composite sum scores:
+So far we have the original `tibble` with a few extra columns containing the composite sum scores:
 
 ```{r}
 ess7es
 ```
 
-Let's read in the SQP data. First we login with `sqp_login()` and for that to work we need to execute these two lines with our valid SQP credentials:
+Let's read in the SQP data. You have therefore to register with SQP ([sqp.upf.edu](www.sqp.upf.edu)) and can then login with `sqp_login()` using your valid SQP credentials:
 
 ```{r, eval = FALSE}
 sqp_login("your user name", "your password")
@@ -93,7 +101,7 @@ Let's confirm all of our questions were extracted.
 ```{r}
 all(tolower(questions$short_name) %in% selected_vars[1:12])
 ```
-Why are we only selecting 12 variables? You'll see later on. We will add the predicted estimates of the last two manually because they're not in the SQP data base.
+Why are we only selecting 12 of our 14 variables? You'll see later on. We will add the measurement quality of the last two manually because they're not in the SQP database.
 
 To wrap the SQP API related business, let's grab the predicted estimates with `get_estimates`.
 
@@ -193,9 +201,9 @@ corr_q2 <-
 corr_q2
 ```
 
-It's the same correlation coefficients but with the diagonal set to the quality of the estimates. But **note** that both the order of the variables `Quality` and the order of the variables in `ess7corr` should be the same! Otherwise we might confuse quality coefficients between variables.
+It's the same correlation coefficients but with the diagonal set to the quality of the estimates. But **note** that both the order of the variables `Quality` and the order of the variables in `ess7corr` should be the same! Otherwise we might confuse quality estimates between variables.
 
-We often want to calculate the Common Method Variance (CMV) of some of these observed variables because they share common methods such as likert scales, etc. The `sqpr` package makes this very easy using the `sqpr_cmv_cor` function. Supply the the correlation data frame, the `Quality` dataset with quality estimates and `sqp_cmv_cor` estimates the CMV between the variables specified (here only two) and subtracts it from the correlation.
+For variables which are measured with the same method, we want to account for their Common Method Variance (CMV). The `sqpr` package makes this very easy using the `sqpr_cmv_cor` function. Supply the correlation data frame, the `Quality` dataset with quality estimates and `sqp_cmv_cor` estimates the CMV between the variables specified (here only two) and subtracts it from the correlation.
 
 ```{r}
 #subtract the cmv from the observed correlation
@@ -218,7 +226,7 @@ cmv <-
 0.27 - cmv
 ```
 
-To finish off correcting for the measurement error, we transform the correlation to a covariance matrix, which is in itself a correlation matrix.
+To finish off correcting for the measurement error, we consider this matrix with quality estimates on the diagonal and CMV subtracted from the correlations, a covariance matrix and transform it to a correlation matrix.
 
 ```{r}
 corrected_corr <- corr_q2_cmv %>% select(-rowname) %>% as.matrix() %>% cov2cor()
@@ -226,7 +234,7 @@ corrected_corr <- corr_q2_cmv %>% select(-rowname) %>% as.matrix() %>% cov2cor()
 corrected_corr
 ```
 
-Here we have a corrected matrix for both measurement error and for the common method variance of some variables. We can dump this into our `sem` models and get much better estimates.
+Here we have a corrected matrix for both measurement error and for the common method variance of some variables. We can dump this into our `sem` models and get estimates corrected for measurement error.
 
 ## Regression model
 
@@ -288,5 +296,5 @@ R2 - R2_uncorr
 
 This case-study shows how adjusting for measurement error and Common Method Variance (CMV) can improve your estimates. We hope that you find the `sqpr` package useful for your estimations.
 
-* Wiebke Weber and Hannah Werner (under review). "The correct(ed) political trust. A step-by-step explanation to correct for measurement error in the study of trust in political institutions.", Social Indicators Research.
+* Wiebke Weber and Hannah Werner (under review). "The correct(ed) political trust. A step-by-step explanation to correct for measurement error in the study of trust in political institutions.", Working paper (available upon request)..
 
