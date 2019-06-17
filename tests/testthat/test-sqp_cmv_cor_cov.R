@@ -119,7 +119,6 @@ test_cor_cov <- function(fun, fun_str) {
   })
 
   test_that(paste0(fun_str, " gives same result when variables are shuffled"), {
-
     sqp_df <-
       tibble(question = paste0("V", 1:5),
              quality = c(0.2, 0.3, 0.5, 0.6, 0.9),
@@ -134,6 +133,8 @@ test_cor_cov <- function(fun, fun_str) {
 
     expect_equivalent(cmv_original,
                       cmv_shuffled[order(cmv_shuffled$rowname), ])
+
+    expect_equal(names(cmv_shuffled), names(cmv_original))
   })
   
   test_that(paste0(fun_str, " uses only unique variable names"), {
@@ -242,7 +243,7 @@ question_ids <- question_ids[with(question_ids, country_iso == "ES" & language_i
 sqp_df <- get_estimates(question_ids)
 sqp_df <- sqp_df[order(sqp_df$question), ]
 
-test_that("sqp_cmv_cor returns correct calculation",  {
+test_that("sqp_cmv_cor returns correct calculation after cov2cor",  {
   ## Apply weighted correlation with pspwght
   # wt_cor_cv <- cov.wt(ess7es3var, wt = ess7es$pspwght, cor = TRUE)
   # original_corr_weighted <- wt_cor_cv$cor
@@ -265,6 +266,22 @@ test_that("sqp_cmv_cor returns correct calculation",  {
 
   expect_equivalent(tmp_corrected_cor, correct_df)
 })
+
+test_that("sqp_cmv_cor returns correct calculate before cov2cor", {
+  original_corr <- cor(ess7es3var)
+  diag(original_corr) <- sqp_df$quality
+  tst_cmv <- as.data.frame(sqp_cmv_cor(original_corr, sqp_df, ppltrst, trstplt))
+
+  compare_tst_cmv <- data.frame(stringsAsFactors=FALSE,
+                                rowname = c("polintr", "ppltrst", "trstplt"),
+                                polintr = c(0.601, -0.199527970511773, -0.17357782848536),
+                                ppltrst = c(-0.199527970511773, 0.702, 0.148332185882232),
+                                trstplt = c(-0.17357782848536, 0.148332185882232, 0.822)
+                                )
+
+  expect_equivalent(tst_cmv, compare_tst_cmv)
+})
+
 
 test_that("sqp_cmv_cov returns correct calculation", {
 
