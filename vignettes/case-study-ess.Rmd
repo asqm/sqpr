@@ -47,22 +47,37 @@ $$
 Remember to replace your email as a character string instead of the argument `ess_email`.
 
 ```{r, results = 'hide'}
-ess7es <-
-  import_country("Spain", 7, ess_email) %>%
-  recode_missings() 
-
-# Create composite scores
-ess7es <-
-  ess7es %>%
-  mutate(poltrst = trstprl + trstplt + trstprt,
-         serv = stfedu + stfhlth,
-         systmrsp = psppsgv + psppipl + ptcpplt)
-
+# Choose your selected variables
 selected_vars <- c("trstprl", "trstplt", "trstprt",
                    "stfedu", "stfhlth", "psppsgv",
                    "psppipl", "ptcpplt", "ppltrst",
                    "polintr", "stflife", "stfeco",
                    "agea","eisced")
+
+# Download the ESS data and clear missing values
+ess7es <-
+  import_country("Spain", 7, ess_email) %>%
+  select(selected_vars, pspwght) %>%
+  filter(complete.cases(.))
+
+# Calculate the standardized but unweighted sums cores
+ess7es <-
+  ess7es %>%
+  mutate(poltrst = scale(trstprl) + scale(trstplt) + scale(trstprt),
+         serv = scale(stfedu) + scale(stfhlth),
+         systmrsp = scale(psppsgv) + scale(psppipl) + scale(ptcpplt))
+
+# Calculate the standard deviation of each sum score
+w_pol <- 1 / sd(ess7es$poltrst)
+w_serv <- 1 / sd(ess7es$serv)
+w_systmrsp <- 1 / sd(ess7es$systmrsp)
+
+# Create the weighted and standardized composite score
+ess7es <-
+  ess7es %>%
+  mutate(poltrst = w_pol*scale(trstprl) + w_pol*scale(trstplt) + w_pol*scale(trstprt),
+         serv = w_serv*scale(stfedu) + w_serv*scale(stfhlth),
+         systmrsp = w_systmrsp*scale(psppsgv) + w_systmrsp*scale(psppipl) + w_systmrsp*scale(ptcpplt))
 
 composite_scores <- c("poltrst", "serv", "systmrsp")
 
@@ -176,25 +191,26 @@ Quality <- Quality[match(variables_order, Quality$question), ]
 Briefly, let's also select these variables for ESS data.
 
 ```{r}
-ess7escorr <- ess7es %>% select(variables_order)
+ess7escorr <- ess7es %>% select(variables_order, pspwght)
 ```
 
 ## Correlations and correcting for measurement error
 
 Let's get the correlation of all the variables in the ESS data.
+
 ```{r}
 # Exploratory correlation matrix (in order of the columns in data frame):
 original_corr_2 <- cor(ess7escorr, use = "complete.obs", method = "pearson")
-
 original_corr_2
 ```
 
-`sqpr` has a very similar function to `cor` but allows to replace the diagonal. In our analysis we can use it to multiply the diagonal with the quality estimates of all the variables.
+`sqpr` has a very similar function to `cor` but allows to replace the diagonal and weight the correlation. In our analysis we can use it to multiply the diagonal with the quality estimates of all the variables and use the `pspwght` from the European Social Survey.
 
 ```{r}
 corr_q2 <-
   sqp_correlate(x = ess7escorr,
                 diag_adj = Quality$quality,
+                wt = pspwght,
                 use = "complete.obs",
                 method = "pearson")
 
@@ -215,7 +231,7 @@ corr_q2_cmv <-
 corr_q2_cmv
 ```
 
-Perhaps you can't see it but the coefficient of the `stfeco` and `stflife` combination has gone down from `0.27` to `0.203`. More concretely, `sqp_cmv_cor` calculates the CMV and subtracts it from the correlation coefficient. A more directly example is:
+Perhaps you can't see it but the coefficient of the `stfeco` and `stflife` combination has gone down from `0.272` to `0.205`. More concretely, `sqp_cmv_cor` calculates the CMV and subtracts it from the correlation coefficient. A more directly example is:
 
 ```{r}
 cmv <-
@@ -223,7 +239,7 @@ cmv <-
   filter(question %in% c("stflife", "stfeco")) %>%
   sqpr::estimate_cmv()
 
-0.27 - cmv
+0.272 - cmv
 ```
 
 To finish off correcting for the measurement error, we consider this matrix with quality estimates on the diagonal and CMV subtracted from the correlations, a covariance matrix and transform it to a correlation matrix.
