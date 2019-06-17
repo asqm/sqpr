@@ -332,8 +332,8 @@ corr_q2_cmv
 <span class="co">#&gt; 3 systmr…  0.604   0.314   0.842    0.180  -0.234   0.145   0.342   0.00977</span>
 <span class="co">#&gt; 4 ppltrst  0.190   0.109   0.180    0.702  -0.210   0.142   0.0895 -0.0612 </span>
 <span class="co">#&gt; 5 polintr -0.197  -0.0164 -0.234   -0.210   0.601  -0.0453 -0.103   0.0124 </span>
-<span class="co">#&gt; 6 stflife  0.133   0.180   0.145    0.142  -0.0453  0.590   0.272  -0.0410 </span>
-<span class="co">#&gt; 7 stfeco   0.431   0.385   0.342    0.0895 -0.103   0.272   0.660   0.0134 </span>
+<span class="co">#&gt; 6 stflife  0.133   0.180   0.145    0.142  -0.0453  0.657   0.205  -0.0410 </span>
+<span class="co">#&gt; 7 stfeco   0.431   0.385   0.342    0.0895 -0.103   0.205   0.727   0.0134 </span>
 <span class="co">#&gt; 8 agea     0.0324  0.0180  0.00977 -0.0612  0.0124 -0.0410  0.0134  1      </span>
 <span class="co">#&gt; 9 eisced  -0.0144 -0.0595  0.0575   0.178  -0.323   0.0688  0.0444 -0.240  </span>
 <span class="co">#&gt; # … with 1 more variable: eisced &lt;dbl&gt;</span></code></pre></div>
@@ -355,20 +355,20 @@ corrected_corr
 <span class="co">#&gt;  [3,]  0.68894173  0.39516666  1.00000000  0.23432355 -0.32893187</span>
 <span class="co">#&gt;  [4,]  0.23719056  0.14979647  0.23432355  1.00000000 -0.32290613</span>
 <span class="co">#&gt;  [5,] -0.26573668 -0.02438162 -0.32893187 -0.32290613  1.00000000</span>
-<span class="co">#&gt;  [6,]  0.18065067  0.27000729  0.20611563  0.21990097 -0.07606445</span>
-<span class="co">#&gt;  [7,]  0.55556031  0.54689278  0.45950925  0.13150855 -0.16290908</span>
+<span class="co">#&gt;  [6,]  0.17117927  0.25585098  0.19530912  0.20837170 -0.07207644</span>
+<span class="co">#&gt;  [7,]  0.52930697  0.52104903  0.43779487  0.12529403 -0.15521071</span>
 <span class="co">#&gt;  [8,]  0.03387076  0.02073316  0.01064683 -0.07300084  0.01598024</span>
 <span class="co">#&gt;  [9,] -0.01557360 -0.07128312  0.06504728  0.21975688 -0.43156606</span>
 <span class="co">#&gt;           stflife      stfeco        agea      eisced</span>
-<span class="co">#&gt;  [1,]  0.18065067  0.55556031  0.03387076 -0.01557360</span>
-<span class="co">#&gt;  [2,]  0.27000729  0.54689278  0.02073316 -0.07128312</span>
-<span class="co">#&gt;  [3,]  0.20611563  0.45950925  0.01064683  0.06504728</span>
-<span class="co">#&gt;  [4,]  0.21990097  0.13150855 -0.07300084  0.21975688</span>
-<span class="co">#&gt;  [5,] -0.07606445 -0.16290908  0.01598024 -0.43156606</span>
-<span class="co">#&gt;  [6,]  1.00000000  0.43612328 -0.05331918  0.09287683</span>
-<span class="co">#&gt;  [7,]  0.43612328  1.00000000  0.01654328  0.05666742</span>
-<span class="co">#&gt;  [8,] -0.05331918  0.01654328  1.00000000 -0.24888811</span>
-<span class="co">#&gt;  [9,]  0.09287683  0.05666742 -0.24888811  1.00000000</span></code></pre></div>
+<span class="co">#&gt;  [1,]  0.17117927  0.52930697  0.03387076 -0.01557360</span>
+<span class="co">#&gt;  [2,]  0.25585098  0.52104903  0.02073316 -0.07128312</span>
+<span class="co">#&gt;  [3,]  0.19530912  0.43779487  0.01064683  0.06504728</span>
+<span class="co">#&gt;  [4,]  0.20837170  0.12529403 -0.07300084  0.21975688</span>
+<span class="co">#&gt;  [5,] -0.07207644 -0.15521071  0.01598024 -0.43156606</span>
+<span class="co">#&gt;  [6,]  1.00000000  0.29665927 -0.05052369  0.08800736</span>
+<span class="co">#&gt;  [7,]  0.29665927  1.00000000  0.01576151  0.05398957</span>
+<span class="co">#&gt;  [8,] -0.05052369  0.01576151  1.00000000 -0.24888811</span>
+<span class="co">#&gt;  [9,]  0.08800736  0.05398957 -0.24888811  1.00000000</span></code></pre></div>
 <p>Here we have a corrected matrix for both measurement error and for the common method variance of some variables. We can dump this into our <code>sem</code> models and get estimates corrected for measurement error.</p>
 </div>
 <div id="regression-model" class="section level2">
@@ -408,11 +408,11 @@ coef_table <span class="op">%&gt;%</span>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Relative increase (they don't only go up!):</span>
 <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/coef">coef</a></span>(fit.corrected) <span class="op">/</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/coef">coef</a></span>(fit)
 <span class="co">#&gt;  poltrst~ppltrst  poltrst~stflife  poltrst~polintr   poltrst~stfeco </span>
-<span class="co">#&gt;            1.159            3.762            1.054            1.302 </span>
+<span class="co">#&gt;            1.021            1.955            1.117            1.049 </span>
 <span class="co">#&gt;     poltrst~serv poltrst~systmrsp     poltrst~agea   poltrst~eisced </span>
-<span class="co">#&gt;            0.925            1.068           -0.045            1.362 </span>
+<span class="co">#&gt;            1.012            1.094            0.179            1.364 </span>
 <span class="co">#&gt; poltrst~~poltrst </span>
-<span class="co">#&gt;            0.766</span></code></pre></div>
+<span class="co">#&gt;            0.784</span></code></pre></div>
 <p>It looks like the results do differ substantially! Otherwise everything would be at <code>1</code>.</p>
 <p>Moreover, the R-squares of the models differ quite substantially.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">R2_uncorr &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/lavaan/topics/lavInspect">inspect</a></span>(fit, <span class="st">'r2'</span>)
@@ -421,7 +421,7 @@ R2 &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocument
 <span class="co"># Change of R2:</span>
 R2 <span class="op">-</span><span class="st"> </span>R2_uncorr
 <span class="co">#&gt; poltrst </span>
-<span class="co">#&gt;   0.125</span></code></pre></div>
+<span class="co">#&gt;   0.116</span></code></pre></div>
 <p>This case-study shows how adjusting for measurement error and Common Method Variance (CMV) can improve your estimates. We hope that you find the <code>sqpr</code> package useful for your estimations.</p>
 <ul>
 <li>Wiebke Weber and Hannah Werner (under review). “The correct(ed) political trust. A step-by-step explanation to correct for measurement error in the study of trust in political institutions.”, Working paper (available upon request)..</li>

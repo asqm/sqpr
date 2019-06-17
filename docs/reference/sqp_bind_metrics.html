@@ -165,24 +165,24 @@ such as 'quality', 'reliability' and 'validity'.</p>
 
 <span class='no'>sqp_df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/structure'>structure</a></span>(<span class='no'>sqp_df</span>, <span class='kw'>class</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>sqp_df</span>), <span class='st'>"sqp"</span>))
 
-<span class='fu'>sqp_bind_metrics</span>(<span class='no'>sqp_df</span>, <span class='no'>new_question</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>quality</span> <span class='kw'>=</span> <span class='fl'>0.7</span>))</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 6 x 4</span><span>
+<span class='fu'>sqp_bind_metrics</span>(<span class='no'>sqp_df</span>, <span class='no'>new_question</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>quality</span> <span class='kw'>=</span> <span class='fl'>0.7</span>))</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 6 x 4</span><span>
 #&gt;   question     quality reliability validity
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> V1               0.2        </span><span style='color: #BB0000;'>NA</span><span>       </span><span style='color: #BB0000;'>NA</span><span>  
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> V2               0.3         0.4     </span><span style='color: #BB0000;'>NA</span><span>  
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> V3               0.5         0.5      0.6
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span> V4               0.6         0.5      0.7
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span> V5               0.9         0.7      0.8
-#&gt; </span><span style='color: #BCBCBC;'>6</span><span> new_question     0.7        </span><span style='color: #BB0000;'>NA</span><span>       </span><span style='color: #BB0000;'>NA</span><span>  </div><div class='input'>
-<span class='fu'>sqp_bind_metrics</span>(<span class='no'>sqp_df</span>, <span class='no'>new_question</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>quality</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>reliability</span> <span class='kw'>=</span> <span class='fl'>0.2</span>))</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 6 x 4</span><span>
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> V1               0.2        </span><span style='color: #BB0000;'>NA</span><span>       </span><span style='color: #BB0000;'>NA</span><span>  
+#&gt; </span><span style='color: #555555;'>2</span><span> V2               0.3         0.4     </span><span style='color: #BB0000;'>NA</span><span>  
+#&gt; </span><span style='color: #555555;'>3</span><span> V3               0.5         0.5      0.6
+#&gt; </span><span style='color: #555555;'>4</span><span> V4               0.6         0.5      0.7
+#&gt; </span><span style='color: #555555;'>5</span><span> V5               0.9         0.7      0.8
+#&gt; </span><span style='color: #555555;'>6</span><span> new_question     0.7        </span><span style='color: #BB0000;'>NA</span><span>       </span><span style='color: #BB0000;'>NA</span><span>  </div><div class='input'>
+<span class='fu'>sqp_bind_metrics</span>(<span class='no'>sqp_df</span>, <span class='no'>new_question</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>quality</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>reliability</span> <span class='kw'>=</span> <span class='fl'>0.2</span>))</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 6 x 4</span><span>
 #&gt;   question     quality reliability validity
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> V1               0.2        </span><span style='color: #BB0000;'>NA</span><span>       </span><span style='color: #BB0000;'>NA</span><span>  
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> V2               0.3         0.4     </span><span style='color: #BB0000;'>NA</span><span>  
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> V3               0.5         0.5      0.6
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span> V4               0.6         0.5      0.7
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span> V5               0.9         0.7      0.8
-#&gt; </span><span style='color: #BCBCBC;'>6</span><span> new_question     0.7         0.2     </span><span style='color: #BB0000;'>NA</span><span>  </div><div class='input'>
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> V1               0.2        </span><span style='color: #BB0000;'>NA</span><span>       </span><span style='color: #BB0000;'>NA</span><span>  
+#&gt; </span><span style='color: #555555;'>2</span><span> V2               0.3         0.4     </span><span style='color: #BB0000;'>NA</span><span>  
+#&gt; </span><span style='color: #555555;'>3</span><span> V3               0.5         0.5      0.6
+#&gt; </span><span style='color: #555555;'>4</span><span> V4               0.6         0.5      0.7
+#&gt; </span><span style='color: #555555;'>5</span><span> V5               0.9         0.7      0.8
+#&gt; </span><span style='color: #555555;'>6</span><span> new_question     0.7         0.2     </span><span style='color: #BB0000;'>NA</span><span>  </div><div class='input'>
 # Specifying a wrong metric name results in error
 
 </div></span><span class='co'># NOT RUN {</span>
