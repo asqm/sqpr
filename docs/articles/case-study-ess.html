@@ -76,7 +76,7 @@
       <h1>Case-study: Correcting for measurement error in the European Social Survey</h1>
                         <h4 class="author">Jorge Cimentada and Wiebke Weber</h4>
             
-            <h4 class="date">2019-06-11</h4>
+            <h4 class="date">2019-06-17</h4>
       
       
       <div class="hidden name"><code>case-study-ess.Rmd</code></div>
@@ -95,77 +95,67 @@
 <div id="read-the-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#read-the-data" class="anchor"></a>Read the data</h2>
-<p>Let’s read in the data from the European Social Survey using the <code>essurvey</code> package and create a sum score of a number of variables. A sum score is literally the <code>sum</code> of a number of variables to create a composite score. Remember to replace your email as a character string instead of the argument <code>your_email</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ess7es &lt;-
-<span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/essurvey/topics/import_country">import_country</a></span>(<span class="st">"Spain"</span>, <span class="dv">7</span>, ess_email) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/essurvey/topics/recode_missings">recode_missings</a></span>() 
-
-<span class="co"># Create composite scores</span>
-ess7es &lt;-
-<span class="st">  </span>ess7es <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">poltrst =</span> trstprl <span class="op">+</span><span class="st"> </span>trstplt <span class="op">+</span><span class="st"> </span>trstprt,
-         <span class="dt">serv =</span> stfedu <span class="op">+</span><span class="st"> </span>stfhlth,
-         <span class="dt">systmrsp =</span> psppsgv <span class="op">+</span><span class="st"> </span>psppipl <span class="op">+</span><span class="st"> </span>ptcpplt)
-
+<p>Let’s read in the data from the European Social Survey using the <code>essurvey</code> package and create a sum score of a number of variables. A sum score is literally the weighted <span class="math inline">\((w)\)</span> <code>sum</code> of a number of variables <span class="math inline">\((y_1, y_2, ..., y_k)\)</span> to create a composite score <span class="math inline">\((CS)\)</span>:</p>
+<p><span class="math display">\[
+\begin{align}
+    Y_{cs} = \sum_{i=1}^{k}\frac{w_i}{{\delta_y}_{cs}} Y_i  &amp;&amp; \text{where $\frac{w_i}{{\delta_y}_{cs}}$ is the weight of the $i$th observed variable}\\
+\end{align}
+\]</span></p>
+<p>Remember to replace your email as a character string instead of the argument <code>ess_email</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Choose your selected variables</span>
 selected_vars &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"trstprl"</span>, <span class="st">"trstplt"</span>, <span class="st">"trstprt"</span>,
                    <span class="st">"stfedu"</span>, <span class="st">"stfhlth"</span>, <span class="st">"psppsgv"</span>,
                    <span class="st">"psppipl"</span>, <span class="st">"ptcpplt"</span>, <span class="st">"ppltrst"</span>,
                    <span class="st">"polintr"</span>, <span class="st">"stflife"</span>, <span class="st">"stfeco"</span>,
                    <span class="st">"agea"</span>,<span class="st">"eisced"</span>)
 
+<span class="co"># Download the ESS data and clear missing values</span>
+ess7es &lt;-
+<span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/essurvey/topics/import_country">import_country</a></span>(<span class="st">"Spain"</span>, <span class="dv">7</span>, ess_email) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(selected_vars, pspwght) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/complete.cases">complete.cases</a></span>(.))
+
+<span class="co"># Calculate the standardized but unweighted sums cores</span>
+ess7es &lt;-
+<span class="st">  </span>ess7es <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">poltrst =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/scale">scale</a></span>(trstprl) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/scale">scale</a></span>(trstplt) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/scale">scale</a></span>(trstprt),
+         <span class="dt">serv =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/scale">scale</a></span>(stfedu) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/scale">scale</a></span>(stfhlth),
+         <span class="dt">systmrsp =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/scale">scale</a></span>(psppsgv) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/scale">scale</a></span>(psppipl) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/scale">scale</a></span>(ptcpplt))
+
+<span class="co"># Calculate the standard deviation of each sum score</span>
+w_pol &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(ess7es<span class="op">$</span>poltrst)
+w_serv &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(ess7es<span class="op">$</span>serv)
+w_systmrsp &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(ess7es<span class="op">$</span>systmrsp)
+
+<span class="co"># Create the weighted and standardized composite score</span>
+ess7es &lt;-
+<span class="st">  </span>ess7es <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">poltrst =</span> w_pol<span class="op">*</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/scale">scale</a></span>(trstprl) <span class="op">+</span><span class="st"> </span>w_pol<span class="op">*</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/scale">scale</a></span>(trstplt) <span class="op">+</span><span class="st"> </span>w_pol<span class="op">*</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/scale">scale</a></span>(trstprt),
+         <span class="dt">serv =</span> w_serv<span class="op">*</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/scale">scale</a></span>(stfedu) <span class="op">+</span><span class="st"> </span>w_serv<span class="op">*</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/scale">scale</a></span>(stfhlth),
+         <span class="dt">systmrsp =</span> w_systmrsp<span class="op">*</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/scale">scale</a></span>(psppsgv) <span class="op">+</span><span class="st"> </span>w_systmrsp<span class="op">*</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/scale">scale</a></span>(psppipl) <span class="op">+</span><span class="st"> </span>w_systmrsp<span class="op">*</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/scale">scale</a></span>(ptcpplt))
+
 composite_scores &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"poltrst"</span>, <span class="st">"serv"</span>, <span class="st">"systmrsp"</span>)
 
-all_vars &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(composite_scores, selected_vars) <span class="co"># for using later</span></code></pre></div>
-<p>So far we the original <code>tibble</code> with a few extra columns containing the composite sum scores:</p>
+all_vars &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(composite_scores, selected_vars) <span class="co"># for later use</span></code></pre></div>
+<p>So far we have the original <code>tibble</code> with a few extra columns containing the composite sum scores:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ess7es
-<span class="co">#&gt; # A tibble: 1,925 x 604</span>
-<span class="co">#&gt;    name  essround edition proddate  idno cntry   tvtot    tvpol  ppltrst</span>
-<span class="co">#&gt;    &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;dbl+l&gt; &lt;dbl+lb&gt; &lt;dbl+lb&gt;</span>
-<span class="co">#&gt;  1 ESS7…        7 2.2     01.12.2…     1 ES    2 [0,5…  2 [0,5…  6 [6]  </span>
-<span class="co">#&gt;  2 ESS7…        7 2.2     01.12.2…     3 ES    2 [0,5…  2 [0,5…  6 [6]  </span>
-<span class="co">#&gt;  3 ESS7…        7 2.2     01.12.2…     4 ES    3 [Mor…  3 [Mor…  6 [6]  </span>
-<span class="co">#&gt;  4 ESS7…        7 2.2     01.12.2…     5 ES    2 [0,5…  1 [Les…  7 [7]  </span>
-<span class="co">#&gt;  5 ESS7…        7 2.2     01.12.2…     6 ES    5 [Mor…  4 [Mor… 10 [Mos…</span>
-<span class="co">#&gt;  6 ESS7…        7 2.2     01.12.2…     7 ES    7 [Mor…  2 [0,5…  7 [7]  </span>
-<span class="co">#&gt;  7 ESS7…        7 2.2     01.12.2…     8 ES    7 [Mor…  7 [Mor…  2 [2]  </span>
-<span class="co">#&gt;  8 ESS7…        7 2.2     01.12.2…    10 ES    6 [Mor…  5 [Mor…  2 [2]  </span>
-<span class="co">#&gt;  9 ESS7…        7 2.2     01.12.2…    12 ES    0 [No … NA        5 [5]  </span>
-<span class="co">#&gt; 10 ESS7…        7 2.2     01.12.2…    14 ES    3 [Mor…  1 [Les…  3 [3]  </span>
-<span class="co">#&gt; # … with 1,915 more rows, and 595 more variables: pplfair &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   pplhlp &lt;dbl+lbl&gt;, polintr &lt;dbl+lbl&gt;, psppsgv &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   actrolg &lt;dbl+lbl&gt;, psppipl &lt;dbl+lbl&gt;, cptppol &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   ptcpplt &lt;dbl+lbl&gt;, etapapl &lt;dbl+lbl&gt;, trstprl &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   trstlgl &lt;dbl+lbl&gt;, trstplc &lt;dbl+lbl&gt;, trstplt &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   trstprt &lt;dbl+lbl&gt;, trstep &lt;dbl+lbl&gt;, trstun &lt;dbl+lbl&gt;, vote &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   prtvtbat &lt;dbl+lbl&gt;, prtvtcbe &lt;dbl+lbl&gt;, prtvtech &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   prtvtdcz &lt;dbl+lbl&gt;, prtvede1 &lt;dbl+lbl&gt;, prtvede2 &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   prtvtcdk &lt;dbl+lbl&gt;, prtvteee &lt;dbl+lbl&gt;, prtvtces &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   prtvtcfi &lt;dbl+lbl&gt;, prtvtcfr &lt;dbl+lbl&gt;, prtvtbgb &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   prtvtehu &lt;dbl+lbl&gt;, prtvtaie &lt;dbl+lbl&gt;, prtvtcil &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   prtvalt1 &lt;dbl+lbl&gt;, prtvalt2 &lt;dbl+lbl&gt;, prtvalt3 &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   prtvtfnl &lt;dbl+lbl&gt;, prtvtbno &lt;dbl+lbl&gt;, prtvtcpl &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   prtvtbpt &lt;dbl+lbl&gt;, prtvtbse &lt;dbl+lbl&gt;, prtvtesi &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   contplt &lt;dbl+lbl&gt;, wrkprty &lt;dbl+lbl&gt;, wrkorg &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   badge &lt;dbl+lbl&gt;, sgnptit &lt;dbl+lbl&gt;, pbldmn &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   bctprd &lt;dbl+lbl&gt;, clsprty &lt;dbl+lbl&gt;, prtclcat &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   prtclcbe &lt;dbl+lbl&gt;, prtclech &lt;dbl+lbl&gt;, prtcldcz &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   prtclede &lt;dbl+lbl&gt;, prtclcdk &lt;dbl+lbl&gt;, prtcleee &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   prtcldes &lt;dbl+lbl&gt;, prtclcfi &lt;dbl+lbl&gt;, prtcldfr &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   prtclbgb &lt;dbl+lbl&gt;, prtclehu &lt;dbl+lbl&gt;, prtclcie &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   prtcldil &lt;dbl+lbl&gt;, prtclalt &lt;dbl+lbl&gt;, prtclenl &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   prtclbno &lt;dbl+lbl&gt;, prtclfpl &lt;dbl+lbl&gt;, prtcldpt &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   prtclbse &lt;dbl+lbl&gt;, prtclesi &lt;dbl+lbl&gt;, prtdgcl &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   lrscale &lt;dbl+lbl&gt;, stflife &lt;dbl+lbl&gt;, stfeco &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   stfgov &lt;dbl+lbl&gt;, stfdem &lt;dbl+lbl&gt;, stfedu &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   stfhlth &lt;dbl+lbl&gt;, gincdif &lt;dbl+lbl&gt;, freehms &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   euftf &lt;dbl+lbl&gt;, imsmetn &lt;dbl+lbl&gt;, imdfetn &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   eimpcnt &lt;dbl+lbl&gt;, impcntr &lt;dbl+lbl&gt;, imbgeco &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   imueclt &lt;dbl+lbl&gt;, imwbcnt &lt;dbl+lbl&gt;, happy &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   sclmeet &lt;dbl+lbl&gt;, inprdsc &lt;dbl+lbl&gt;, sclact &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   crmvct &lt;dbl+lbl&gt;, aesfdrk &lt;dbl+lbl&gt;, health &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   hlthhmp &lt;dbl+lbl&gt;, rlgblg &lt;dbl+lbl&gt;, rlgdnm &lt;dbl+lbl&gt;,</span>
-<span class="co">#&gt; #   rlgdnbat &lt;dbl+lbl&gt;, rlgdnbe &lt;dbl+lbl&gt;, …</span></code></pre></div>
-<p>Let’s read in the SQP data. First we login with <code><a href="../reference/sqp_login.html">sqp_login()</a></code> and for that to work we need to execute these two lines with our valid SQP credentials:</p>
+<span class="co">#&gt; # A tibble: 1,624 x 18</span>
+<span class="co">#&gt;    trstprl trstplt trstprt  stfedu stfhlth psppsgv psppipl ptcpplt  ppltrst</span>
+<span class="co">#&gt;    &lt;dbl+l&gt; &lt;dbl+l&gt; &lt;dbl+l&gt; &lt;dbl+l&gt; &lt;dbl+l&gt; &lt;dbl+l&gt; &lt;dbl+l&gt; &lt;dbl+l&gt; &lt;dbl+lb&gt;</span>
+<span class="co">#&gt;  1 0 [No … 0 [No … 1 [1]   3 [3]   1 [1]   3 [3]   0 [Not… 0 [Not…  6 [6]  </span>
+<span class="co">#&gt;  2 5 [5]   4 [4]   4 [4]   3 [3]   5 [5]   5 [5]   6 [6]   3 [3]    6 [6]  </span>
+<span class="co">#&gt;  3 4 [4]   3 [3]   3 [3]   3 [3]   8 [8]   6 [6]   2 [2]   4 [4]    7 [7]  </span>
+<span class="co">#&gt;  4 3 [3]   0 [No … 3 [3]   2 [2]   2 [2]   0 [Not… 0 [Not… 0 [Not… 10 [Mos…</span>
+<span class="co">#&gt;  5 0 [No … 0 [No … 0 [No … 0 [Ext… 2 [2]   0 [Not… 1 [1]   5 [5]    7 [7]  </span>
+<span class="co">#&gt;  6 0 [No … 0 [No … 0 [No … 0 [Ext… 0 [Ext… 0 [Not… 0 [Not… 0 [Not…  2 [2]  </span>
+<span class="co">#&gt;  7 5 [5]   0 [No … 0 [No … 5 [5]   3 [3]   0 [Not… 2 [2]   0 [Not…  5 [5]  </span>
+<span class="co">#&gt;  8 4 [4]   0 [No … 0 [No … 5 [5]   4 [4]   0 [Not… 0 [Not… 0 [Not…  3 [3]  </span>
+<span class="co">#&gt;  9 5 [5]   0 [No … 0 [No … 8 [8]   5 [5]   0 [Not… 0 [Not… 0 [Not…  0 [You…</span>
+<span class="co">#&gt; 10 0 [No … 0 [No … 0 [No … 0 [Ext… 0 [Ext… 0 [Not… 0 [Not… 1 [1]    1 [1]  </span>
+<span class="co">#&gt; # … with 1,614 more rows, and 9 more variables: polintr &lt;dbl+lbl&gt;,</span>
+<span class="co">#&gt; #   stflife &lt;dbl+lbl&gt;, stfeco &lt;dbl+lbl&gt;, agea &lt;dbl+lbl&gt;, eisced &lt;dbl+lbl&gt;,</span>
+<span class="co">#&gt; #   pspwght &lt;dbl&gt;, poltrst[,1] &lt;dbl&gt;, serv[,1] &lt;dbl&gt;, systmrsp[,1] &lt;dbl&gt;</span></code></pre></div>
+<p>Let’s read in the SQP data. You have therefore to register with SQP (<a href="www.sqp.upf.edu">sqp.upf.edu</a>) and can then login with <code><a href="../reference/sqp_login.html">sqp_login()</a></code> using your valid SQP credentials:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/sqp_login.html">sqp_login</a></span>(<span class="st">"your user name"</span>, <span class="st">"your password"</span>)</code></pre></div>
 <p>Once that’s done, we can continue with accessing the data.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">study_id &lt;-<span class="st"> </span><span class="kw"><a href="../reference/find_studies.html">find_studies</a></span>(<span class="st">"ESS Round 7"</span>)<span class="op">$</span>id
@@ -177,7 +167,7 @@ questions &lt;-
 <p>Let’s confirm all of our questions were extracted.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/all">all</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/chartr">tolower</a></span>(questions<span class="op">$</span>short_name) <span class="op">%in%</span><span class="st"> </span>selected_vars[<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>])
 <span class="co">#&gt; [1] TRUE</span></code></pre></div>
-<p>Why are we only selecting 12 variables? You’ll see later on. We will add the predicted estimates of the last two manually because they’re not in the SQP data base.</p>
+<p>Why are we only selecting 12 of our 14 variables? You’ll see later on. We will add the measurement quality of the last two manually because they’re not in the SQP database.</p>
 <p>To wrap the SQP API related business, let’s grab the predicted estimates with <code>get_estimates</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sqp_data &lt;-
 <span class="st">  </span><span class="kw"><a href="../reference/get_estimates.html">get_estimates</a></span>(questions<span class="op">$</span>id) <span class="op">%&gt;%</span>
@@ -221,7 +211,7 @@ questions &lt;-
 <span class="co">#&gt;  7 stfedu         0.757    0.838   0.635</span>
 <span class="co">#&gt;  8 stfhlth        0.76     0.798   0.607</span>
 <span class="co">#&gt;  9 stflife        0.721    0.911   0.657</span>
-<span class="co">#&gt; 10 poltrst       NA       NA       0.913</span></code></pre></div>
+<span class="co">#&gt; 10 poltrst       NA       NA       0.914</span></code></pre></div>
 <p>creates a new variable called <code>poltrst</code> which will have the quality of the sum score of <code>trstprl</code>, <code>trstplt</code>, <code>trstprt</code>. Note that these three variables are <strong>not</strong> present anymore, but only <code>poltrst</code>, the summary of the three. For our analysis we want to repeat that for the three sum scores from the beginning. Let’s extend it:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Quality &lt;-
 <span class="st">  </span>sqp_data <span class="op">%&gt;%</span>
@@ -237,9 +227,9 @@ questions &lt;-
 <span class="co">#&gt; 2 ppltrst        0.737    0.952   0.702</span>
 <span class="co">#&gt; 3 stfeco         0.797    0.912   0.727</span>
 <span class="co">#&gt; 4 stflife        0.721    0.911   0.657</span>
-<span class="co">#&gt; 5 poltrst       NA       NA       0.913</span>
-<span class="co">#&gt; 6 serv          NA       NA       0.748</span>
-<span class="co">#&gt; 7 systmrsp      NA       NA       0.841</span></code></pre></div>
+<span class="co">#&gt; 5 poltrst       NA       NA       0.914</span>
+<span class="co">#&gt; 6 serv          NA       NA       0.750</span>
+<span class="co">#&gt; 7 systmrsp      NA       NA       0.842</span></code></pre></div>
 <p>Great! We have our summarized <code>tibble</code>. Sometimes you’ll want to manually append predictions such as quality estimates not available in the SQP API. For our case, we want to add the <code>quality</code> estimates of the variables <code>agea</code> and <code>eised</code> (remember those two we were excluding from before? we were excluding them because they’re not available in the SQP data base). For that we can use <code>sqp_bind_metrics</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Quality &lt;-<span class="st"> </span>
 <span class="st">  </span>Quality <span class="op">%&gt;%</span>
@@ -254,9 +244,9 @@ Quality
 <span class="co">#&gt; 2 ppltrst        0.737    0.952   0.702</span>
 <span class="co">#&gt; 3 stfeco         0.797    0.912   0.727</span>
 <span class="co">#&gt; 4 stflife        0.721    0.911   0.657</span>
-<span class="co">#&gt; 5 poltrst       NA       NA       0.913</span>
-<span class="co">#&gt; 6 serv          NA       NA       0.748</span>
-<span class="co">#&gt; 7 systmrsp      NA       NA       0.841</span>
+<span class="co">#&gt; 5 poltrst       NA       NA       0.914</span>
+<span class="co">#&gt; 6 serv          NA       NA       0.750</span>
+<span class="co">#&gt; 7 systmrsp      NA       NA       0.842</span>
 <span class="co">#&gt; 8 agea          NA       NA       1    </span>
 <span class="co">#&gt; 9 eisced        NA       NA       0.93</span></code></pre></div>
 <p>Note that <code>sqp_bind_metrics</code> is very strict, it accepts an <code>sqp</code> data frame (given by <code>get_estimates</code>) and it will match that the names of your estimates (<code>quality</code> here) matches exactly the same names in the SQP API. You can read more about it in <code><a href="../reference/sqp_bind_metrics.html">?sqp_bind_metrics</a></code>. Finally, let’s order our results.</p>
@@ -272,7 +262,7 @@ Quality
 
 Quality &lt;-<span class="st"> </span>Quality[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/match">match</a></span>(variables_order, Quality<span class="op">$</span>question), ]</code></pre></div>
 <p>Briefly, let’s also select these variables for ESS data.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ess7escorr &lt;-<span class="st"> </span>ess7es <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(variables_order)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ess7escorr &lt;-<span class="st"> </span>ess7es <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(variables_order, pspwght)</code></pre></div>
 </div>
 <div id="correlations-and-correcting-for-measurement-error" class="section level2">
 <h2 class="hasAnchor">
@@ -280,51 +270,53 @@ Quality &lt;-<span class="st"> </span>Quality[<span class="kw"><a href="https://
 <p>Let’s get the correlation of all the variables in the ESS data.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Exploratory correlation matrix (in order of the columns in data frame):</span>
 original_corr_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/cor">cor</a></span>(ess7escorr, <span class="dt">use =</span> <span class="st">"complete.obs"</span>, <span class="dt">method =</span> <span class="st">"pearson"</span>)
-
 original_corr_<span class="dv">2</span>
-<span class="co">#&gt;              poltrst        serv    systmrsp     ppltrst       polintr</span>
-<span class="co">#&gt; poltrst   1.00000000  0.42234347  0.60017274  0.18756402 -0.1998034262</span>
-<span class="co">#&gt; serv      0.42234347  1.00000000  0.31451487  0.11161757 -0.0238949765</span>
-<span class="co">#&gt; systmrsp  0.60017274  0.31451487  1.00000000  0.17976483 -0.2340428111</span>
-<span class="co">#&gt; ppltrst   0.18756402  0.11161757  0.17976483  1.00000000 -0.1987630767</span>
-<span class="co">#&gt; polintr  -0.19980343 -0.02389498 -0.23404281 -0.19876308  1.0000000000</span>
-<span class="co">#&gt; stflife   0.13809045  0.18105357  0.14334382  0.14719373 -0.0407515829</span>
-<span class="co">#&gt; stfeco    0.43680221  0.38492773  0.34387670  0.09057548 -0.1050462717</span>
-<span class="co">#&gt; agea      0.03343543  0.01723621  0.01364820 -0.05888371  0.0002020306</span>
-<span class="co">#&gt; eisced   -0.01546372 -0.05567295  0.05062386  0.16991291 -0.3124573975</span>
-<span class="co">#&gt;              stflife      stfeco          agea      eisced</span>
-<span class="co">#&gt; poltrst   0.13809045  0.43680221  0.0334354262 -0.01546372</span>
-<span class="co">#&gt; serv      0.18105357  0.38492773  0.0172362098 -0.05567295</span>
-<span class="co">#&gt; systmrsp  0.14334382  0.34387670  0.0136482010  0.05062386</span>
-<span class="co">#&gt; ppltrst   0.14719373  0.09057548 -0.0588837086  0.16991291</span>
-<span class="co">#&gt; polintr  -0.04075158 -0.10504627  0.0002020306 -0.31245740</span>
-<span class="co">#&gt; stflife   1.00000000  0.27002646 -0.0375443228  0.07276395</span>
-<span class="co">#&gt; stfeco    0.27002646  1.00000000  0.0165999850  0.03815190</span>
-<span class="co">#&gt; agea     -0.03754432  0.01659999  1.0000000000 -0.22553987</span>
-<span class="co">#&gt; eisced    0.07276395  0.03815190 -0.2255398662  1.00000000</span></code></pre></div>
-<p><code>sqpr</code> has a very similar function to <code>cor</code> but allows to replace the diagonal. In our analysis we can use it to multiply the diagonal with the quality estimates of all the variables.</p>
+<span class="co">#&gt;               poltrst        serv    systmrsp     ppltrst       polintr</span>
+<span class="co">#&gt; poltrst   1.000000000  0.42042189  0.60203327  0.18768642 -0.2014219670</span>
+<span class="co">#&gt; serv      0.420421888  1.00000000  0.31633682  0.11142522 -0.0212754857</span>
+<span class="co">#&gt; systmrsp  0.602033274  0.31633682  1.00000000  0.17999428 -0.2361902279</span>
+<span class="co">#&gt; ppltrst   0.187686419  0.11142522  0.17999428  1.00000000 -0.1987630767</span>
+<span class="co">#&gt; polintr  -0.201421967 -0.02127549 -0.23619023 -0.19876308  1.0000000000</span>
+<span class="co">#&gt; stflife   0.135837000  0.18062375  0.14358248  0.14719373 -0.0407515829</span>
+<span class="co">#&gt; stfeco    0.434821138  0.38457746  0.34605350  0.09057548 -0.1050462717</span>
+<span class="co">#&gt; agea      0.035019520  0.01604983  0.01144204 -0.05888371  0.0002020306</span>
+<span class="co">#&gt; eisced   -0.016453690 -0.05828007  0.05296626  0.16991291 -0.3124573975</span>
+<span class="co">#&gt; pspwght   0.007210406 -0.06471818  0.01940722  0.11507178 -0.1442207091</span>
+<span class="co">#&gt;              stflife      stfeco          agea      eisced      pspwght</span>
+<span class="co">#&gt; poltrst   0.13583700  0.43482114  0.0350195196 -0.01645369  0.007210406</span>
+<span class="co">#&gt; serv      0.18062375  0.38457746  0.0160498326 -0.05828007 -0.064718182</span>
+<span class="co">#&gt; systmrsp  0.14358248  0.34605350  0.0114420397  0.05296626  0.019407217</span>
+<span class="co">#&gt; ppltrst   0.14719373  0.09057548 -0.0588837086  0.16991291  0.115071778</span>
+<span class="co">#&gt; polintr  -0.04075158 -0.10504627  0.0002020306 -0.31245740 -0.144220709</span>
+<span class="co">#&gt; stflife   1.00000000  0.27002646 -0.0375443228  0.07276395  0.021942844</span>
+<span class="co">#&gt; stfeco    0.27002646  1.00000000  0.0165999850  0.03815190 -0.012278518</span>
+<span class="co">#&gt; agea     -0.03754432  0.01659999  1.0000000000 -0.22553987 -0.193861040</span>
+<span class="co">#&gt; eisced    0.07276395  0.03815190 -0.2255398662  1.00000000  0.494724370</span>
+<span class="co">#&gt; pspwght   0.02194284 -0.01227852 -0.1938610399  0.49472437  1.000000000</span></code></pre></div>
+<p><code>sqpr</code> has a very similar function to <code>cor</code> but allows to replace the diagonal and weight the correlation. In our analysis we can use it to multiply the diagonal with the quality estimates of all the variables and use the <code>pspwght</code> from the European Social Survey.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">corr_q2 &lt;-
 <span class="st">  </span><span class="kw"><a href="../reference/sqp_correlate.html">sqp_correlate</a></span>(<span class="dt">x =</span> ess7escorr,
                 <span class="dt">diag_adj =</span> Quality<span class="op">$</span>quality,
+                <span class="dt">wt =</span> pspwght,
                 <span class="dt">use =</span> <span class="st">"complete.obs"</span>,
                 <span class="dt">method =</span> <span class="st">"pearson"</span>)
 
 corr_q2
 <span class="co">#&gt; # A tibble: 9 x 10</span>
-<span class="co">#&gt;   rowname poltrst    serv systmrsp ppltrst  polintr stflife  stfeco</span>
-<span class="co">#&gt;   &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 poltrst  0.913   0.422    0.600   0.188  -2.00e-1  0.138   0.437 </span>
-<span class="co">#&gt; 2 serv     0.422   0.748    0.315   0.112  -2.39e-2  0.181   0.385 </span>
-<span class="co">#&gt; 3 systmr…  0.600   0.315    0.841   0.180  -2.34e-1  0.143   0.344 </span>
-<span class="co">#&gt; 4 ppltrst  0.188   0.112    0.180   0.702  -1.99e-1  0.147   0.0906</span>
-<span class="co">#&gt; 5 polintr -0.200  -0.0239  -0.234  -0.199   6.01e-1 -0.0408 -0.105 </span>
-<span class="co">#&gt; 6 stflife  0.138   0.181    0.143   0.147  -4.08e-2  0.657   0.270 </span>
-<span class="co">#&gt; 7 stfeco   0.437   0.385    0.344   0.0906 -1.05e-1  0.270   0.727 </span>
-<span class="co">#&gt; 8 agea     0.0334  0.0172   0.0136 -0.0589  2.02e-4 -0.0375  0.0166</span>
-<span class="co">#&gt; 9 eisced  -0.0155 -0.0557   0.0506  0.170  -3.12e-1  0.0728  0.0382</span>
-<span class="co">#&gt; # … with 2 more variables: agea &lt;dbl&gt;, eisced &lt;dbl&gt;</span></code></pre></div>
-<p>It’s the same correlation coefficients but with the diagonal set to the quality of the estimates. But <strong>note</strong> that both the order of the variables <code>Quality</code> and the order of the variables in <code>ess7corr</code> should be the same! Otherwise we might confuse quality coefficients between variables.</p>
-<p>We often want to calculate the Common Method Variance (CMV) of some of these observed variables because they share common methods such as likert scales, etc. The <code>sqpr</code> package makes this very easy using the <code>sqpr_cmv_cor</code> function. Supply the the correlation data frame, the <code>Quality</code> dataset with quality estimates and <code>sqp_cmv_cor</code> estimates the CMV between the variables specified (here only two) and subtracts it from the correlation.</p>
+<span class="co">#&gt;   rowname poltrst    serv systmrsp ppltrst polintr stflife  stfeco     agea</span>
+<span class="co">#&gt;   &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 poltrst  0.914   0.418   0.604    0.190  -0.197   0.133   0.431   0.0324 </span>
+<span class="co">#&gt; 2 serv     0.418   0.750   0.314    0.109  -0.0164  0.180   0.385   0.0180 </span>
+<span class="co">#&gt; 3 systmr…  0.604   0.314   0.842    0.180  -0.234   0.145   0.342   0.00977</span>
+<span class="co">#&gt; 4 ppltrst  0.190   0.109   0.180    0.702  -0.210   0.142   0.0895 -0.0612 </span>
+<span class="co">#&gt; 5 polintr -0.197  -0.0164 -0.234   -0.210   0.601  -0.0453 -0.103   0.0124 </span>
+<span class="co">#&gt; 6 stflife  0.133   0.180   0.145    0.142  -0.0453  0.657   0.272  -0.0410 </span>
+<span class="co">#&gt; 7 stfeco   0.431   0.385   0.342    0.0895 -0.103   0.272   0.727   0.0134 </span>
+<span class="co">#&gt; 8 agea     0.0324  0.0180  0.00977 -0.0612  0.0124 -0.0410  0.0134  1      </span>
+<span class="co">#&gt; 9 eisced  -0.0144 -0.0595  0.0575   0.178  -0.323   0.0688  0.0444 -0.240  </span>
+<span class="co">#&gt; # … with 1 more variable: eisced &lt;dbl&gt;</span></code></pre></div>
+<p>It’s the same correlation coefficients but with the diagonal set to the quality of the estimates. But <strong>note</strong> that both the order of the variables <code>Quality</code> and the order of the variables in <code>ess7corr</code> should be the same! Otherwise we might confuse quality estimates between variables.</p>
+<p>For variables which are measured with the same method, we want to account for their Common Method Variance (CMV). The <code>sqpr</code> package makes this very easy using the <code>sqpr_cmv_cor</code> function. Supply the correlation data frame, the <code>Quality</code> dataset with quality estimates and <code>sqp_cmv_cor</code> estimates the CMV between the variables specified (here only two) and subtracts it from the correlation.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#subtract the cmv from the observed correlation</span>
 corr_q2_cmv &lt;-
 <span class="st">  </span><span class="kw"><a href="../reference/sqp_cmv_cor.html">sqp_cmv_cor</a></span>(<span class="dt">x =</span> corr_q2,
@@ -333,51 +325,51 @@ corr_q2_cmv &lt;-
 
 corr_q2_cmv
 <span class="co">#&gt; # A tibble: 9 x 10</span>
-<span class="co">#&gt;   rowname poltrst    serv systmrsp ppltrst  polintr stflife  stfeco</span>
-<span class="co">#&gt;   &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 poltrst  0.913   0.422    0.600   0.188  -2.00e-1  0.138   0.437 </span>
-<span class="co">#&gt; 2 serv     0.422   0.748    0.315   0.112  -2.39e-2  0.181   0.385 </span>
-<span class="co">#&gt; 3 systmr…  0.600   0.315    0.841   0.180  -2.34e-1  0.143   0.344 </span>
-<span class="co">#&gt; 4 ppltrst  0.188   0.112    0.180   0.702  -1.99e-1  0.147   0.0906</span>
-<span class="co">#&gt; 5 polintr -0.200  -0.0239  -0.234  -0.199   6.01e-1 -0.0408 -0.105 </span>
-<span class="co">#&gt; 6 stflife  0.138   0.181    0.143   0.147  -4.08e-2  0.657   0.203 </span>
-<span class="co">#&gt; 7 stfeco   0.437   0.385    0.344   0.0906 -1.05e-1  0.203   0.727 </span>
-<span class="co">#&gt; 8 agea     0.0334  0.0172   0.0136 -0.0589  2.02e-4 -0.0375  0.0166</span>
-<span class="co">#&gt; 9 eisced  -0.0155 -0.0557   0.0506  0.170  -3.12e-1  0.0728  0.0382</span>
-<span class="co">#&gt; # … with 2 more variables: agea &lt;dbl&gt;, eisced &lt;dbl&gt;</span></code></pre></div>
-<p>Perhaps you can’t see it but the coefficient of the <code>stfeco</code> and <code>stflife</code> combination has gone down from <code>0.27</code> to <code>0.203</code>. More concretely, <code>sqp_cmv_cor</code> calculates the CMV and subtracts it from the correlation coefficient. A more directly example is:</p>
+<span class="co">#&gt;   rowname poltrst    serv systmrsp ppltrst polintr stflife  stfeco     agea</span>
+<span class="co">#&gt;   &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 poltrst  0.914   0.418   0.604    0.190  -0.197   0.133   0.431   0.0324 </span>
+<span class="co">#&gt; 2 serv     0.418   0.750   0.314    0.109  -0.0164  0.180   0.385   0.0180 </span>
+<span class="co">#&gt; 3 systmr…  0.604   0.314   0.842    0.180  -0.234   0.145   0.342   0.00977</span>
+<span class="co">#&gt; 4 ppltrst  0.190   0.109   0.180    0.702  -0.210   0.142   0.0895 -0.0612 </span>
+<span class="co">#&gt; 5 polintr -0.197  -0.0164 -0.234   -0.210   0.601  -0.0453 -0.103   0.0124 </span>
+<span class="co">#&gt; 6 stflife  0.133   0.180   0.145    0.142  -0.0453  0.590   0.272  -0.0410 </span>
+<span class="co">#&gt; 7 stfeco   0.431   0.385   0.342    0.0895 -0.103   0.272   0.660   0.0134 </span>
+<span class="co">#&gt; 8 agea     0.0324  0.0180  0.00977 -0.0612  0.0124 -0.0410  0.0134  1      </span>
+<span class="co">#&gt; 9 eisced  -0.0144 -0.0595  0.0575   0.178  -0.323   0.0688  0.0444 -0.240  </span>
+<span class="co">#&gt; # … with 1 more variable: eisced &lt;dbl&gt;</span></code></pre></div>
+<p>Perhaps you can’t see it but the coefficient of the <code>stfeco</code> and <code>stflife</code> combination has gone down from <code>0.272</code> to <code>0.205</code>. More concretely, <code>sqp_cmv_cor</code> calculates the CMV and subtracts it from the correlation coefficient. A more directly example is:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cmv &lt;-
 <span class="st">  </span>Quality <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(question <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"stflife"</span>, <span class="st">"stfeco"</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span>sqpr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/sqpr/topics/estimate_cmv">estimate_cmv</a></span>()
 
-<span class="fl">0.27</span> <span class="op">-</span><span class="st"> </span>cmv
-<span class="co">#&gt; [1] 0.2029138</span></code></pre></div>
-<p>To finish off correcting for the measurement error, we transform the correlation to a covariance matrix, which is in itself a correlation matrix.</p>
+<span class="fl">0.272</span> <span class="op">-</span><span class="st"> </span>cmv
+<span class="co">#&gt; [1] 0.2049138</span></code></pre></div>
+<p>To finish off correcting for the measurement error, we consider this matrix with quality estimates on the diagonal and CMV subtracted from the correlations, a covariance matrix and transform it to a correlation matrix.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">corrected_corr &lt;-<span class="st"> </span>corr_q2_cmv <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span>rowname) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">as.matrix</a></span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/cor">cov2cor</a></span>()
 
 corrected_corr
-<span class="co">#&gt;           poltrst        serv    systmrsp     ppltrst       polintr</span>
-<span class="co">#&gt;  [1,]  1.00000000  0.51089817  0.68481184  0.23424735 -0.2696866313</span>
-<span class="co">#&gt;  [2,]  0.51089817  1.00000000  0.39647636  0.15400643 -0.0356323296</span>
-<span class="co">#&gt;  [3,]  0.68481184  0.39647636  1.00000000  0.23395775 -0.3291996309</span>
-<span class="co">#&gt;  [4,]  0.23424735  0.15400643  0.23395775  1.00000000 -0.3060059835</span>
-<span class="co">#&gt;  [5,] -0.26968663 -0.03563233 -0.32919963 -0.30600598  1.0000000000</span>
-<span class="co">#&gt;  [6,]  0.17826853  0.25822558  0.19284019  0.21673950 -0.0648521773</span>
-<span class="co">#&gt;  [7,]  0.53605746  0.52189944  0.43978136  0.12678704 -0.1589191383</span>
-<span class="co">#&gt;  [8,]  0.03498651  0.01992584  0.01488253 -0.07027917  0.0002606033</span>
-<span class="co">#&gt;  [9,] -0.01677901 -0.06673867  0.05724204  0.21028890 -0.4179382317</span>
-<span class="co">#&gt;           stflife      stfeco          agea      eisced</span>
-<span class="co">#&gt;  [1,]  0.17826853  0.53605746  0.0349865071 -0.01677901</span>
-<span class="co">#&gt;  [2,]  0.25822558  0.52189944  0.0199258389 -0.06673867</span>
-<span class="co">#&gt;  [3,]  0.19284019  0.43978136  0.0148825271  0.05724204</span>
-<span class="co">#&gt;  [4,]  0.21673950  0.12678704 -0.0702791659  0.21028890</span>
-<span class="co">#&gt;  [5,] -0.06485218 -0.15891914  0.0002606033 -0.41793823</span>
-<span class="co">#&gt;  [6,]  1.00000000  0.29364211 -0.0463192577  0.09308766</span>
-<span class="co">#&gt;  [7,]  0.29364211  1.00000000  0.0194688586  0.04639888</span>
-<span class="co">#&gt;  [8,] -0.04631926  0.01946886  1.0000000000 -0.23387395</span>
-<span class="co">#&gt;  [9,]  0.09308766  0.04639888 -0.2338739464  1.00000000</span></code></pre></div>
-<p>Here we have a corrected matrix for both measurement error and for the common method variance of some variables. We can dump this into our <code>sem</code> models and get much better estimates.</p>
+<span class="co">#&gt;           poltrst        serv    systmrsp     ppltrst     polintr</span>
+<span class="co">#&gt;  [1,]  1.00000000  0.50490577  0.68894173  0.23719056 -0.26573668</span>
+<span class="co">#&gt;  [2,]  0.50490577  1.00000000  0.39516666  0.14979647 -0.02438162</span>
+<span class="co">#&gt;  [3,]  0.68894173  0.39516666  1.00000000  0.23432355 -0.32893187</span>
+<span class="co">#&gt;  [4,]  0.23719056  0.14979647  0.23432355  1.00000000 -0.32290613</span>
+<span class="co">#&gt;  [5,] -0.26573668 -0.02438162 -0.32893187 -0.32290613  1.00000000</span>
+<span class="co">#&gt;  [6,]  0.18065067  0.27000729  0.20611563  0.21990097 -0.07606445</span>
+<span class="co">#&gt;  [7,]  0.55556031  0.54689278  0.45950925  0.13150855 -0.16290908</span>
+<span class="co">#&gt;  [8,]  0.03387076  0.02073316  0.01064683 -0.07300084  0.01598024</span>
+<span class="co">#&gt;  [9,] -0.01557360 -0.07128312  0.06504728  0.21975688 -0.43156606</span>
+<span class="co">#&gt;           stflife      stfeco        agea      eisced</span>
+<span class="co">#&gt;  [1,]  0.18065067  0.55556031  0.03387076 -0.01557360</span>
+<span class="co">#&gt;  [2,]  0.27000729  0.54689278  0.02073316 -0.07128312</span>
+<span class="co">#&gt;  [3,]  0.20611563  0.45950925  0.01064683  0.06504728</span>
+<span class="co">#&gt;  [4,]  0.21990097  0.13150855 -0.07300084  0.21975688</span>
+<span class="co">#&gt;  [5,] -0.07606445 -0.16290908  0.01598024 -0.43156606</span>
+<span class="co">#&gt;  [6,]  1.00000000  0.43612328 -0.05331918  0.09287683</span>
+<span class="co">#&gt;  [7,]  0.43612328  1.00000000  0.01654328  0.05666742</span>
+<span class="co">#&gt;  [8,] -0.05331918  0.01654328  1.00000000 -0.24888811</span>
+<span class="co">#&gt;  [9,]  0.09287683  0.05666742 -0.24888811  1.00000000</span></code></pre></div>
+<p>Here we have a corrected matrix for both measurement error and for the common method variance of some variables. We can dump this into our <code>sem</code> models and get estimates corrected for measurement error.</p>
 </div>
 <div id="regression-model" class="section level2">
 <h2 class="hasAnchor">
@@ -416,11 +408,11 @@ coef_table <span class="op">%&gt;%</span>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Relative increase (they don't only go up!):</span>
 <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/coef">coef</a></span>(fit.corrected) <span class="op">/</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/coef">coef</a></span>(fit)
 <span class="co">#&gt;  poltrst~ppltrst  poltrst~stflife  poltrst~polintr   poltrst~stfeco </span>
-<span class="co">#&gt;            0.948            1.690            1.159            1.053 </span>
+<span class="co">#&gt;            1.159            3.762            1.054            1.302 </span>
 <span class="co">#&gt;     poltrst~serv poltrst~systmrsp     poltrst~agea   poltrst~eisced </span>
-<span class="co">#&gt;            1.028            1.076            0.208            1.310 </span>
+<span class="co">#&gt;            0.925            1.068           -0.045            1.362 </span>
 <span class="co">#&gt; poltrst~~poltrst </span>
-<span class="co">#&gt;            0.786</span></code></pre></div>
+<span class="co">#&gt;            0.766</span></code></pre></div>
 <p>It looks like the results do differ substantially! Otherwise everything would be at <code>1</code>.</p>
 <p>Moreover, the R-squares of the models differ quite substantially.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">R2_uncorr &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/lavaan/topics/lavInspect">inspect</a></span>(fit, <span class="st">'r2'</span>)
@@ -429,10 +421,10 @@ R2 &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocument
 <span class="co"># Change of R2:</span>
 R2 <span class="op">-</span><span class="st"> </span>R2_uncorr
 <span class="co">#&gt; poltrst </span>
-<span class="co">#&gt;   0.114</span></code></pre></div>
+<span class="co">#&gt;   0.125</span></code></pre></div>
 <p>This case-study shows how adjusting for measurement error and Common Method Variance (CMV) can improve your estimates. We hope that you find the <code>sqpr</code> package useful for your estimations.</p>
 <ul>
-<li>Wiebke Weber and Hannah Werner (under review). “The correct(ed) political trust. A step-by-step explanation to correct for measurement error in the study of trust in political institutions.”, Social Indicators Research.</li>
+<li>Wiebke Weber and Hannah Werner (under review). “The correct(ed) political trust. A step-by-step explanation to correct for measurement error in the study of trust in political institutions.”, Working paper (available upon request)..</li>
 </ul>
 </div>
   </div>
