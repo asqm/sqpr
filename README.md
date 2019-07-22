@@ -1,14 +1,14 @@
-sqpr <img src="man/figures/sqpr_logo.jpg" align="right" width="200" height="200" />
+sqpr <img src="man/figures/sqpr_logo.png" align="right" width="200" height="200" />
 -----------------------------------------------------------------------------------
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/sqpr)](https://cran.r-project.org/package=sqpr)
 [![Travis build
-status](https://travis-ci.org/asqm/sqpr.svg?branch=master)](https://travis-ci.org/asqm/sqpr)
+status](https://travis-ci.org/sociometricresearch/sqpr.svg?branch=master)](https://travis-ci.org/sociometricresearch/sqpr)
 [![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/asqm/sqpr?branch=master&svg=true)](https://ci.appveyor.com/project/asqm/sqpr)
+status](https://ci.appveyor.com/api/projects/status/github/sociometricresearch/sqpr?branch=master&svg=true)](https://ci.appveyor.com/project/sociometricresearch/sqpr)
 [![Coverage
-status](https://codecov.io/gh/asqm/sqpr/branch/master/graph/badge.svg)](https://codecov.io/github/asqm/sqpr?branch=master)
+status](https://codecov.io/gh/sociometricresearch/sqpr/branch/master/graph/badge.svg)](https://codecov.io/github/sociometricresearch/sqpr?branch=master)
 
 The `sqpr` package allows you to calculate several estimations of the
 quality of your survey questions and also adjust your estimations for
@@ -23,7 +23,7 @@ Installation
 version of from Github with:
 
     # install.packages("devtools")
-    devtools::install_github("asqm/sqpr")
+    devtools::install_github("sociometricresearch/sqpr")
 
 Example
 -------
@@ -41,7 +41,7 @@ First, load the package in R and provide your registered credentials.
 For details on the login process see the
 `Accessing the SQP API vignette` from the package.
 
-Once you've ran `sqp_login()`, you're all set to work with the SQP API!
+Once you’ve ran `sqp_login()`, you’re all set to work with the SQP API!
 No need to run it again unless you close the R session.
 
 Exploring the SQP API
@@ -63,12 +63,12 @@ Ok, so we have our `study_id`. Which questions are in that study?
 
     q_ess <- find_questions(ess_four$id, "tv")
 
-That might take a while because it's downloading all of the data to your
+That might take a while because it’s downloading all of the data to your
 computer. However, if you run `find_questions` (or any other API related
 function) once, then any repetition should be instant as it loads
 everything from your computer rather than downloading it again.
 
-Let's query further down to get questions for a specific question.
+Let’s query further down to get questions for a specific question.
 
     sp_tv <- q_ess[q_ess$language_iso == "spa", ]
     sp_tv
