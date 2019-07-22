@@ -93,9 +93,3 @@ predictions for those questions.
 `get_estimates` will return all question names as lower case for
 increasing the chances of compatibility with the name in the
 questionnair of the study.
-
-`sqpr` does much more than querying data from the SQP API, such as
-calculating common method variance of several questions and adjusting
-correlations for measurement error, among other things. The two
-vignettes of the package elaborate much more on how to query data and
-use it in your analysis.
