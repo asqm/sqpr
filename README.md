@@ -54,7 +54,7 @@ the `id` of a certain study
     #> # A tibble: 1 x 2
     #>      id name       
     #>   <int> <chr>      
-    #> 1     4 ESS Round 4
+    ##> 1     4 ESS Round 4
 
 Ok, so we have our `study_id`. Which questions are in that study?
 `find_questions` will do the work for you.
