@@ -8,13 +8,11 @@ status](https://travis-ci.org/sociometricresearch/sqpr.svg?branch=master)](https
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/sociometricresearch/sqpr?branch=master&svg=true)](https://ci.appveyor.com/project/cimentadaj/sqpr)
 [![Codecov test
-coverage](https://codecov.io/gh/sociometricresearch/measurementfree/branch/master/graph/badge.svg)](https://codecov.io/gh/sociometricresearch/measurementfree?branch=master)
+coverage](https://codecov.io/gh/sociometricresearch/sqpr/branch/master/graph/badge.svg)](https://codecov.io/gh/sociometricresearch/sqpr?branch=master)
 
-The `sqpr` package allows you to calculate several estimations of the
-quality of your survey questions and also adjust your estimations for
-measurement error. Moreover, it gives easy access to the API of the
-Survey Quality Prediction [website](http://sqp.upf.edu/), a data base
-that contains over 40,000 predictions on the quality of questions.
+The `sqpr` package gives easy access to the API of the Survey Quality
+Prediction [website](http://sqp.upf.edu/), a data base that contains
+over 40,000 predictions on the quality of questions.
 
 Installation
 ------------
