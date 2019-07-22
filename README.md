@@ -6,9 +6,9 @@ status](https://www.r-pkg.org/badges/version/sqpr)](https://cran.r-project.org/p
 [![Travis build
 status](https://travis-ci.org/sociometricresearch/sqpr.svg?branch=master)](https://travis-ci.org/sociometricresearch/sqpr)
 [![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/sociometricresearch/sqpr?branch=master&svg=true)](https://ci.appveyor.com/project/sociometricresearch/sqpr)
-[![Coverage
-status](https://codecov.io/gh/sociometricresearch/sqpr/branch/master/graph/badge.svg)](https://codecov.io/github/sociometricresearch/sqpr?branch=master)
+status](https://ci.appveyor.com/api/projects/status/github/sociometricresearch/sqpr?branch=master&svg=true)](https://ci.appveyor.com/project/cimentadaj/sqpr)
+[![Codecov test
+coverage](https://codecov.io/gh/sociometricresearch/measurementfree/branch/master/graph/badge.svg)](https://codecov.io/gh/sociometricresearch/measurementfree?branch=master)
 
 The `sqpr` package allows you to calculate several estimations of the
 quality of your survey questions and also adjust your estimations for
