@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Manually bind new rows to an SQP data frame — sqp_bind_metrics • sqpr</title>
+<title>Manually bind new rows to an SQP 3.0 data frame — sqp_bind_metrics • sqpr</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Manually bind new rows to an SQP data frame — sqp_bind_metrics" />
+<meta property="og:title" content="Manually bind new rows to an SQP 3.0 data frame — sqp_bind_metrics" />
 
-<meta property="og:description" content="Manually bind new rows to an SQP data frame" />
+<meta property="og:description" content="Manually bind new rows to an SQP 3.0 data frame" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -86,7 +86,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/accesing-sqp-api.html">Accessing the SQP API</a>
+      <a href="../articles/accesing-sqp-api.html">Accessing the SQP 3.0 API</a>
     </li>
     <li>
       <a href="../articles/case-study-ess.html">Case-study: Correcting for measurement error in the European Social Survey</a>
@@ -109,14 +109,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Manually bind new rows to an SQP data frame</h1>
+    <h1>Manually bind new rows to an SQP 3.0 data frame</h1>
     
     <div class="hidden name"><code>sqp_bind_metrics.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Manually bind new rows to an SQP data frame</p>
+    <p>Manually bind new rows to an SQP 3.0 data frame</p>
     
     </div>
 
@@ -135,7 +135,7 @@
     </tr>
     <tr>
       <th>metrics</th>
-      <td><p>a list containing new SQP metrics. Currently it only
+      <td><p>a list containing new SQP 3.0 metrics. Currently it only
 supports 'quality', 'reliability' and 'validity'. Can also specify one of the metrics
 and the remaining are set to NA by default</p></td>
     </tr>
@@ -144,7 +144,7 @@ and the remaining are set to NA by default</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p><code>sqp_data</code> with a new row that contains the new question name
-and the metrics as columns. Metrics must match existing names from SQP data
+and the metrics as columns. Metrics must match existing names from SQP 3.0 data
 such as 'quality', 'reliability' and 'validity'.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
@@ -187,7 +187,7 @@ such as 'quality', 'reliability' and 'validity'.</p>
 
 </div></span><span class='co'># NOT RUN {</span>
 <span class='fu'>sqp_bind_metrics</span>(<span class='no'>sqp_df</span>, <span class='no'>new_question</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>wrong_metric</span> <span class='kw'>=</span> <span class='fl'>0.7</span>))
-<span class='co'># Error: One or more of the specified `metrics` don't match the SQP column names</span>
+<span class='co'># Error: One or more of the specified `metrics` don't match the SQP 3.0 column names</span>
 
 <span class='co'># }</span><div class='input'>
 # Currently only quality, reliability and validity are allowed.

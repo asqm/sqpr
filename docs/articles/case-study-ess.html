@@ -53,7 +53,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/accesing-sqp-api.html">Accessing the SQP API</a>
+      <a href="../articles/accesing-sqp-api.html">Accessing the SQP 3.0 API</a>
     </li>
     <li>
       <a href="../articles/case-study-ess.html">Case-study: Correcting for measurement error in the European Social Survey</a>
@@ -85,7 +85,7 @@
 
     
     
-<p>In this case study we will go through an applied example of the capabilities of the <code>sqpr</code> package. For a detailed example on accessing the SQP API, check out the ‘Accessing the SQP API’ vignette from the <code>sqpr</code> package.</p>
+<p>In this case study we will go through an applied example of the capabilities of the <code>sqpr</code> package. For a detailed example on accessing the SQP 3.0 API, check out the ‘Accessing the SQP 3.0 API’ vignette from the <code>sqpr</code> package.</p>
 <p>We’ll begin by loading the packages we’ll use and the <code>sqpr</code> package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(lavaan)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)
@@ -155,7 +155,7 @@ all_vars &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdo
 <span class="co">#&gt; # … with 1,614 more rows, and 9 more variables: polintr &lt;dbl+lbl&gt;,</span>
 <span class="co">#&gt; #   stflife &lt;dbl+lbl&gt;, stfeco &lt;dbl+lbl&gt;, agea &lt;dbl+lbl&gt;, eisced &lt;dbl+lbl&gt;,</span>
 <span class="co">#&gt; #   pspwght &lt;dbl&gt;, poltrst[,1] &lt;dbl&gt;, serv[,1] &lt;dbl&gt;, systmrsp[,1] &lt;dbl&gt;</span></code></pre></div>
-<p>Let’s read in the SQP data. You have therefore to register with SQP (<a href="www.sqp.upf.edu">sqp.upf.edu</a>) and can then login with <code><a href="../reference/sqp_login.html">sqp_login()</a></code> using your valid SQP credentials:</p>
+<p>Let’s read in the SQP 3.0 data. You have therefore to register with SQP 3.0 (<a href="www.sqp.upf.edu">sqp.upf.edu</a>) and can then login with <code><a href="../reference/sqp_login.html">sqp_login()</a></code> using your valid SQP 3.0 credentials:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/sqp_login.html">sqp_login</a></span>(<span class="st">"your user name"</span>, <span class="st">"your password"</span>)</code></pre></div>
 <p>Once that’s done, we can continue with accessing the data.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">study_id &lt;-<span class="st"> </span><span class="kw"><a href="../reference/find_studies.html">find_studies</a></span>(<span class="st">"ESS Round 7"</span>)<span class="op">$</span>id
@@ -167,12 +167,12 @@ questions &lt;-
 <p>Let’s confirm all of our questions were extracted.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/all">all</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/chartr">tolower</a></span>(questions<span class="op">$</span>short_name) <span class="op">%in%</span><span class="st"> </span>selected_vars[<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>])
 <span class="co">#&gt; [1] TRUE</span></code></pre></div>
-<p>Why are we only selecting 12 of our 14 variables? You’ll see later on. We will add the measurement quality of the last two manually because they’re not in the SQP database.</p>
-<p>To wrap the SQP API related business, let’s grab the predicted estimates with <code>get_estimates</code>.</p>
+<p>Why are we only selecting 12 of our 14 variables? You’ll see later on. We will add the measurement quality of the last two manually because they’re not in the SQP 3.0 database.</p>
+<p>To wrap the SQP 3.0 API related business, let’s grab the predicted estimates with <code>get_estimates</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sqp_data &lt;-
 <span class="st">  </span><span class="kw"><a href="../reference/get_estimates.html">get_estimates</a></span>(questions<span class="op">$</span>id) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span>(question)</code></pre></div>
-<p>Alright, now we have a nicely formatted <code>tibble</code> from the SQP database in R.</p>
+<p>Alright, now we have a nicely formatted <code>tibble</code> from the SQP 3.0 database in R.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sqp_data
 <span class="co">#&gt; # A tibble: 12 x 4</span>
 <span class="co">#&gt;    question reliability validity quality</span>
@@ -193,7 +193,7 @@ questions &lt;-
 <div id="analysis" class="section level2">
 <h2 class="hasAnchor">
 <a href="#analysis" class="anchor"></a>Analysis</h2>
-<p>With the function <code>sqpr_sscore</code> we can calculate the quality of a sum score. Remember those sum scores we calculated at the beginning? We can calculate the quality of the sum score by specifying the data from the SQP API, the data from the European Social Survey and provide <code>sqp_sscore</code> with the variables that contribute to the sum score.</p>
+<p>With the function <code>sqpr_sscore</code> we can calculate the quality of a sum score. Remember those sum scores we calculated at the beginning? We can calculate the quality of the sum score by specifying the data from the SQP 3.0 API, the data from the European Social Survey and provide <code>sqp_sscore</code> with the variables that contribute to the sum score.</p>
 <p>For example, this code..</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/sqp_sscore.html">sqp_sscore</a></span>(<span class="dt">sqp_data =</span> sqp_data,
            <span class="dt">df =</span> ess7es,
@@ -230,7 +230,7 @@ questions &lt;-
 <span class="co">#&gt; 5 poltrst       NA       NA       0.914</span>
 <span class="co">#&gt; 6 serv          NA       NA       0.750</span>
 <span class="co">#&gt; 7 systmrsp      NA       NA       0.842</span></code></pre></div>
-<p>Great! We have our summarized <code>tibble</code>. Sometimes you’ll want to manually append predictions such as quality estimates not available in the SQP API. For our case, we want to add the <code>quality</code> estimates of the variables <code>agea</code> and <code>eised</code> (remember those two we were excluding from before? we were excluding them because they’re not available in the SQP data base). For that we can use <code>sqp_bind_metrics</code>.</p>
+<p>Great! We have our summarized <code>tibble</code>. Sometimes you’ll want to manually append predictions such as quality estimates not available in the SQP 3.0 API. For our case, we want to add the <code>quality</code> estimates of the variables <code>agea</code> and <code>eised</code> (remember those two we were excluding from before? we were excluding them because they’re not available in the SQP 3.0 data base). For that we can use <code>sqp_bind_metrics</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Quality &lt;-<span class="st"> </span>
 <span class="st">  </span>Quality <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw"><a href="../reference/sqp_bind_metrics.html">sqp_bind_metrics</a></span>(agea, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">quality =</span> <span class="dv">1</span>)) <span class="op">%&gt;%</span>
@@ -249,7 +249,7 @@ Quality
 <span class="co">#&gt; 7 systmrsp      NA       NA       0.842</span>
 <span class="co">#&gt; 8 agea          NA       NA       1    </span>
 <span class="co">#&gt; 9 eisced        NA       NA       0.93</span></code></pre></div>
-<p>Note that <code>sqp_bind_metrics</code> is very strict, it accepts an <code>sqp</code> data frame (given by <code>get_estimates</code>) and it will match that the names of your estimates (<code>quality</code> here) matches exactly the same names in the SQP API. You can read more about it in <code><a href="../reference/sqp_bind_metrics.html">?sqp_bind_metrics</a></code>. Finally, let’s order our results.</p>
+<p>Note that <code>sqp_bind_metrics</code> is very strict, it accepts an <code>sqp</code> data frame (given by <code>get_estimates</code>) and it will match that the names of your estimates (<code>quality</code> here) matches exactly the same names in the SQP 3.0 API. You can read more about it in <code><a href="../reference/sqp_bind_metrics.html">?sqp_bind_metrics</a></code>. Finally, let’s order our results.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">variables_order &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"poltrst"</span>,
                      <span class="st">"serv"</span>,
                      <span class="st">"systmrsp"</span>,

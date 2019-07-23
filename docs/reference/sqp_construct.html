@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Construct an SQP tibble manually — sqp_construct • sqpr</title>
+<title>Construct an SQP 3.0 tibble manually — sqp_construct • sqpr</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Construct an SQP tibble manually — sqp_construct" />
+<meta property="og:title" content="Construct an SQP 3.0 tibble manually — sqp_construct" />
 
-<meta property="og:description" content="sqp_construct is designed to create SQP tibbles
+<meta property="og:description" content="sqp_construct is designed to create SQP 3.0 tibbles
 by manually inserting new metrics such as quality or validity." />
 <meta name="twitter:card" content="summary" />
 
@@ -87,7 +87,7 @@ by manually inserting new metrics such as quality or validity." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/accesing-sqp-api.html">Accessing the SQP API</a>
+      <a href="../articles/accesing-sqp-api.html">Accessing the SQP 3.0 API</a>
     </li>
   </ul>
 </li>
@@ -107,14 +107,14 @@ by manually inserting new metrics such as quality or validity." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Construct an SQP tibble manually</h1>
+    <h1>Construct an SQP 3.0 tibble manually</h1>
     
     <div class="hidden name"><code>sqp_construct.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>sqp_construct</code> is designed to create SQP tibbles
+    <p><code>sqp_construct</code> is designed to create SQP 3.0 tibbles
 by manually inserting new metrics such as quality or validity.</p>
     
     </div>
@@ -132,7 +132,7 @@ by manually inserting new metrics such as quality or validity.</p>
     </tr>
     <tr>
       <th>metrics</th>
-      <td><p>a list containing new SQP metrics. Currently it only
+      <td><p>a list containing new SQP 3.0 metrics. Currently it only
 supports quality, reliability and validity. Can also specify one of the metrics
 and the remaining are set to NA by default</p></td>
     </tr>
@@ -168,12 +168,12 @@ which uses standard evaluation.</p>
 #&gt;   question     reliability validity quality
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>              </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
 #&gt; </span><span style='color: #555555;'>1</span><span> new_question          </span><span style='color: #BB0000;'>NA</span><span>      0.2     0.3</div><div class='input'>
-# Note that specifying a column which is not availabe in SQP data
+# Note that specifying a column which is not availabe in SQP 3.0 data
 # will throw an error
 
 </div></span><span class='co'># NOT RUN {</span>
 <span class='fu'>sqp_construct</span>(<span class='no'>new_question</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>random_col</span> <span class='kw'>=</span> <span class='fl'>0.3</span>, <span class='kw'>validity</span> <span class='kw'>=</span> <span class='fl'>0.2</span>))
-<span class='co'># Error: One or more of the specified metrics don't match the SQP column names</span>
+<span class='co'># Error: One or more of the specified metrics don't match the SQP 3.0 column names</span>
 <span class='co'># }</span><div class='input'>
 
 </div></pre>

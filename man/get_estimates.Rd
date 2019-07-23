@@ -3,7 +3,7 @@
 \name{get_estimates}
 \alias{get_estimates}
 \alias{get_question_name}
-\title{Extract variable estimates from the SQP
+\title{Extract variable estimates from the SQP 3.0
 prediction algorithm}
 \usage{
 get_estimates(id, all_columns = FALSE, authorized = TRUE)
@@ -15,7 +15,7 @@ get_question_name(id)
 be one or more id's.}
 
 \item{all_columns}{a logical stating whether to extract all available
-columns from the SQP database. See the details section for a list of all
+columns from the SQP 3.0 database. See the details section for a list of all
 possible variables.}
 
 \item{authorized}{\code{TRUE} to return \strong{only} the authorized prediction or
@@ -31,12 +31,12 @@ In both situations, the number of columns depends on the \code{all_columns} argu
 id is of length 0 where it returns an empty character.
 }
 \description{
-Extract variable estimates from the SQP
+Extract variable estimates from the SQP 3.0
 prediction algorithm
 }
 \details{
 SQP predictions can be both 'authorized' predictions, which are
-performed by the SQP software, and 'crowd-sourced' predictions which are
+performed by the SQP 3.0 software, and 'crowd-sourced' predictions which are
 added to the database by other users. By default, \code{get_estimates}
 always returns the 'authorized' prediction when it is available. When
 it is not, it returns the first non-authorized prediction, and so on.
@@ -108,7 +108,7 @@ get_question_name(1:10)
 
 }
 \seealso{
-\code{\link{sqp_login}} for logging in to the SQP API through R and
+\code{\link{sqp_login}} for logging in to the SQP 3.0 API through R and
 \code{\link{find_questions}} and \code{\link{find_studies}} for locating
 the variables of interest to use in \code{get_estimates}.
 }

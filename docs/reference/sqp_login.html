@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Login to the SQP API — sqp_login • sqpr</title>
+<title>Login to the SQP 3.0 API — sqp_login • sqpr</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Login to the SQP API — sqp_login" />
+<meta property="og:title" content="Login to the SQP 3.0 API — sqp_login" />
 
-<meta property="og:description" content="Login to the SQP API directly from R. Make sure that your username/email and password
+<meta property="og:description" content="Login to the SQP 3.0 API directly from R. Make sure that your username/email and password
 are previously registered at http://sqp.upf.edu/accounts/login/?next=/loadui/" />
 <meta name="twitter:card" content="summary" />
 
@@ -87,7 +87,7 @@ are previously registered at http://sqp.upf.edu/accounts/login/?next=/loadui/" /
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/accesing-sqp-api.html">Accessing the SQP API</a>
+      <a href="../articles/accesing-sqp-api.html">Accessing the SQP 3.0 API</a>
     </li>
   </ul>
 </li>
@@ -107,14 +107,14 @@ are previously registered at http://sqp.upf.edu/accounts/login/?next=/loadui/" /
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Login to the SQP API</h1>
+    <h1>Login to the SQP 3.0 API</h1>
     
     <div class="hidden name"><code>sqp_login.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Login to the SQP API directly from R. Make sure that your username/email and password
+    <p>Login to the SQP 3.0 API directly from R. Make sure that your username/email and password
 are previously registered at <a href='http://sqp.upf.edu/accounts/login/?next=/loadui/'>http://sqp.upf.edu/accounts/login/?next=/loadui/</a></p>
     
     </div>
@@ -137,13 +137,13 @@ are previously registered at <a href='http://sqp.upf.edu/accounts/login/?next=/l
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>an invisible <code>TRUE</code>. But it will raise an error if the account doesn't
-match any SQP accounts.</p>
+match any SQP 3.0 accounts.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Currently <code>sqp_login</code> offers three possible ways to log in. The first
 is by placing your username/email and password as environment variables with names
-<code>SQP_USER</code> and <code>SQP_PW</code>. The second is placing your username/email and
+<code>SQP 3.0_USER</code> and <code>SQP 3.0_PW</code>. The second is placing your username/email and
 password as variables in <code><a href='https://www.rdocumentation.org/packages/base/topics/options'>options()</a></code> with the same names. And finally,
 the third, and most insecure, is by providing your username/email and password as
 arguments to <code>sqp_login</code>. We discourage users to use the third option because
@@ -160,8 +160,8 @@ first.</p>
 # Let's suppose your username is 'mary' and your password is 'secret'.
 # Set your environmental variables with Sys.setenv()
 
-Sys.setenv(SQP_USER = 'mary')
-Sys.setenv(SQP_PW = 'secret')
+Sys.setenv(SQP 3.0_USER = 'mary')
+Sys.setenv(SQP 3.0_PW = 'secret')
 
 # You can run the previous two lines and then delete them.
 # While that R session is open, sqp_login will search for these two
@@ -176,8 +176,8 @@ https://csgillespie.github.io/efficientR/r-startup.html#renviron
 # Similarly, you can set the values as options
 
 options(
- SQP_USER = 'mary',
- SQP_PW = 'secret'
+ SQP 3.0_USER = 'mary',
+ SQP 3.0_PW = 'secret'
  )
 
 sqp_login()

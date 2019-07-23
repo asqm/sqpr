@@ -1,4 +1,4 @@
-#' Construct an SQP tibble manually
+#' Construct an SQP 3.0 tibble manually
 #'
 #' \code{sqp_construct} is designed to create SQP tibbles
 #' by manually inserting new metrics such as quality or validity.
@@ -28,7 +28,7 @@
 #'
 #' sqp_construct(new_question, list(quality = 0.3, validity = 0.2))
 #'
-#' # Note that specifying a column which is not availabe in SQP data
+#' # Note that specifying a column which is not availabe in SQP 3.0 data
 #' # will throw an error
 #'
 #' \dontrun{
@@ -73,7 +73,7 @@ sqp_construct_ <- function(question_name, metrics, all_columns = FALSE) {
   generic_sqp(question, sqp_metrics, all_columns = all_columns)
 }
 
-# Specify columns that should be in the SQP data and
+# Specify columns that should be in the SQP 3.0 data and
 # replacements
 # returns a named list with the replacements
 # added
@@ -87,7 +87,7 @@ columns_sqp <- function(columns_to_fill, replacement, all_columns = FALSE) {
   }
 
   # sqp_columns is a global variable defining
-  # the columns that SQP needs to have
+  # the columns that SQP 3.0 needs to have
   num_cols <- length(sqp_cols)
   empty_cols <- stats::setNames(rep(list(NA_real_), num_cols), sqp_cols)
 

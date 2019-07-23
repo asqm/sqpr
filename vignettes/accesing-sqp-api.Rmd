@@ -1,10 +1,10 @@
 ---
-title: "Accessing the SQP API"
+title: "Accessing the SQP 3.0 API"
 author: "Jorge Cimentada"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Accessing the SQP API}
+  %\VignetteIndexEntry{Accessing the SQP 3.0 API}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -31,7 +31,7 @@ The `sqpr` package gives you access to the API of the Survey Quality Prediction 
 
 ### Registration
 
-This vignette will cover how to log in to the API and download data interactively. First things first, you need to register in the [SQP website](http://sqp.upf.edu/accounts/register/) and confirm your registration through your email.
+This vignette will cover how to log in to the API and download data interactively. First things first, you need to register in the [SQP 3.0 website](http://sqp.upf.edu/accounts/register/) and confirm your registration through your email.
 
 Got that ready? Let's move on.
 
@@ -79,11 +79,11 @@ sqp_login(
 )
 ```
 
-Once you've ran `sqp_login()` once, you're all set to work with the SQP API! No need to run it again unless you close the R session.
+Once you've ran `sqp_login()` once, you're all set to work with the SQP 3.0 API! No need to run it again unless you close the R session.
 
-## Exploring the SQP API
+## Exploring the SQP 3.0 API
 
-The SQP API has questions nested into studies. Some of these studies/questions might be in many different languages because the SQP community is very diverse. For that, we need to access the `id`'s of the study and question of interest. Let's look for all the questions that have `tv` at the beginning of the word in the European Social Survey round 4. First, we need to figure out the id of that study. `find_studies()` accepts a string with your study of interest and it searches for similar names in the SQP database.
+The SQP 3.0 API has questions nested into studies. Some of these studies/questions might be in many different languages because the SQP 3.0 community is very diverse. For that, we need to access the `id`'s of the study and question of interest. Let's look for all the questions that have `tv` at the beginning of the word in the European Social Survey round 4. First, we need to figure out the id of that study. `find_studies()` accepts a string with your study of interest and it searches for similar names in the SQP 3.0 database.
 
 ```{r}
 find_studies("ess")
@@ -94,7 +94,7 @@ Aha! There it is. Then more specifically..
 study_id <- find_studies("ESS Round 4")$id
 ```
 
-`find_studies` is very helpful for finding patterns in the SQP database. However, if you can't find your study, you should use `get_studies()` which will return all the studies in the SQP database and then perform your search manually.
+`find_studies` is very helpful for finding patterns in the SQP 3.0 database. However, if you can't find your study, you should use `get_studies()` which will return all the studies in the SQP 3.0 database and then perform your search manually.
 
 
 Ok, so we have our `study_id`. Which questions are in that study? `find_questions` will do the work for you.
@@ -127,7 +127,7 @@ get_estimates(sp_tv$id)
 
 `get_estimates` will return all question names as lower case for increasing the chances of compatibility with the name in the questionnaire of the study.
 
-It will also return empty fields for the questions that don't have any predictions, like `tvpol` in the example above. Moreover, `get_estimates` gives the option of grabbing more columns from the SQP API that contain estimations such as standard errors and interquantile ranges of the predictions from above. See `?get_estimates` for a list of all available columns. You can do that like this:
+It will also return empty fields for the questions that don't have any predictions, like `tvpol` in the example above. Moreover, `get_estimates` gives the option of grabbing more columns from the SQP 3.0 API that contain estimations such as standard errors and interquantile ranges of the predictions from above. See `?get_estimates` for a list of all available columns. You can do that like this:
 
 ```{r}
 get_estimates(sp_tv$id, all_columns = TRUE)
@@ -135,4 +135,4 @@ get_estimates(sp_tv$id, all_columns = TRUE)
 
 The nice thing about `get_estimates` is that once you've explored and found your variables, if you save the id's of the questions in your script, once your restart your R session you can avoid most of the steps above and get your estimates with only `sqp_login(); get_estimates(question_ids)`, assuming you placed your login information as environmental variables (or options) and your question ids are in a vector named `question_ids`.
 
-I hope that gives a general idea of how to explore the SQP interactively. For more examples on how this blends with the other `sqpr` related functions, check out the case-study vignette of the `sqpr` package.
+I hope that gives a general idea of how to explore the SQP 3.0 API interactively. For more examples on how this blends with the other `sqpr` related functions, check out the case-study vignette of the `sqpr` package.

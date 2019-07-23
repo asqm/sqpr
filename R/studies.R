@@ -1,7 +1,7 @@
-#' Extract available studies from the SQP API
+#' Extract available studies from the SQP 3.0 API
 #'
 #' \code{find_studies} allows you to search for studies by names while
-#' \code{get_studies} will return all available studies in the SQP database.
+#' \code{get_studies} will return all available studies in the SQP 3.0 database.
 #'
 #' @param study a string with the name of the study. Upper and lower cases are
 #' ignored and regular expressions are supported.

@@ -1,10 +1,10 @@
-#' Extract variable estimates from the SQP
+#' Extract variable estimates from the SQP 3.0
 #' prediction algorithm
 #'
 #' @param id a numeric vector containing the id(s) of variable(s) of interest. Can
 #' be one or more id's.
 #' @param all_columns a logical stating whether to extract all available
-#' columns from the SQP database. See the details section for a list of all
+#' columns from the SQP 3.0 database. See the details section for a list of all
 #' possible variables.
 #' @param authorized \code{TRUE} to return \strong{only} the authorized prediction or
 #' \code{FALSE} to return all available predictions. If set to \code{FALSE} a
@@ -13,7 +13,7 @@
 #'
 #' @details
 #' SQP predictions can be both 'authorized' predictions, which are
-#' performed by the SQP software, and 'crowd-sourced' predictions which are
+#' performed by the SQP 3.0 software, and 'crowd-sourced' predictions which are
 #' added to the database by other users. By default, \code{get_estimates}
 #' always returns the 'authorized' prediction when it is available. When
 #' it is not, it returns the first non-authorized prediction, and so on.
@@ -65,7 +65,7 @@
 #' }
 #'
 #'
-#' @seealso \code{\link{sqp_login}} for logging in to the SQP API through R and
+#' @seealso \code{\link{sqp_login}} for logging in to the SQP 3.0 API through R and
 #' \code{\link{find_questions}} and \code{\link{find_studies}} for locating
 #' the variables of interest to use in \code{get_estimates}.
 #'

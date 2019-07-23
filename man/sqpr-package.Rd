@@ -4,7 +4,7 @@
 \name{sqpr-package}
 \alias{sqpr}
 \alias{sqpr-package}
-\title{sqpr: Extract the Quality of your Survey Questions with SQP}
+\title{sqpr: Extract the Quality of your Survey Questions with SQP 3.0}
 \description{
 Using the database of the SQP 3.0 API, sqpr allows downloading data on the quality of over 40,000 questions, including the quality, validity and reliability of each question.
 }

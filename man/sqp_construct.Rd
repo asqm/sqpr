@@ -3,7 +3,7 @@
 \name{sqp_construct}
 \alias{sqp_construct}
 \alias{sqp_construct_}
-\title{Construct an SQP tibble manually}
+\title{Construct an SQP 3.0 tibble manually}
 \usage{
 sqp_construct(question_name, metrics, all_columns = FALSE)
 
@@ -41,7 +41,7 @@ sqp_construct(new_question, list(quality = 0.3))
 
 sqp_construct(new_question, list(quality = 0.3, validity = 0.2))
 
-# Note that specifying a column which is not availabe in SQP data
+# Note that specifying a column which is not availabe in SQP 3.0 data
 # will throw an error
 
 \dontrun{

@@ -3,7 +3,7 @@
 \name{find_studies}
 \alias{find_studies}
 \alias{get_studies}
-\title{Extract available studies from the SQP API}
+\title{Extract available studies from the SQP 3.0 API}
 \usage{
 find_studies(study)
 
@@ -19,7 +19,7 @@ of the study.
 }
 \description{
 \code{find_studies} allows you to search for studies by names while
-\code{get_studies} will return all available studies in the SQP database.
+\code{get_studies} will return all available studies in the SQP 3.0 database.
 }
 \details{
 The user should almost always start by using \code{find_studies}

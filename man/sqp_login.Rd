@@ -2,7 +2,7 @@
 % Please edit documentation in R/sqp_login.R
 \name{sqp_login}
 \alias{sqp_login}
-\title{Login to the SQP API}
+\title{Login to the SQP 3.0 API}
 \usage{
 sqp_login(username = NULL, password = NULL)
 }
@@ -16,7 +16,7 @@ an invisible \code{TRUE}. But it will raise an error if the account doesn't
 match any SQP accounts.
 }
 \description{
-Login to the SQP API directly from R. Make sure that your username/email and password
+Login to the SQP 3.0 API directly from R. Make sure that your username/email and password
 are previously registered at \url{http://sqp.upf.edu/accounts/login/?next=/loadui/}
 }
 \details{

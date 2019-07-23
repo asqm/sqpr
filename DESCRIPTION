@@ -1,6 +1,6 @@
 Package: sqpr
 Version: 0.1.0
-Title: Extract the Quality of your Survey Questions with SQP
+Title: Extract the Quality of your Survey Questions with SQP 3.0
 Description: Using the database of the SQP 3.0 API, sqpr allows downloading data on the quality of over 40,000 questions, including the quality, validity and reliability of each question.
 Authors@R: c(
         person("Jorge", "Cimentada", , "cimentadaj@gmail.com", c("aut", "cre")),

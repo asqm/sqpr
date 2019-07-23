@@ -1,6 +1,6 @@
-#' Login to the SQP API
+#' Login to the SQP 3.0 API
 #'
-#' Login to the SQP API directly from R. Make sure that your username/email and password
+#' Login to the SQP 3.0 API directly from R. Make sure that your username/email and password
 #' are previously registered at \url{http://sqp.upf.edu/accounts/login/?next=/loadui/}
 #'
 #' @param username your username or email as a string
