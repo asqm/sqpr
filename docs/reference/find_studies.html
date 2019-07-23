@@ -89,9 +89,6 @@ get_studies will return all available studies in the SQP database." />
     <li>
       <a href="../articles/accesing-sqp-api.html">Accessing the SQP API</a>
     </li>
-    <li>
-      <a href="../articles/case-study-ess.html">Case-study: Correcting for measurement error in the European Social Survey</a>
-    </li>
   </ul>
 </li>
       </ul>
@@ -131,8 +128,8 @@ get_studies will return all available studies in the SQP database." />
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>study</th>
-      <td><p>a string with the name of the study. Upper and lower cases is
-ignored.</p></td>
+      <td><p>a string with the name of the study. Upper and lower cases are
+ignored and regular expressions are supported.</p></td>
     </tr>
     </table>
     
@@ -145,11 +142,7 @@ of the study.</p>
 
     <p>The user should almost always start by using <code>find_studies</code>
 which searches for a study based on it's name. If nothing useful comes up
-then use <code>get_studies</code> which will return all available studies. Note
-that the first time that any of these functions are called it might
-take some time to retrieve all of the data. However, after one
-of the two functions has already downloaded the data then it is
-saved in memory until the end of the R session.</p>
+then use <code>get_studies</code> which will return all available studies.</p>
 <p>The returned <code><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></code> will contain
 the id and name of the study/studies. The user should take note of
 the id of the desired study to checkout which questions are available

@@ -89,9 +89,6 @@ by manually inserting new metrics such as quality or validity." />
     <li>
       <a href="../articles/accesing-sqp-api.html">Accessing the SQP API</a>
     </li>
-    <li>
-      <a href="../articles/case-study-ess.html">Case-study: Correcting for measurement error in the European Social Survey</a>
-    </li>
   </ul>
 </li>
       </ul>
@@ -144,7 +141,7 @@ and the remaining are set to NA by default</p></td>
       <td><p>if <code>TRUE</code> will return all columns (quite a few) that can be
 returned by the <code><a href='get_estimates.html'>get_estimates</a></code> function. See <code><a href='get_estimates.html'>get_estimates</a></code>
 for the description of which variables would be created. If <code>FALSE</code> (default) it
-will return only columns <code>question</code>,  <code>quality</code>, <code>reliability</code> and <code>validity</code>.</p></td>
+will return only columns <code>question</code>, <code>quality</code>, <code>reliability</code> and <code>validity</code>.</p></td>
     </tr>
     </table>
     
@@ -178,7 +175,6 @@ which uses standard evaluation.</p>
 <span class='fu'>sqp_construct</span>(<span class='no'>new_question</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>random_col</span> <span class='kw'>=</span> <span class='fl'>0.3</span>, <span class='kw'>validity</span> <span class='kw'>=</span> <span class='fl'>0.2</span>))
 <span class='co'># Error: One or more of the specified metrics don't match the SQP column names</span>
 <span class='co'># }</span><div class='input'>
-# Currently only quality, reliability and validity are allowed.
 
 </div></pre>
   </div>

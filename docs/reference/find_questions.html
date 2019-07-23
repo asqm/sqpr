@@ -89,9 +89,6 @@ in a study and get_questions to return all the question in a study." />
     <li>
       <a href="../articles/accesing-sqp-api.html">Accessing the SQP API</a>
     </li>
-    <li>
-      <a href="../articles/case-study-ess.html">Case-study: Correcting for measurement error in the European Social Survey</a>
-    </li>
   </ul>
 </li>
       </ul>
@@ -160,23 +157,19 @@ specific wording of the question, answer options, etc..</p></td>
 <span class='co'># Set login information here. See ?sqp_login</span>
 <span class='fu'><a href='sqp_login.html'>sqp_login</a></span>()
 
-<span class='co'># 1 is ESS round 1</span>
+<span class='co'># 1 is the study ESS round 1</span>
 <span class='fu'>find_questions</span>(<span class='fl'>1</span>, <span class='st'>"tvtot"</span>)
-
-<span class='co'># If ran again, even with a different variable, it loads</span>
-<span class='co'># the data from memory, making it very fast</span>
-
-<span class='fu'>find_questions</span>(<span class='fl'>1</span>, <span class='st'>"tvpol"</span>)
-
 
 <span class='co'># If that doesn't fit, then use get_questions and search for the question</span>
 <span class='co'># manually through filtering:</span>
 
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>dplyr</span>)
-<span class='fu'>get_questions</span>(<span class='fl'>1</span>) <span class='kw'>%&gt;%</span>
-   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>country_iso</span> <span class='kw'>==</span> <span class='st'>"ES"</span>,
-          <span class='no'>language_iso</span> <span class='kw'>==</span> <span class='st'>"spa"</span>,
-          <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/grep'>grepl</a></span>(<span class='st'>"Tot"</span>, <span class='no'>.</span>$<span class='no'>short_name</span>))
+<span class='no'>all_questions</span> <span class='kw'>&lt;-</span> <span class='fu'>get_questions</span>(<span class='fl'>1</span>)
+<span class='no'>cnt_filt</span> <span class='kw'>&lt;-</span> <span class='no'>all_questions</span>$<span class='no'>country_iso</span> <span class='kw'>==</span> <span class='st'>"ES"</span>
+<span class='no'>lang_filt</span> <span class='kw'>&lt;-</span> <span class='no'>all_questions</span>$<span class='no'>language_iso</span> <span class='kw'>==</span> <span class='st'>"spa"</span>
+<span class='no'>var_filt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/grep'>grepl</a></span>(<span class='st'>"TvTot"</span>, <span class='no'>all_questions</span>$<span class='no'>short_name</span>)
+
+<span class='co'># The desired "TvTot" variable from Spain, in Spanish</span>
+<span class='no'>all_questions</span>[<span class='no'>cnt_filt</span> <span class='kw'>&amp;</span> <span class='no'>lang_filt</span> <span class='kw'>&amp;</span> <span class='no'>var_filt</span>, ]
 
 <span class='co'># Can also search for several variables in one call</span>
 
