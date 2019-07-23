@@ -25,6 +25,7 @@
 #'
 #' @examples
 #'
+#' 
 #' \dontrun{
 #'
 #' ## Let's suppose your username is 'mary' and your password is 'secret'.
@@ -59,6 +60,7 @@
 #'
 #' }
 #'
+#' 
 sqp_login <- function(username = NULL, password = NULL) {
   username <- sqp_username(username)
   password <- sqp_pw(password)

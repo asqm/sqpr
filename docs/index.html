@@ -80,6 +80,11 @@
 
 <p>The <code>sqpr</code> package gives easy access to the API of the Survey Quality Prediction <a href="http://sqp.upf.edu/">website</a>, a data base that contains over 40,000 predictions on the quality of questions.</p>
 </div>
+<div id="important-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#important-changes" class="anchor"></a>Important changes</h2>
+<p>After the feedback received at the <a href="https://www.europeansurveyresearch.org/conferences/overview">ESRA 2019 conference</a>, the <code>sqpr</code> package has been decoupled into two packages. The first will be responsible for only obtaining the data from the SQP API (<code>sqpr</code>) and the second will have all the measurement error corrections implemented separately. This way, measurement error corrections can happen independently of the SQP software for anyone who has other survey quality information. This new package is still under construction and will be uploaded as soon as it has working value. If you have any questions, please contact us at <a href="mailto:cimentadaj@gmail.com" class="email">cimentadaj@gmail.com</a>.</p>
+</div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -93,7 +98,7 @@
 <div id="registration-and-logging-in" class="section level3">
 <h3 class="hasAnchor">
 <a href="#registration-and-logging-in" class="anchor"></a>Registration and logging in</h3>
-<p>Register in the <a href="http://sqp.upf.edu/accounts/register/">SQP 3.0 website</a> and confirm your registration through your email.</p>
+<p>Register in the <a href="http://sqp.upf.edu/accounts/register/">SQP website</a> and confirm your registration through your email.</p>
 <p>First, load the package in R and provide your registered credentials.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(sqpr)</span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="kw"><a href="reference/sqp_login.html">sqp_login</a></span>(<span class="st">'your username'</span>, <span class="st">'your password'</span>)</span></code></pre></div>
@@ -101,9 +106,9 @@
 <p>Once you’ve ran <code><a href="reference/sqp_login.html">sqp_login()</a></code>, you’re all set to work with the SQP 3.0 3.0 API! No need to run it again unless you close the R session.</p>
 </div>
 </div>
-<div id="exploring-the-sqp-3-0-3-0-api" class="section level2">
+<div id="exploring-the-sqp-3-0-api" class="section level2">
 <h2 class="hasAnchor">
-<a href="#exploring-the-sqp-3-0-3-0-api" class="anchor"></a>Exploring the SQP 3.0 3.0 API</h2>
+<a href="#exploring-the-sqp-3-0-api" class="anchor"></a>Exploring the SQP 3.0 API</h2>
 <p>You can query all the questions in a specific study to check whether a specific question has quality predictions. Use <code>find_studies</code> to locate the <code>id</code> of a certain study</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>ess_four &lt;-<span class="st"> </span><span class="kw"><a href="reference/find_studies.html">find_studies</a></span>(<span class="st">"ESS Round 4"</span>)</span>
 <span id="cb3-2"><a href="#cb3-2"></a>ess_four</span>

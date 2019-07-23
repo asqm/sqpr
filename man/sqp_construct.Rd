@@ -46,7 +46,7 @@ sqp_construct(new_question, list(quality = 0.3, validity = 0.2))
 
 \dontrun{
 sqp_construct(new_question, list(random_col = 0.3, validity = 0.2))
-## Error: One or more of the specified metrics don't match the SQP column names
+# Error: One or more of the specified metrics don't match the SQP column names
 }
 
 

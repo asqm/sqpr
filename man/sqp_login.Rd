@@ -35,6 +35,7 @@ first.
 }
 \examples{
 
+
 \dontrun{
 
 ## Let's suppose your username is 'mary' and your password is 'secret'.
@@ -68,5 +69,6 @@ sqp_login()
 sqp_login(username = 'mary', password = 'secret')
 
 }
+
 
 }
