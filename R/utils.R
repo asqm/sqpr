@@ -133,9 +133,11 @@ sqp_env$q_estimates <- "/completions/"
 # because I subset by index in the code. If changed, then the
 # indexes need to change as well.
 sqp_env$study_variables <- c("id", "name")
-sqp_env$question_variables <- c("id", "study_id", "short_name", "country_iso", "language_iso")
+sqp_env$question_variables <-
+  c("id", "study_id", "short_name", "country_iso", "language_iso")
 
-sqp_env$short_estimate_variables <- paste0("prediction.", c("reliability", "validity", "quality"))
+sqp_env$short_estimate_variables <-
+  paste0("prediction.", c("reliability", "validity", "quality"))
 
 
 sqp_env$all_estimate_variables <- c("question",
@@ -149,7 +151,6 @@ sqp_env$all_estimate_variables <- c("question",
                                     "authorized",
                                     "complete",
                                     "user_id",
-                                    "user_username",
                                     "error",
                                     "errorMessage",
                                     "reliabilityCoefficient",

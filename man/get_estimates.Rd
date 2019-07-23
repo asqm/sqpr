@@ -62,7 +62,6 @@ of all columns:
 \item authorized: Whether it is an 'authorized' prediction or not. See the details section
 \item complete: Whether all fields of the coding are complete
 \item user_id: The id of the user that crowd-sourced the prediction
-\item user_username: The account name of the user that crowd-sourced the prediction
 \item error: Whether there was an error in making the prediction. For an example,
  see \url{http://sqp.upf.edu/loadui/#questionPrediction/12552/42383}
 \item errorMessage: The error message, if there was an error

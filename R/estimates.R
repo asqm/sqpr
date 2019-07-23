@@ -39,7 +39,6 @@
 #' \item authorized: Whether it is an 'authorized' prediction or not. See the details section
 #' \item complete: Whether all fields of the coding are complete
 #' \item user_id: The id of the user that crowd-sourced the prediction
-#' \item user_username: The account name of the user that crowd-sourced the prediction
 #' \item error: Whether there was an error in making the prediction. For an example,
 #'  see \url{http://sqp.upf.edu/loadui/#questionPrediction/12552/42383}
 #' \item errorMessage: The error message, if there was an error
@@ -120,6 +119,9 @@ get_estimates <- function(id, all_columns = FALSE, authorized = TRUE) {
 
   q_name <- get_question_name(id)
   raw_data <- object_request(url_id, estimates = TRUE)
+
+  # Remove email of user
+  raw_data <- lapply(raw_data, function(x) {x$user_username <- NULL; x})
 
   list_data <- Map(
     function(x, y, z) make_estimate_df(x, y, z,
