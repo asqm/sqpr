@@ -10,11 +10,15 @@ r:
 
 r_github_packages:
   - r-lib/covr
-  - r-lib/pkgdown
-
-
-warnings_are_errors: true
 
 after_success:
   - Rscript -e 'covr::codecov()'
-  - Rscript -e 'pkgdown::build_site(); pkgdown::deploy_site_github()'
+
+warnings_are_errors: true
+
+before_cache: Rscript -e 'remotes::install_cran("pkgdown")'
+
+deploy:
+  provider: script
+  script: Rscript -e 'pkgdown::deploy_site_github()'
+  skip_cleanup: true  
