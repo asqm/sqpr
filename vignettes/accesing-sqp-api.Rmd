@@ -27,7 +27,7 @@ sqp_login(user, pw)
 ```
 
 
-The `sqpr` package allows you to calculate several estimations of the quality of your survey questions and also adjust your estimations for measurement error. But among other things, it also gives you access to the API of the Survey Quality Prediction [website](http://sqp.upf.edu/), a data base that contains over 40,000 predictions on the quality of questions.
+The `sqpr` package gives you access to the API of the Survey Quality Prediction [website](http://sqp.upf.edu/), a data base that contains over 40,000 predictions on the quality of questions.
 
 ### Registration
 
@@ -37,8 +37,9 @@ Got that ready? Let's move on.
 
 ### Loging in
 
-First, load the package in R with:
+First, install and load the package in R with:
 ```{r, eval = FALSE}
+devtools::install_github("sociometricresearch/sqpr")
 library(sqpr)
 ```
 
@@ -124,7 +125,7 @@ The hard part is done now. Once we have the `id` of your questions of interest, 
 get_estimates(sp_tv$id)
 ```
 
-`get_estimates` will return all question names as lower case for increasing the chances of compatibility with the name in the questionnaire of the study. Something very important for using other `sqpr` functions such as `sqp_cmv_cor`, where the function checks that the names in `question` match the column names of the study. Check out the case-study vignette of the `sqpr` package for a more concrete example.
+`get_estimates` will return all question names as lower case for increasing the chances of compatibility with the name in the questionnaire of the study.
 
 It will also return empty fields for the questions that don't have any predictions, like `tvpol` in the example above. Moreover, `get_estimates` gives the option of grabbing more columns from the SQP API that contain estimations such as standard errors and interquantile ranges of the predictions from above. See `?get_estimates` for a list of all available columns. You can do that like this:
 
@@ -132,6 +133,6 @@ It will also return empty fields for the questions that don't have any predictio
 get_estimates(sp_tv$id, all_columns = TRUE)
 ```
 
-The nice thing about `get_estimates` is that once you've explored and found your variables, if you save the id's of the questions in your script, once your restart your R session you can avoid all most of the steps above and get your estimates with only `sqp_login(); get_estimates(question_ids)`, assuming you placed your login information as environmental variables (or options) and your question ids are in a vector named `question_ids`.
+The nice thing about `get_estimates` is that once you've explored and found your variables, if you save the id's of the questions in your script, once your restart your R session you can avoid most of the steps above and get your estimates with only `sqp_login(); get_estimates(question_ids)`, assuming you placed your login information as environmental variables (or options) and your question ids are in a vector named `question_ids`.
 
 I hope that gives a general idea of how to explore the SQP interactively. For more examples on how this blends with the other `sqpr` related functions, check out the case-study vignette of the `sqpr` package.

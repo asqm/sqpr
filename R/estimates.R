@@ -1,11 +1,13 @@
-#' Extract variable estimates from the SQP prediction algorithm
+#' Extract variable estimates from the SQP
+#' prediction algorithm
 #'
 #' @param id a numeric vector containing the id(s) of variable(s) of interest. Can
 #' be one or more id's.
 #' @param all_columns a logical stating whether to extract all available
-#' columns from the SQP database. See the details section for a list of all possible variables.
+#' columns from the SQP database. See the details section for a list of all
+#' possible variables.
 #' @param authorized \code{TRUE} to return \strong{only} the authorized prediction or
-#' \code{FALSE} return all available predictions. If set to \code{FALSE} a
+#' \code{FALSE} to return all available predictions. If set to \code{FALSE} a
 #' a warning is issued reminding the user to pick one prediction for each variable
 #' based on the \code{user_id} and \code{user_username} columns.
 #'
@@ -97,10 +99,11 @@ get_estimates <- function(id, all_columns = FALSE, authorized = TRUE) {
   stopifnot(is.numeric(id))
 
   if (length(id) < 1) {
-    empty_df <- sqp_construct("empty", list(quality = NA_real_), all_columns = all_columns)[0, ]
+    empty_df <-
+      sqp_construct("empty", list(quality = NA_real_),
+                    all_columns = all_columns)[0, ]
     return(empty_df)
   }
-
     
   if (length(id) > 100) {
     stop("The SQP API only accepts 100 requests per call and `id` has length greater than 100")

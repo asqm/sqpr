@@ -1,7 +1,7 @@
 Package: sqpr
 Version: 0.1.0
-Title: Extract and Analyze the Quality of your Survey Questions with SQP
-Description: Using the database of the SQP API, sqpr allows downloading data on the quality of over 40,000 questions, adjust for the Common Method Variance (CMV) of several variables, calculate the quality of the sumscore of several variables and adjust your model estimations for measurement error.
+Title: Extract the Quality of your Survey Questions with SQP
+Description: Using the database of the SQP 3.0 API, sqpr allows downloading data on the quality of over 40,000 questions, including the quality, validity and reliability of each question.
 Authors@R: c(
         person("Jorge", "Cimentada", , "cimentadaj@gmail.com", c("aut", "cre")),
         person("Wiebke", "Weber", , role = c("aut"))
@@ -12,18 +12,13 @@ LazyData: true
 ByteCompile: true
 Imports: 
     stats,
-    dplyr,
     tibble,
     httr,
-    memoise,
     jsonlite
 RoxygenNote: 6.1.1
 Suggests: 
     testthat,
     knitr,
     rmarkdown,
-    essurvey,
-    lavaan,
-    ggplot2,
     covr
 VignetteBuilder: knitr

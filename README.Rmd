@@ -64,16 +64,13 @@ ess_four <- find_studies("ESS Round 4")
 ess_four
 ```
 
-
 Ok, so we have our `study_id`. Which questions are in that study? `find_questions` will do the work for you.
 
 ```{r}
 q_ess <- find_questions(ess_four$id, "tv")
 ```
 
-That might take a while because it's downloading all of the data to your computer. However, if you run `find_questions` (or any other API related function) once, then any repetition should be instant as it loads everything from your computer rather than downloading it again.
-
-Let's query further down to get questions for a specific question.
+That might take a while because it's downloading all of the data to your computer. Let's query further down to get questions for a specific question.
 ```{r}
 sp_tv <- q_ess[q_ess$language_iso == "spa", ]
 sp_tv
@@ -86,4 +83,4 @@ predictions <- get_estimates(sp_tv$id)
 predictions
 ```
 
-`get_estimates` will return all question names as lower case for increasing the chances of compatibility with the name in the questionnair of the study.
+`get_estimates` will return all question names as lower case for increasing the chances of compatibility with the name in the questionnaire of the study.

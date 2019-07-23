@@ -35,23 +35,19 @@ in a study and get_questions to return all the question in a study.
 # Set login information here. See ?sqp_login
 sqp_login()
 
-# 1 is ESS round 1
+# 1 is the study ESS round 1
 find_questions(1, "tvtot")
-
-# If ran again, even with a different variable, it loads
-# the data from memory, making it very fast
-
-find_questions(1, "tvpol")
-
 
 # If that doesn't fit, then use get_questions and search for the question
 # manually through filtering:
 
-library(dplyr)
-get_questions(1) \%>\%
-   filter(country_iso == "ES",
-          language_iso == "spa",
-          grepl("Tot", .$short_name))
+all_questions <- get_questions(1)
+cnt_filt <- all_questions$country_iso == "ES"
+lang_filt <- all_questions$language_iso == "spa"
+var_filt <- grepl("TvTot", all_questions$short_name)
+
+# The desired "TvTot" variable from Spain, in Spanish
+all_questions[cnt_filt & lang_filt & var_filt, ]
 
 # Can also search for several variables in one call
 

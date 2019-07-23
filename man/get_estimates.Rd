@@ -3,7 +3,8 @@
 \name{get_estimates}
 \alias{get_estimates}
 \alias{get_question_name}
-\title{Extract variable estimates from the SQP prediction algorithm}
+\title{Extract variable estimates from the SQP
+prediction algorithm}
 \usage{
 get_estimates(id, all_columns = FALSE, authorized = TRUE)
 
@@ -14,10 +15,11 @@ get_question_name(id)
 be one or more id's.}
 
 \item{all_columns}{a logical stating whether to extract all available
-columns from the SQP database. See the details section for a list of all possible variables.}
+columns from the SQP database. See the details section for a list of all
+possible variables.}
 
 \item{authorized}{\code{TRUE} to return \strong{only} the authorized prediction or
-\code{FALSE} return all available predictions. If set to \code{FALSE} a
+\code{FALSE} to return all available predictions. If set to \code{FALSE} a
 a warning is issued reminding the user to pick one prediction for each variable
 based on the \code{user_id} and \code{user_username} columns.}
 }
@@ -29,7 +31,8 @@ In both situations, the number of columns depends on the \code{all_columns} argu
 id is of length 0 where it returns an empty character.
 }
 \description{
-Extract variable estimates from the SQP prediction algorithm
+Extract variable estimates from the SQP
+prediction algorithm
 }
 \details{
 SQP predictions can be both 'authorized' predictions, which are

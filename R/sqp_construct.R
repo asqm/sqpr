@@ -10,7 +10,7 @@
 #' @param all_columns if \code{TRUE} will return all columns (quite a few) that can be
 #' returned by the \code{\link{get_estimates}} function. See \code{\link{get_estimates}}
 #' for the description of which variables would be created. If \code{FALSE} (default) it
-#' will return only columns \code{question},  \code{quality}, \code{reliability} and \code{validity}.
+#' will return only columns \code{question}, \code{quality}, \code{reliability} and \code{validity}.
 #'
 #' @return a \code{\link[tibble]{tibble}} of one row with the supplied metrics. It also has
 #' class \code{sqp} for further manipulations within the \code{sqpr} package.
@@ -36,7 +36,6 @@
 #' # Error: One or more of the specified metrics don't match the SQP column names
 #' }
 #'
-#' # Currently only quality, reliability and validity are allowed.
 #'
 sqp_construct <- function(question_name, metrics, all_columns = FALSE) {
   question <- as.character(substitute(question_name))

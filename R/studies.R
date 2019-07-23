@@ -3,16 +3,12 @@
 #' \code{find_studies} allows you to search for studies by names while
 #' \code{get_studies} will return all available studies in the SQP database.
 #'
-#' @param study a string with the name of the study. Upper and lower cases is
-#' ignored.
+#' @param study a string with the name of the study. Upper and lower cases are
+#' ignored and regular expressions are supported.
 #'
 #' @details The user should almost always start by using \code{find_studies}
 #' which searches for a study based on it's name. If nothing useful comes up
-#' then use \code{get_studies} which will return all available studies. Note
-#' that the first time that any of these functions are called it might
-#' take some time to retrieve all of the data. However, after one
-#' of the two functions has already downloaded the data then it is
-#' saved in memory until the end of the R session.
+#' then use \code{get_studies} which will return all available studies.
 #'
 #' The returned \code{\link[tibble]{tibble}} will contain
 #' the id and name of the study/studies. The user should take note of

@@ -67,11 +67,8 @@ q_ess <- find_questions(ess_four$id, "tv")
 ```
 
 That might take a while because it’s downloading all of the data to your
-computer. However, if you run `find_questions` (or any other API related
-function) once, then any repetition should be instant as it loads
-everything from your computer rather than downloading it again.
-
-Let’s query further down to get questions for a specific question.
+computer. Let’s query further down to get questions for a specific
+question.
 
 ``` r
 sp_tv <- q_ess[q_ess$language_iso == "spa", ]
@@ -101,4 +98,4 @@ predictions
 
 `get_estimates` will return all question names as lower case for
 increasing the chances of compatibility with the name in the
-questionnair of the study.
+questionnaire of the study.

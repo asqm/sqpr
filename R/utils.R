@@ -69,13 +69,6 @@ columns_present <- function(corr_data, sqp_data, var_names) {
 }
 
 
-# These functions are aimed at making requests to the SQP API.
-# This function allows to retrieve the same requests if
-# no parameters have changed. I have to keep it outside the functions
-# because if defined inside a fun, then it is deleted after
-# the env of the fun is deleted.
-memo_GET <- memoise::memoise(httr::GET)
-
 # Make a general request with the login information
 auth_GET <- function(path, ...) {
   check_login()
@@ -83,10 +76,10 @@ auth_GET <- function(path, ...) {
   auth <- httr::add_headers('Authorization' = paste("Bearer", sqp_env$token))
 
   res <-
-    memo_GET(url = sqp_env$hostname,
-             path = path,
-             config = auth,
-             ...)
+    httr::GET(url = sqp_env$hostname,
+              path = path,
+              config = auth,
+              ...)
   res
 }
 
