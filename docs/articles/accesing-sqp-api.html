@@ -96,18 +96,18 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"sociometricresearch/sqpr"</span>)</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(sqpr)</span></code></pre></div>
 <p>There’s currently three ways of loging in to the API. The first one by setting your credentials as enviroment variables. How do I do that?</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.setenv">Sys.setenv</a></span>(<span class="dt">SQP 3.0_USER =</span> <span class="st">'This is where your email or username goes'</span>)</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.setenv">Sys.setenv</a></span>(<span class="dt">SQP 3.0_PW =</span> <span class="st">'This is where your password goes'</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.setenv">Sys.setenv</a></span>(<span class="dt">SQP_USER =</span> <span class="st">'This is where your email or username goes'</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.setenv">Sys.setenv</a></span>(<span class="dt">SQP_PW =</span> <span class="st">'This is where your password goes'</span>)</span></code></pre></div>
 <p>once you executed the previous lines, run <code><a href="../reference/sqp_login.html">sqp_login()</a></code> and if you don’t get an error, then you signed up just fine.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw"><a href="../reference/sqp_login.html">sqp_login</a></span>()</span></code></pre></div>
 <p>That easy! The nice thing is that once you executed the previous lines you can erase them from your script and nobody will ever see your account credentials.</p>
 <p>Very similarly, you can also set your credentials as options in your R session.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(</span>
-<span id="cb4-2"><a href="#cb4-2"></a>  <span class="dt">SQP 3.0_USER =</span> <span class="st">'This is where your email or username goes'</span>),</span>
-<span id="cb4-3"><a href="#cb4-3"></a>  SQP 3.0_PW =<span class="st"> 'This is where your password goes'</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="dt">SQP_USER =</span> <span class="st">'This is where your email or username goes'</span>),</span>
+<span id="cb4-3"><a href="#cb4-3"></a>  SQP_PW =<span class="st"> 'This is where your password goes'</span></span>
 <span id="cb4-4"><a href="#cb4-4"></a><span class="er">)</span></span>
 <span id="cb4-5"><a href="#cb4-5"></a><span class="kw"><a href="../reference/sqp_login.html">sqp_login</a></span>()</span></code></pre></div>
-<p>This is very similar to the previous approach in that you can delete the <code><a href="https://www.rdocumentation.org/packages/base/topics/options">options(...)</a></code> statement and <code><a href="../reference/sqp_login.html">sqp_login()</a></code> will always find it. Note that both approaches only work during your R session. If you’re interested in setting the <code>SQP 3.0_USER</code> and <code>SQP 3.0_PW</code> variables permanently in your system environment (that means not having to write them down everytime you open/close your session), then you should check out <a href="https://csgillespie.github.io/efficientR/r-startup.html#renviron">this chapter</a> on environmental variables.</p>
+<p>This is very similar to the previous approach in that you can delete the <code><a href="https://www.rdocumentation.org/packages/base/topics/options">options(...)</a></code> statement and <code><a href="../reference/sqp_login.html">sqp_login()</a></code> will always find it. Note that both approaches only work during your R session. If you’re interested in setting the <code>SQP_USER</code> and <code>SQP_PW</code> variables permanently in your system environment (that means not having to write them down everytime you open/close your session), then you should check out <a href="https://csgillespie.github.io/efficientR/r-startup.html#renviron">this chapter</a> on environmental variables.</p>
 <p>Finally, there is one last approach, which I don’t recommend. You can always sign up by placing your credentials inside <code><a href="../reference/sqp_login.html">sqp_login()</a></code>, but that would require for your credentials to be visible to anyone you share your code to. That means any documents shared on Google Drive, Github, Bitbucket or just a simple share over gmail. In any case, here’s how you’d do it:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw"><a href="../reference/sqp_login.html">sqp_login</a></span>(</span>
 <span id="cb5-2"><a href="#cb5-2"></a>  <span class="st">'This is where your email or username goes'</span>,</span>
@@ -115,9 +115,9 @@
 <span id="cb5-4"><a href="#cb5-4"></a>)</span></code></pre></div>
 <p>Once you’ve ran <code><a href="../reference/sqp_login.html">sqp_login()</a></code> once, you’re all set to work with the SQP 3.0 API! No need to run it again unless you close the R session.</p>
 </div>
-<div id="exploring-the-sqp-api" class="section level2">
+<div id="exploring-the-sqp-3-0-api" class="section level2">
 <h2 class="hasAnchor">
-<a href="#exploring-the-sqp-api" class="anchor"></a>Exploring the SQP 3.0 API</h2>
+<a href="#exploring-the-sqp-3-0-api" class="anchor"></a>Exploring the SQP 3.0 API</h2>
 <p>The SQP 3.0 API has questions nested into studies. Some of these studies/questions might be in many different languages because the SQP 3.0 community is very diverse. For that, we need to access the <code>id</code>’s of the study and question of interest. Let’s look for all the questions that have <code>tv</code> at the beginning of the word in the European Social Survey round 4. First, we need to figure out the id of that study. <code><a href="../reference/find_studies.html">find_studies()</a></code> accepts a string with your study of interest and it searches for similar names in the SQP 3.0 database.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw"><a href="../reference/find_studies.html">find_studies</a></span>(<span class="st">"ess"</span>)</span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="co">#&gt; # A tibble: 34 x 2</span></span>
@@ -205,7 +205,7 @@
 <span id="cb12-15"><a href="#cb12-15"></a><span class="co">#&gt; #   reliabilityCoefficientStdError &lt;dbl&gt;,</span></span>
 <span id="cb12-16"><a href="#cb12-16"></a><span class="co">#&gt; #   validityCoefficientStdError &lt;dbl&gt;, qualityCoefficientStdError &lt;dbl&gt;</span></span></code></pre></div>
 <p>The nice thing about <code>get_estimates</code> is that once you’ve explored and found your variables, if you save the id’s of the questions in your script, once your restart your R session you can avoid most of the steps above and get your estimates with only <code><a href="../reference/sqp_login.html">sqp_login(); get_estimates(question_ids)</a></code>, assuming you placed your login information as environmental variables (or options) and your question ids are in a vector named <code>question_ids</code>.</p>
-<p>I hope that gives a general idea of how to explore the SQP 3.0 interactively. For more examples on how this blends with the other <code>sqpr</code> related functions, check out the case-study vignette of the <code>sqpr</code> package.</p>
+<p>I hope that gives a general idea of how to explore the SQP 3.0 API interactively. For more examples on how this blends with the other <code>sqpr</code> related functions, check out the case-study vignette of the <code>sqpr</code> package.</p>
 </div>
   </div>
 
@@ -214,7 +214,7 @@
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#exploring-the-sqp-api">Exploring the SQP 3.0 API</a></li>
+<li><a href="#exploring-the-sqp-3-0-api">Exploring the SQP 3.0 API</a></li>
       </ul>
 </div>
       </div>

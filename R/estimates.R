@@ -67,12 +67,12 @@
 #'
 #' @seealso \code{\link{sqp_login}} for logging in to the SQP 3.0 API through R and
 #' \code{\link{find_questions}} and \code{\link{find_studies}} for locating
-#' the variables of interest to use in \code{get_estimates}.
+#' the variables of interest to use in \code{\link{get_estimates}}.
 #'
-#' @return \code{get_estimates} returns a \code{\link[tibble]{tibble}} with the predictions.
-#' If \code{id} is of length 0, \code{get_estimates} returns an empty data frame.
+#' @return \code{\link{get_estimates}} returns a \code{\link[tibble]{tibble}} with the predictions.
+#' If \code{id} is of length 0, \code{\link{get_estimates}} returns an empty data frame.
 #' In both situations, the number of columns depends on the \code{all_columns} argument.
-#' \code{get_question_name} returns a character vector with the question name(s) unless
+#' \code{\link{get_question_name}} returns a character vector with the question name(s) unless
 #' id is of length 0 where it returns an empty character.
 #' @export
 #'

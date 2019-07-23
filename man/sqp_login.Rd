@@ -37,23 +37,23 @@ first.
 
 \dontrun{
 
-# Let's suppose your username is 'mary' and your password is 'secret'.
-# Set your environmental variables with Sys.setenv()
+## Let's suppose your username is 'mary' and your password is 'secret'.
+## Set your environmental variables with Sys.setenv()
 
 Sys.setenv(SQP_USER = 'mary')
 Sys.setenv(SQP_PW = 'secret')
 
-# You can run the previous two lines and then delete them.
-# While that R session is open, sqp_login will search for these two
-# variables even if you delete the previous lines. For example..
+## You can run the previous two lines and then delete them.
+## While that R session is open, sqp_login will search for these two
+## variables even if you delete the previous lines. For example..
 
 sqp_login()
 
-# will login successfully. Users interested in setting these values
-# as permament environment variables are referred to
+## will login successfully. Users interested in setting these values
+## as permament environment variables are referred to
 https://csgillespie.github.io/efficientR/r-startup.html#renviron
 
-# Similarly, you can set the values as options
+## Similarly, you can set the values as options
 
 options(
  SQP_USER = 'mary',
@@ -62,8 +62,8 @@ options(
 
 sqp_login()
 
-# Finally, if you never plan to share your code (and even then I suggest the
-# other options), you can always use the account as arguments to sqp_login.
+## Finally, if you never plan to share your code (and even then I suggest the
+## other options), you can always use the account as arguments to sqp_login.
 
 sqp_login(username = 'mary', password = 'secret')
 

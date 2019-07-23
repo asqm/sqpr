@@ -137,13 +137,13 @@ are previously registered at <a href='http://sqp.upf.edu/accounts/login/?next=/l
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>an invisible <code>TRUE</code>. But it will raise an error if the account doesn't
-match any SQP 3.0 accounts.</p>
+match any SQP accounts.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Currently <code>sqp_login</code> offers three possible ways to log in. The first
 is by placing your username/email and password as environment variables with names
-<code>SQP 3.0_USER</code> and <code>SQP 3.0_PW</code>. The second is placing your username/email and
+<code>SQP_USER</code> and <code>SQP_PW</code>. The second is placing your username/email and
 password as variables in <code><a href='https://www.rdocumentation.org/packages/base/topics/options'>options()</a></code> with the same names. And finally,
 the third, and most insecure, is by providing your username/email and password as
 arguments to <code>sqp_login</code>. We discourage users to use the third option because
@@ -157,33 +157,33 @@ first.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 </div># NOT RUN {
-# Let's suppose your username is 'mary' and your password is 'secret'.
-# Set your environmental variables with Sys.setenv()
+## Let's suppose your username is 'mary' and your password is 'secret'.
+## Set your environmental variables with Sys.setenv()
 
-Sys.setenv(SQP 3.0_USER = 'mary')
-Sys.setenv(SQP 3.0_PW = 'secret')
+Sys.setenv(SQP_USER = 'mary')
+Sys.setenv(SQP_PW = 'secret')
 
-# You can run the previous two lines and then delete them.
-# While that R session is open, sqp_login will search for these two
-# variables even if you delete the previous lines. For example..
+## You can run the previous two lines and then delete them.
+## While that R session is open, sqp_login will search for these two
+## variables even if you delete the previous lines. For example..
 
 sqp_login()
 
-# will login successfully. Users interested in setting these values
-# as permament environment variables are referred to
+## will login successfully. Users interested in setting these values
+## as permament environment variables are referred to
 https://csgillespie.github.io/efficientR/r-startup.html#renviron
 
-# Similarly, you can set the values as options
+## Similarly, you can set the values as options
 
 options(
- SQP 3.0_USER = 'mary',
- SQP 3.0_PW = 'secret'
+ SQP_USER = 'mary',
+ SQP_PW = 'secret'
  )
 
 sqp_login()
 
-# Finally, if you never plan to share your code (and even then I suggest the
-# other options), you can always use the account as arguments to sqp_login.
+## Finally, if you never plan to share your code (and even then I suggest the
+## other options), you can always use the account as arguments to sqp_login.
 
 sqp_login(username = 'mary', password = 'secret')
 
