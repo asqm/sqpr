@@ -70,7 +70,6 @@ columns_present <- function(corr_data, sqp_data, var_names) {
 
 
 # These functions are aimed at making requests to the SQP API.
-
 # This function allows to retrieve the same requests if
 # no parameters have changed. I have to keep it outside the functions
 # because if defined inside a fun, then it is deleted after
@@ -116,6 +115,18 @@ object_request <- function(path, estimates = FALSE) {
   final_df <- tibble::as_tibble(json_data)
   final_df
 }
+
+sqp_reconstruct <- function(sqp_data, variables_check = sqp_env$sqp_columns) {
+
+  # If sqp_data is not in the correct format, throw an error
+  check_sqp_data(sqp_data, variables_check)
+
+  # If it has a correct format, then simply add the sqp class if
+  # it doesn't have it
+  if (!inherits(sqp_data, "sqp")) class(sqp_data) <- c(class(sqp_data), "sqp")
+  sqp_data
+}
+
 
 
 sqp_env <- new.env()

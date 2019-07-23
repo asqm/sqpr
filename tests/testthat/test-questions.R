@@ -1,6 +1,6 @@
 context("test-questions.R")
 
-test_that("get_studies returns correct df", {
+test_that("get_questions returns correct df", {
   sqp_login()
   correct_df <- get_questions(12)
 
@@ -9,7 +9,7 @@ test_that("get_studies returns correct df", {
   expect_false(nrow(correct_df) == 0)
 })
 
-test_that("get_studies handles unexistent studies", {
+test_that("get_questions handles unexistent questions", {
   sqp_login()
   expect_error(get_questions(numeric()),
                "length\\(.*\\) != 0 is not TRUE")
@@ -22,7 +22,7 @@ test_that("get_studies handles unexistent studies", {
                regexp = ".* is not TRUE")
 })
 
-test_that("find_studies accepts regular expressions", {
+test_that("find_questions accepts regular expressions", {
   sqp_login()
   regexp <- find_questions(12, "a$")
 
@@ -31,7 +31,7 @@ test_that("find_studies accepts regular expressions", {
   expect_false(nrow(regexp) == 0)
 })
 
-test_that("find_studies handles empty strings", {
+test_that("find_questions handles empty strings", {
   sqp_login()
   regexp <- find_questions(12, "")
 
@@ -40,7 +40,7 @@ test_that("find_studies handles empty strings", {
   expect_false(nrow(regexp) == 0)
 })
 
-test_that("find_studies returns extra columns", {
+test_that("find_questions returns extra columns", {
   sqp_login()
   expect_gt(ncol(find_questions(12, "", all_columns = TRUE)),
             length(sqp_env$question_variables))
