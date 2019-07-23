@@ -42,6 +42,10 @@ always returns the 'authorized' prediction when it is available. When
 it is not, it returns the first non-authorized prediction, and so on.
 If the user wants to choose a specific prediction, then
 \code{authorized = FALSE} will return all available predictions for each question.
+If \code{authorized = FALSE} and \code{all_columns = FALSE},
+\code{\link{get_estimates}} raises an error because there is no way of
+disentangling which prediction is authorized/unauthorized without the
+additional \code{user_id} column.
 
 \code{get_estimates} returns a four column \code{\link[tibble]{tibble}} with
 the question name and the estimates for \code{quality}, \code{reliability} and

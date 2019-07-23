@@ -19,6 +19,10 @@
 #' it is not, it returns the first non-authorized prediction, and so on.
 #' If the user wants to choose a specific prediction, then
 #' \code{authorized = FALSE} will return all available predictions for each question.
+#' If \code{authorized = FALSE} and \code{all_columns = FALSE},
+#' \code{\link{get_estimates}} raises an error because there is no way of
+#' disentangling which prediction is authorized/unauthorized without the
+#' additional \code{user_id} column.
 #' 
 #' \code{get_estimates} returns a four column \code{\link[tibble]{tibble}} with
 #' the question name and the estimates for \code{quality}, \code{reliability} and
@@ -98,6 +102,8 @@
 get_estimates <- function(id, all_columns = FALSE, authorized = TRUE) {
   stopifnot(is.numeric(id))
 
+  if (!authorized & !all_columns) stop("If authorized is set to `FALSE`, argument `all_columns` must be set to `TRUE` to identify which variables are authorized/non-authorized")
+
   if (length(id) < 1) {
     empty_df <-
       sqp_construct("empty", list(quality = NA_real_),
@@ -116,7 +122,9 @@ get_estimates <- function(id, all_columns = FALSE, authorized = TRUE) {
   raw_data <- object_request(url_id, estimates = TRUE)
 
   list_data <- Map(
-    function(x, y, z) make_estimate_df(x, y, z, all_columns = all_columns, authorized = authorized),
+    function(x, y, z) make_estimate_df(x, y, z,
+                                       all_columns = all_columns,
+                                       authorized = authorized),
     raw_data,
     q_name,
     id

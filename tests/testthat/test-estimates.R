@@ -36,6 +36,17 @@ test_that("get_estimates returns unauthorized predictions", {
 })
 
 
+test_that("get_estimates fails when authorized is FALSE and all_columns TRUE", {
+  sqp_login()
+  set.seed(1231)
+
+  expect_error(
+    get_estimates(4, all_columns = FALSE, authorized = FALSE),
+    regexp = "If authorized is set to `FALSE`, argument `all_columns` must be set to `TRUE` to identify which variables are authorized/non-authorized"
+  )
+})
+
+
 # Here I chose one variable that was empty at the time.
 # If this raises an error, then just find another empty variables
 test_that("get_estimates converts empty estimates into missing tibble", {
