@@ -24,8 +24,13 @@ the second will have all the measurement error corrections implemented
 separately. This way, measurement error corrections can happen
 independently of the SQP software for anyone who has other survey
 quality information. This new package is still under construction and
-will be uploaded as soon as it has working value. If you have any
-questions, please contact us at <cimentadaj@gmail.com>.
+will be uploaded as soon as it has working value.
+
+Currently, the `sqpr` package is not **usable**. This package is being
+tested on the new SQP 3.0 API and not on the published website of the
+SQP [here](http://sqp.upf.edu/).
+
+If you have any questions, please contact us at <cimentadaj@gmail.com>.
 
 ## Installation
 
