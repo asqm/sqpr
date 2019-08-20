@@ -137,14 +137,14 @@ expressions are supported.</p></td>
     </tr>
     <tr>
       <th>country</th>
-      <td><p>the country where the question was applied.
-See the ISO two letter country name list
+      <td><p>the country where the question was applied in two letter ISO
+code. See the ISO two letter country name list
 <a href='https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2'>here</a>
 for all options. Upper or lower case is ignored.</p></td>
     </tr>
     <tr>
       <th>lang</th>
-      <td><p>the language the question should be in a three
+      <td><p>the language the question should be in, in a three
 letter character. See the ISO three letter country name list
 <a href='https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes'>here</a>
 for all options. Upper or lower case is ignored. This should be
@@ -158,10 +158,11 @@ possible variables.</p></td>
     </tr>
     <tr>
       <th>authorized</th>
-      <td><p><code>TRUE</code> to return <strong>only</strong> the authorized prediction or
-<code>FALSE</code> to return all available predictions. If set to <code>FALSE</code> a
-a warning is issued reminding the user to pick one prediction for each variable
-based on the <code>user_id</code> and <code>user_username</code> columns.</p></td>
+      <td><p><code>TRUE</code> to return <strong>only</strong> the authorized
+prediction or <code>FALSE</code> to return all available predictions. If set to
+<code>FALSE</code> a warning is issued reminding the user to pick one prediction
+for each variable based on the <code>user_id</code> and <code>user_username</code>
+columns.</p></td>
     </tr>
     </table>
     
@@ -173,24 +174,26 @@ argument.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>SQP predictions can be both 'authorized' predictions, which are
+    <p><code>get_sqp</code> is a simple wrapper around <code><a href='find_questions.html'>find_questions</a></code>,
+<code><a href='find_studies.html'>find_studies</a></code> and <code><a href='get_estimates.html'>get_estimates</a></code> for a direct
+downloading strategy of the SQP data. For a lower-level approach use
+a combination of these functions to extract SQP data.</p>
+<p>SQP predictions can be both 'authorized' predictions, which are
 performed by the SQP 3.0 software, and 'crowd-sourced' predictions which are
 added to the database by other users. By default, <code>sqp_data</code>
 always returns the 'authorized' prediction when it is available. When
 it is not, it returns the first non-authorized prediction, and so on.
 If the user wants to choose a specific prediction, then
-<code>authorized = FALSE</code> will return all available predictions for each question.
-If <code>authorized = FALSE</code> and <code>all_columns = FALSE</code>,
+<code>authorized = FALSE</code> will return all available predictions for each
+question.</p>
+<p>If <code>authorized = FALSE</code> and <code>all_columns = FALSE</code>,
 <code>get_sqp</code> raises an error because there is no way of
 disentangling which prediction is authorized/unauthorized without the
-additional <code>user_id</code> column.</p>
-<p><code>sqp_data</code> is just a wrapper around <code><a href='find_studies.html'>find_studies</a></code>,
-<code><a href='find_questions.html'>find_questions</a></code> and <code><a href='get_estimates.html'>get_estimates</a></code> for easier
-interacting with the SQP API. <code>sqp_data</code> returns a four column
-<code><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></code> with the question name and the estimates
-for <code>quality</code>, <code>reliability</code> and <code>validity</code>. However,
-if <code>all_columns</code> is set to <code>TRUE</code> the returned
-<code><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></code> contains new columns. Below you can
+additional <code>user_id</code> column (observed when <code>all_columns = TRUE</code>).</p>
+<p><code>sqp_data</code> returns a four column <code><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></code> with
+the question name and the estimates for <code>quality</code>, <code>reliability</code>
+and <code>validity</code>. However, if <code>all_columns</code> is set to <code>TRUE</code>
+the returned <code><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></code> contains new columns. Below you can
 find the descriptionof of all columns:</p>
 <ul>
 <li><p>question: the literal name of the question in the questionnaire of the study</p></li>
@@ -231,9 +234,10 @@ find the descriptionof of all columns:</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='sqp_login.html'>sqp_login</a></code> for logging in to the SQP 3.0 API through R and
-<code><a href='find_questions.html'>find_questions</a></code>, <code><a href='find_studies.html'>find_studies</a></code> and
-<code><a href='get_estimates.html'>get_estimates</a></code> for the manual approach of extracting estimates.</p></div>
+    <div class='dont-index'><p><code><a href='sqp_login.html'>sqp_login</a></code> for logging in to the SQP 3.0 API through R
+and <code><a href='find_questions.html'>find_questions</a></code>, <code><a href='find_studies.html'>find_studies</a></code> and
+<code><a href='get_estimates.html'>get_estimates</a></code> for the lower-level approach of extracting
+estimates.</p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
