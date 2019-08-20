@@ -8,12 +8,12 @@
 #' the study. Upper or lower case is ignored and regular
 #' expressions are supported.
 #' 
-#' @param country the country where the question was applied.
-#' See the ISO two letter country name list
+#' @param country the country where the question was applied in two letter ISO
+#' code. See the ISO two letter country name list
 #' \href{https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2}{here}
 #' for all options. Upper or lower case is ignored.
 #' 
-#' @param lang the language the question should be in a three
+#' @param lang the language the question should be in, in a three
 #' letter character. See the ISO three letter country name list
 #' \href{https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes}{here}
 #' for all options. Upper or lower case is ignored. This should be
@@ -23,31 +23,36 @@
 #' columns from the SQP 3.0 database. See the details section for a list of all
 #' possible variables.
 #' 
-#' @param authorized \code{TRUE} to return \strong{only} the authorized prediction or
-#' \code{FALSE} to return all available predictions. If set to \code{FALSE} a
-#' a warning is issued reminding the user to pick one prediction for each variable
-#' based on the \code{user_id} and \code{user_username} columns.
+#' @param authorized \code{TRUE} to return \strong{only} the authorized
+#' prediction or \code{FALSE} to return all available predictions. If set to
+#' \code{FALSE} a warning is issued reminding the user to pick one prediction
+#' for each variable based on the \code{user_id} and \code{user_username}
+#' columns.
 #'
 #' @details
+#' \code{get_sqp} is a simple wrapper around \code{\link{find_questions}},
+#' \code{\link{find_studies}} and \code{\link{get_estimates}} for a direct
+#' downloading strategy of the SQP data. For a lower-level approach use
+#' a combination of these functions to extract SQP data.
+#' 
 #' SQP predictions can be both 'authorized' predictions, which are
 #' performed by the SQP 3.0 software, and 'crowd-sourced' predictions which are
 #' added to the database by other users. By default, \code{sqp_data}
 #' always returns the 'authorized' prediction when it is available. When
 #' it is not, it returns the first non-authorized prediction, and so on.
 #' If the user wants to choose a specific prediction, then
-#' \code{authorized = FALSE} will return all available predictions for each question.
-#' If \code{authorized = FALSE} and \code{all_columns = FALSE},
-#' \code{\link{get_sqp}} raises an error because there is no way of
-#' disentangling which prediction is authorized/unauthorized without the
-#' additional \code{user_id} column.
+#' \code{authorized = FALSE} will return all available predictions for each
+#' question.
 #' 
-#' \code{sqp_data} is just a wrapper around \code{\link{find_studies}},
-#' \code{\link{find_questions}} and \code{\link{get_estimates}} for easier
-#' interacting with the SQP API. \code{sqp_data} returns a four column
-#' \code{\link[tibble]{tibble}} with the question name and the estimates
-#' for \code{quality}, \code{reliability} and \code{validity}. However,
-#' if \code{all_columns} is set to \code{TRUE} the returned
-#' \code{\link[tibble]{tibble}} contains new columns. Below you can
+#' If \code{authorized = FALSE} and \code{all_columns = FALSE},
+#' \code{get_sqp} raises an error because there is no way of
+#' disentangling which prediction is authorized/unauthorized without the
+#' additional \code{user_id} column (observed when \code{all_columns = TRUE}).
+#'
+#' \code{sqp_data} returns a four column \code{\link[tibble]{tibble}} with
+#' the question name and the estimates for \code{quality}, \code{reliability}
+#' and \code{validity}. However, if \code{all_columns} is set to \code{TRUE}
+#' the returned \code{\link[tibble]{tibble}} contains new columns. Below you can
 #' find the descriptionof of all columns:
 #'
 #' \itemize{
@@ -88,9 +93,10 @@
 #' }
 #'
 #'
-#' @seealso \code{\link{sqp_login}} for logging in to the SQP 3.0 API through R and
-#' \code{\link{find_questions}}, \code{\link{find_studies}} and
-#' \code{\link{get_estimates}} for the manual approach of extracting estimates.
+#' @seealso \code{\link{sqp_login}} for logging in to the SQP 3.0 API through R
+#' and \code{\link{find_questions}}, \code{\link{find_studies}} and
+#' \code{\link{get_estimates}} for the lower-level approach of extracting
+#' estimates.
 #'
 #' @return \code{\link{get_sqp}} returns a \code{\link[tibble]{tibble}} with the
 #' predictions. The number of columns depends on the \code{all_columns}
