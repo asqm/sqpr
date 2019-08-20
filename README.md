@@ -66,27 +66,30 @@ Once you’ve ran `sqp_login()`, you’re all set to work with the SQP 3.0
 
 You can query all the questions in a specific study to check whether a
 specific question has quality predictions. Use `find_studies` to locate
-the `id` of a certain study
+whether your study is in the SQP 3.0 database.
 
 ``` r
-ess_four <- find_studies("ESS Round 4")
-ess_four
+find_studies("ESS Round 4")
 #> # A tibble: 1 x 2
 #>      id name       
 #>   <int> <chr>      
 #> 1     4 ESS Round 4
 ```
 
-Ok, so we have our `study_id`. Which questions are in that study?
-`find_questions` will do the work for you.
+Great\! Once we have that, we can use it to find all of it’s questions
+with `find_questions`. `find_questions` accepts the study that you’re
+looking for and a string that specifies the questions that you’re
+looking for. Let’s search for all questions that have `tv` in the name:
 
 ``` r
-q_ess <- find_questions(ess_four$id, "tv")
+q_ess <- find_questions("ESS Round 4", "tv")
 ```
 
 That might take a while because it’s downloading all of the data to your
-computer. Let’s query further down to get questions for a specific
-question.
+computer. If you want to know all the questions in that study
+beforehand, use `get_questions("ESS Round 4")`.
+
+Let’s query further down to get the language for a specific question:
 
 ``` r
 sp_tv <- q_ess[q_ess$language_iso == "spa", ]

@@ -147,9 +147,7 @@ get_sqp <- function(study,
                     all_columns = FALSE,
                     authorized = TRUE) {
 
-  sqp_study <- find_studies(study)
-  sqp_question <- find_questions(sqp_study$id, question_name)
-
+  sqp_question <- find_questions(study, question_name)
   country_filt <- tolower(sqp_question$country_iso) == tolower(country)
   language_filt <- tolower(sqp_question$language_iso) == tolower(lang)
   sqp_question <- sqp_question[country_filt & language_filt, ]

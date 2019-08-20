@@ -5,13 +5,13 @@
 \alias{get_questions}
 \title{Extract question information from specific studies}
 \usage{
-find_questions(id_study, question_name, all_columns = FALSE)
+find_questions(study, question_name, all_columns = FALSE)
 
-get_questions(id_study, all_columns = FALSE)
+get_questions(study, all_columns = FALSE)
 }
 \arguments{
-\item{id_study}{a numeric value that specifies the desired study. Find with
-\code{\link{find_studies}} or \code{\link{get_studies}}.}
+\item{study}{a character specifying the \strong{name} of the desired study.
+Find with \code{\link{find_studies}} or \code{\link{get_studies}}.}
 
 \item{question_name}{A vector of strings specifying the variable names.
 A search is performed for similar names from all variables in the study.
@@ -36,12 +36,12 @@ in a study and get_questions to return all the question in a study.
 sqp_login()
 
 # 1 is the study ESS round 1
-find_questions(1, "tvtot")
+find_questions("ESS round 1", "tvtot")
 
 # If that doesn't fit, then use get_questions and search for the question
 # manually through filtering:
 
-all_questions <- get_questions(1)
+all_questions <- get_questions("ESS round 1")
 cnt_filt <- all_questions$country_iso == "ES"
 lang_filt <- all_questions$language_iso == "spa"
 var_filt <- grepl("TvTot", all_questions$short_name)
@@ -51,7 +51,7 @@ all_questions[cnt_filt & lang_filt & var_filt, ]
 
 # Can also search for several variables in one call
 
-find_questions(1, c("tvpol", "tvtot"))
+find_questions("ESS round 1", c("tvpol", "tvtot"))
 
 # Or use regular expressions. For example, to find all variables
 # that begin with tv

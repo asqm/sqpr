@@ -1,12 +1,22 @@
 ## test_that("multiplication works", {
 
-##   # Should return empty data frame
+## ## Should return empty data frame
 ##   get_sqp(
 ##     c("random_study"),
 ##     "tvtot",
 ##     "es",
 ##     "spa"
 ##   )
+
+
+## # Should throw error
+##   get_sqp(
+##     c("ESS round 4", "ESS round 2"),
+##     "tvtot",
+##     "es",
+##     "spa"
+##   )
+
 
 ##   # Should generate error about only one study being possible to search
 ##   get_sqp(

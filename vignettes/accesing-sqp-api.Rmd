@@ -90,25 +90,25 @@ find_studies("ess")
 ```
 
 Aha! There it is. Then more specifically..
+
 ```{r}
-study_id <- find_studies("ESS Round 4")$id
+find_studies("ESS Round 4")
 ```
 
 `find_studies` is very helpful for finding patterns in the SQP 3.0 database. However, if you can't find your study, you should use `get_studies()` which will return all the studies in the SQP 3.0 database and then perform your search manually.
 
-
-Ok, so we have our `study_id`. Which questions are in that study? `find_questions` will do the work for you.
+Ok, so we know our study is there. Which questions are in that study? `find_questions` will do the work for you.
 
 ```{r}
-find_questions(study_id, "tv")
+find_questions("ESS Round 4", "tv")
 ```
 
-That might take a while because it's downloading all of the data to your computer. However, if you run `find_questions` (or any other API related function) once, then any repetition should be instant as it loads everything from your computer rather than downloading it again.
+That might take a while because it's downloading all of the data to your computer.
 
 Ok, that search was unsuccesfull, as we can see there are questions that don't begin with `tv`. We can also use regular expressions to find more detailed patterns. For example, `^tv` will find all questions that start (`^`) with `tv`.
 
 ```{r}
-tv_qs <- find_questions(study_id, "^tv")
+tv_qs <- find_questions("ESS Round 4", "^tv")
 tv_qs
 ```
 
