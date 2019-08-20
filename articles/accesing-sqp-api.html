@@ -135,10 +135,14 @@
 <a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; 10   579 ESS Round 7                                                       </span></a>
 <a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; # … with 24 more rows</span></a></code></pre></div>
 <p>Aha! There it is. Then more specifically..</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">study_id &lt;-<span class="st"> </span><span class="kw"><a href="../reference/find_studies.html">find_studies</a></span>(<span class="st">"ESS Round 4"</span>)<span class="op">$</span>id</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="../reference/find_studies.html">find_studies</a></span>(<span class="st">"ESS Round 4"</span>)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt; # A tibble: 1 x 2</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt;      id name       </span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt;      </span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; 1     4 ESS Round 4</span></a></code></pre></div>
 <p><code>find_studies</code> is very helpful for finding patterns in the SQP 3.0 database. However, if you can’t find your study, you should use <code><a href="../reference/find_studies.html">get_studies()</a></code> which will return all the studies in the SQP 3.0 database and then perform your search manually.</p>
-<p>Ok, so we have our <code>study_id</code>. Which questions are in that study? <code>find_questions</code> will do the work for you.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="../reference/find_questions.html">find_questions</a></span>(study_id, <span class="st">"tv"</span>)</a>
+<p>Ok, so we know our study is there. Which questions are in that study? <code>find_questions</code> will do the work for you.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="../reference/find_questions.html">find_questions</a></span>(<span class="st">"ESS Round 4"</span>, <span class="st">"tv"</span>)</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt; # A tibble: 129 x 5</span></a>
 <a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt;       id study_id short_name country_iso language_iso</span></a>
 <a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt;    &lt;int&gt;    &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;       </span></a>
@@ -153,9 +157,9 @@
 <a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt;  9 27332        4 PrtVtxx    BE          nld         </span></a>
 <a class="sourceLine" id="cb8-14" data-line-number="14"><span class="co">#&gt; 10  8275        4 TvTot      BG          bul         </span></a>
 <a class="sourceLine" id="cb8-15" data-line-number="15"><span class="co">#&gt; # … with 119 more rows</span></a></code></pre></div>
-<p>That might take a while because it’s downloading all of the data to your computer. However, if you run <code>find_questions</code> (or any other API related function) once, then any repetition should be instant as it loads everything from your computer rather than downloading it again.</p>
+<p>That might take a while because it’s downloading all of the data to your computer.</p>
 <p>Ok, that search was unsuccesfull, as we can see there are questions that don’t begin with <code>tv</code>. We can also use regular expressions to find more detailed patterns. For example, <code>^tv</code> will find all questions that start (<code>^</code>) with <code>tv</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">tv_qs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/find_questions.html">find_questions</a></span>(study_id, <span class="st">"^tv"</span>)</a>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">tv_qs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/find_questions.html">find_questions</a></span>(<span class="st">"ESS Round 4"</span>, <span class="st">"^tv"</span>)</a>
 <a class="sourceLine" id="cb9-2" data-line-number="2">tv_qs</a>
 <a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#&gt; # A tibble: 88 x 5</span></a>
 <a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt;       id study_id short_name country_iso language_iso</span></a>

@@ -119,17 +119,17 @@ in a study and get_questions to return all the question in a study.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>find_questions</span>(<span class='no'>id_study</span>, <span class='no'>question_name</span>, <span class='kw'>all_columns</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+    <pre class="usage"><span class='fu'>find_questions</span>(<span class='no'>study</span>, <span class='no'>question_name</span>, <span class='kw'>all_columns</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>get_questions</span>(<span class='no'>id_study</span>, <span class='kw'>all_columns</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>get_questions</span>(<span class='no'>study</span>, <span class='kw'>all_columns</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>id_study</th>
-      <td><p>a numeric value that specifies the desired study. Find with
-<code><a href='find_studies.html'>find_studies</a></code> or <code><a href='find_studies.html'>get_studies</a></code>.</p></td>
+      <th>study</th>
+      <td><p>a character specifying the <strong>name</strong> of the desired study.
+Find with <code><a href='find_studies.html'>find_studies</a></code> or <code><a href='find_studies.html'>get_studies</a></code>.</p></td>
     </tr>
     <tr>
       <th>question_name</th>
@@ -158,12 +158,12 @@ specific wording of the question, answer options, etc..</p></td>
 <span class='fu'><a href='sqp_login.html'>sqp_login</a></span>()
 
 <span class='co'># 1 is the study ESS round 1</span>
-<span class='fu'>find_questions</span>(<span class='fl'>1</span>, <span class='st'>"tvtot"</span>)
+<span class='fu'>find_questions</span>(<span class='st'>"ESS round 1"</span>, <span class='st'>"tvtot"</span>)
 
 <span class='co'># If that doesn't fit, then use get_questions and search for the question</span>
 <span class='co'># manually through filtering:</span>
 
-<span class='no'>all_questions</span> <span class='kw'>&lt;-</span> <span class='fu'>get_questions</span>(<span class='fl'>1</span>)
+<span class='no'>all_questions</span> <span class='kw'>&lt;-</span> <span class='fu'>get_questions</span>(<span class='st'>"ESS round 1"</span>)
 <span class='no'>cnt_filt</span> <span class='kw'>&lt;-</span> <span class='no'>all_questions</span>$<span class='no'>country_iso</span> <span class='kw'>==</span> <span class='st'>"ES"</span>
 <span class='no'>lang_filt</span> <span class='kw'>&lt;-</span> <span class='no'>all_questions</span>$<span class='no'>language_iso</span> <span class='kw'>==</span> <span class='st'>"spa"</span>
 <span class='no'>var_filt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/grep'>grepl</a></span>(<span class='st'>"TvTot"</span>, <span class='no'>all_questions</span>$<span class='no'>short_name</span>)
@@ -173,7 +173,7 @@ specific wording of the question, answer options, etc..</p></td>
 
 <span class='co'># Can also search for several variables in one call</span>
 
-<span class='fu'>find_questions</span>(<span class='fl'>1</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"tvpol"</span>, <span class='st'>"tvtot"</span>))
+<span class='fu'>find_questions</span>(<span class='st'>"ESS round 1"</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"tvpol"</span>, <span class='st'>"tvtot"</span>))
 
 <span class='co'># Or use regular expressions. For example, to find all variables</span>
 <span class='co'># that begin with tv</span>
