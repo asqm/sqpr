@@ -146,6 +146,10 @@ get_sqp <- function(study,
                     lang,
                     all_columns = FALSE,
                     authorized = TRUE) {
+  stopifnot(is.character(country),
+            length(country) == 1,
+            is.character(lang),
+            length(lang) == 1)
 
   sqp_question <- find_questions(study, question_name)
   country_filt <- tolower(sqp_question$country_iso) == tolower(country)

@@ -29,6 +29,31 @@ test_that("get_questions handles unexistent questions", {
 
 })
 
+test_that("find_questions handles unexistent requests", {
+  sqp_login()
+  
+  expect_error(find_questions(numeric(), numeric()),
+               "is.character(question_name) is not TRUE",
+               fixed = TRUE)
+
+  expect_error(find_questions(numeric(), ""),
+               "is.character(study) is not TRUE",
+               fixed = TRUE)
+
+  expect_error(find_questions("random_study", "test"),
+               "Study 'random_study' was not found. Check get_studies()",
+               fixed = TRUE)
+  
+  expect_error(find_questions("ESS round 1", character()),
+               regexp = "length(question_name) >= 1 is not TRUE",
+               fixed = TRUE)
+
+  expect_error(find_questions("ESS round 2|ESS round 4", "random_question"),
+               "Multiple studies matched. Narrow down to one: ESS Round 2, ESS Round 4", #nolintr
+               fixed = TRUE)
+
+})
+
 test_that("find_questions accepts regular expressions", {
   sqp_login()
   regexp <- find_questions("GLES Nachwahlstudie", "a$")

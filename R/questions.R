@@ -49,7 +49,10 @@
 #'}
 #'
 find_questions <- function(study, question_name, all_columns = FALSE) {
-  stopifnot(!missing(study), !missing(question_name))
+  stopifnot(!missing(study),
+            !missing(question_name),
+            is.character(question_name),
+            length(question_name) >= 1)
 
   questions_df <- get_questions(study, all_columns = all_columns)
 

@@ -1,75 +1,182 @@
 ## test_that("multiplication works", {
 
-## ## Should return empty data frame
-##   get_sqp(
-##     c("random_study"),
-##     "tvtot",
-##     "es",
-##     "spa"
-##   )
+check_df <- function(sqp_data, nc = 4, nr = 1) {
+  expect_is(sqp_data, "sqp")
+  expect_length(sqp_data, nc)
+  expect_true(nrow(sqp_data) == nr)
+  expect_true(all(sqp_env$sqp_columns %in% names(sqp_data)))
+}
+
+test_that("get_sqp returns correct output", {
+  sqp_login()
+  set.seed(1231)
+
+  sqp_data <-
+    get_sqp(
+      "ESS round 4",
+      "tvtot",
+      "es",
+      "spa"
+    )
+
+  check_df(sqp_data)
+})
+
+test_that("get_sqp returns all columns correctly", {
+  sqp_login()
+  set.seed(1231)
+
+  sqp_data <-
+    get_sqp(
+      "ESS round 4",
+      "tvtot",
+      "es",
+      "spa",
+      all_columns = TRUE
+    )
+
+  check_df(sqp_data, nc = 23)
+})
+
+test_that("get_sqp returns empty df when wrong question", {
+  sqp_login()
+  set.seed(1231)
+
+  sqp_data <-
+    get_sqp(
+      "ESS round 4",
+      "random",
+      "es",
+      "spa"
+    )
+
+  check_df(sqp_data, nr = 0)
+
+  sqp_data <-
+    get_sqp(
+      "ESS round 4",
+      "random",
+      "es",
+      "spa",
+      all_columns = TRUE
+    )
+
+  check_df(sqp_data, nc = 23, nr = 0)
+})
+
+test_that("get_sqp throws error with wrong study", {
+  sqp_login()
+
+  expect_error(
+    get_sqp(
+      c("random_study"),
+      "tvtot",
+      "es",
+      "spa"
+    ),
+    "Study 'random_study' was not found. Check get_studies()",
+    fixed = TRUE
+  )
+
+  # For multiple studies
+  expect_error(
+    get_sqp(
+      c("ESS round 4", "ESS round 2"),
+      "tvtot",
+      "es",
+      "spa"
+    ),
+    "length(study) == 1 is not TRUE",
+    fixed = TRUE
+  )
+
+  expect_error(
+    get_sqp(
+      character(),
+      "tvtot",
+      "es",
+      "spa"
+    ),
+    "length(study) == 1 is not TRUE",
+    fixed = TRUE
+  )
+
+})
+
+test_that("get_sqp throws error with wrong question", {
+  sqp_login()
+
+  expect_error(
+    get_sqp(
+      "ESS Round 4",
+      numeric(),
+      "es",
+      "spa"
+    ),
+    "is.character(question_name) is not TRUE",
+    fixed = TRUE
+  )
+
+expect_error(
+    get_sqp(
+      "ESS Round 4",
+      character(),
+      "es",
+      "spa"
+    ),
+    "length(question_name) >= 1 is not TRUE",
+    fixed = TRUE
+  )
+
+})
 
 
-## # Should throw error
-##   get_sqp(
-##     c("ESS round 4", "ESS round 2"),
-##     "tvtot",
-##     "es",
-##     "spa"
-##   )
+test_that("get_sqp throws error with wrong country/lang", {
+  sqp_login()
 
+  expect_error(
+    get_sqp(
+      "ESS Round 4",
+      "tvtot",
+      numeric(),
+      "spa"
+    ),
+    "is.character(country) is not TRUE",
+    fixed = TRUE
+  )
 
-##   # Should generate error about only one study being possible to search
-##   get_sqp(
-##     c("ESS Round 4", "random_study"),
-##     "tvtot",
-##     "es",
-##     "spa"
-##   )
+  expect_error(
+    get_sqp(
+      "ESS Round 4",
+      "tvtot",
+      c("spa", "ger"),
+      "spa"
+    ),
+    "length(country) == 1 is not TRUE",
+    fixed = TRUE
+  )
 
-##   # Should generate error about study being empty
-##   get_sqp(
-##     character(),
-##     "tvtot",
-##     "es",
-##     "spa"
-##   )
+  expect_error(
+    get_sqp(
+      "ESS Round 4",
+      "tvtot",
+      "es",
+      numeric()
+    ),
+    "is.character(lang) is not TRUE",
+    fixed = TRUE
+  )
 
-##   # This should throw an error
-##   # Check for character and length and the error should be informative
-##   # for higher level functions so use explicit name of question name
-##   ## rather than question id
-##   get_sqp(
-##     "ESS Round 4",
-##     character(),
-##     "es",
-##     "spa"
-##   )
+  
+  expect_error(
+    get_sqp(
+      "ESS Round 4",
+      "tvtot",
+      "es",
+      c("spa", "ita")
+    ),
+    "length(lang) == 1 is not TRUE",
+    fixed = TRUE
+  )
 
-##   # Should throw an error
-##   get_sqp(
-##     "ESS Round 4",
-##     "tvtot",
-##     "es"
-##     character(),
-##     )
-
-##   # Should throw an error
-##   # Why? Because if we get several country/languages (which is possible),
-##   # the result of get_estimates won't allow to identify which estimates belong
-##   ## to which country/lang
-##   get_sqp(
-##     "ESS round 4",
-##     "tvtot",
-##     "es",
-##     c("spa", "cat"),
-##     )
-
-##   # Should it throw an error suggesting the available languages?
-##   get_sqp(
-##     "ESS Round 4",
-##     "tvtot",
-##     "es"
-##     "es"
-##   )
-
-## })
+})
