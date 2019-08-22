@@ -111,34 +111,88 @@
 <div id="exploring-the-sqp-3-0-api" class="section level2">
 <h2 class="hasAnchor">
 <a href="#exploring-the-sqp-3-0-api" class="anchor"></a>Exploring the SQP 3.0 API</h2>
-<p>You can query all the questions in a specific study to check whether a specific question has quality predictions. Use <code>find_studies</code> to locate whether your study is in the SQP 3.0 database.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="reference/find_studies.html">find_studies</a></span>(<span class="st">"ESS Round 4"</span>)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; # A tibble: 1 x 2</span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt;      id name       </span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt;      </span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; 1     4 ESS Round 4</span></a></code></pre></div>
+<div id="quick-interaction" class="section level3">
+<h3 class="hasAnchor">
+<a href="#quick-interaction" class="anchor"></a>Quick interaction</h3>
+<p>To explore the SQP 3.0 API quickly, <code>get_sqp</code> will be your main function. Assuming you know the study, question, country and language that you’re looking for, you can make one call to the SQP 3.0 API. Let’s try to get the question <code>tvtot</code> in Round 3 for Spain in Spanish.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">sp &lt;-</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/get_sqp.html">get_sqp</a></span>(</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">    <span class="dt">study =</span> <span class="st">"ESS Round 1"</span>,</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">    <span class="dt">question_name =</span> <span class="st">"tvtot"</span>,</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">    <span class="dt">country =</span> <span class="st">"es"</span>,</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">    <span class="dt">lang =</span> <span class="st">"spa"</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">  )</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">sp</a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; # A tibble: 1 x 4</span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt;   question reliability validity quality</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt;   &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; 1 tvtot          0.731    0.939   0.686</span></a></code></pre></div>
+<p>The country and language specification need to be in two and three letter codes respectively. A simple search on Google will yield two and three letter codes for country and language, feel free to explore them.</p>
+<p><code>get_sqp</code> also allows to specify several variables:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">sp &lt;-</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/get_sqp.html">get_sqp</a></span>(</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">    <span class="dt">study =</span> <span class="st">"ESS Round 1"</span>,</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">    <span class="dt">question_name =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"tvtot"</span>, <span class="st">"trstprl"</span>, <span class="st">"ppltrst"</span>),</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">    <span class="dt">country =</span> <span class="st">"es"</span>,</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">    <span class="dt">lang =</span> <span class="st">"spa"</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">  )</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">sp</a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt; # A tibble: 3 x 4</span></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt;   question reliability validity quality</span></a>
+<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt;   &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt; 1 tvtot          0.731    0.939   0.686</span></a>
+<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt; 2 ppltrst        0.724    0.956   0.692</span></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt; 3 trstprl        0.828    0.902   0.747</span></a></code></pre></div>
+<p>Additionally, you can also use regular expressions:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">sp &lt;-</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/get_sqp.html">get_sqp</a></span>(</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">    <span class="dt">study =</span> <span class="st">"ESS Round 1"</span>,</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">    <span class="dt">question_name =</span> <span class="st">"^tv"</span>,</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">    <span class="dt">country =</span> <span class="st">"es"</span>,</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">    <span class="dt">lang =</span> <span class="st">"spa"</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">  )</a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9">sp</a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt; # A tibble: 2 x 4</span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt;   question reliability validity quality</span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt;   &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; 1 tvtot          0.731    0.939   0.686</span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; 2 tvpol         NA       NA      NA</span></a></code></pre></div>
+</div>
+<div id="manual-searching" class="section level3">
+<h3 class="hasAnchor">
+<a href="#manual-searching" class="anchor"></a>Manual searching</h3>
+<p>The previos step assumes you’re well aware of the studies available and some of the country/languages available. Alternatively, you can query all the questions in a specific study to check whether a specific question has quality predictions. Use <code>find_studies</code> to locate whether your study is in the SQP 3.0 database.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="reference/find_studies.html">find_studies</a></span>(<span class="st">"ESS Round 4"</span>)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; # A tibble: 1 x 2</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt;      id name       </span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt;      </span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; 1     4 ESS Round 4</span></a></code></pre></div>
 <p>Great! Once we have that, we can use it to find all of it’s questions with <code>find_questions</code>. <code>find_questions</code> accepts the study that you’re looking for and a string that specifies the questions that you’re looking for. Let’s search for all questions that have <code>tv</code> in the name:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">q_ess &lt;-<span class="st"> </span><span class="kw"><a href="reference/find_questions.html">find_questions</a></span>(<span class="st">"ESS Round 4"</span>, <span class="st">"tv"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">q_ess &lt;-<span class="st"> </span><span class="kw"><a href="reference/find_questions.html">find_questions</a></span>(<span class="st">"ESS Round 4"</span>, <span class="st">"tv"</span>)</a></code></pre></div>
 <p>That might take a while because it’s downloading all of the data to your computer. If you want to know all the questions in that study beforehand, use <code><a href="reference/find_questions.html">get_questions("ESS Round 4")</a></code>.</p>
 <p>Let’s query further down to get the language for a specific question:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">sp_tv &lt;-<span class="st"> </span>q_ess[q_ess<span class="op">$</span>language_iso <span class="op">==</span><span class="st"> "spa"</span>, ]</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">sp_tv</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt; # A tibble: 3 x 5</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt;      id study_id short_name country_iso language_iso</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt;   &lt;int&gt;    &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;       </span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; 1  7999        4 TvTot      ES          spa         </span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; 2 27699        4 TvPol      ES          spa         </span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; 3 27638        4 PrtVtxx    ES          spa</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">sp_tv &lt;-<span class="st"> </span>q_ess[q_ess<span class="op">$</span>language_iso <span class="op">==</span><span class="st"> "spa"</span>, ]</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">sp_tv</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; # A tibble: 3 x 5</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt;      id study_id short_name country_iso language_iso</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt;   &lt;int&gt;    &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;       </span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt; 1  7999        4 TvTot      ES          spa         </span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; 2 27699        4 TvPol      ES          spa         </span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt; 3 27638        4 PrtVtxx    ES          spa</span></a></code></pre></div>
 <p>The hard part is done now. Once we have the <code>id</code> of your questions of interest, we supply it to <code>get_estimates</code> and it will bring the quality predictions for those questions.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">predictions &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_estimates.html">get_estimates</a></span>(sp_tv<span class="op">$</span>id)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">predictions</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; # A tibble: 3 x 4</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt;   question reliability validity quality</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt;   &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; 1 tvtot          0.713    0.926    0.66</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; 2 tvpol         NA       NA       NA   </span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; 3 prtvtxx       NA       NA       NA</span></a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">predictions &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_estimates.html">get_estimates</a></span>(sp_tv<span class="op">$</span>id)</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">predictions</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#&gt; # A tibble: 3 x 4</span></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt;   question reliability validity quality</span></a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#&gt;   &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#&gt; 1 tvtot          0.713    0.926    0.66</span></a>
+<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co">#&gt; 2 tvpol         NA       NA       NA   </span></a>
+<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co">#&gt; 3 prtvtxx       NA       NA       NA</span></a></code></pre></div>
 <p><code>get_estimates</code> will return all question names as lower case for increasing the chances of compatibility with the name in the questionnaire of the study.</p>
+</div>
 </div>
   </div>
 

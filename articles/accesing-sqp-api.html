@@ -118,6 +118,7 @@
 <div id="exploring-the-sqp-3-0-api" class="section level2">
 <h2 class="hasAnchor">
 <a href="#exploring-the-sqp-3-0-api" class="anchor"></a>Exploring the SQP 3.0 API</h2>
+<p>If you’re aware of the study/question/country/language that you’re searchin for, please have a look at <code>get_sqp</code>, a function that allows to make one single query to obtain SQP estimates. See for example <a href="https://sociometricresearch.github.io/sqpr/">here</a>.</p>
 <p>The SQP 3.0 API has questions nested into studies. Some of these studies/questions might be in many different languages because the SQP 3.0 community is very diverse. For that, we need to access the <code>id</code>’s of the study and question of interest. Let’s look for all the questions that have <code>tv</code> at the beginning of the word in the European Social Survey round 4. First, we need to figure out the id of that study. <code><a href="../reference/find_studies.html">find_studies()</a></code> accepts a string with your study of interest and it searches for similar names in the SQP 3.0 database.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="../reference/find_studies.html">find_studies</a></span>(<span class="st">"ess"</span>)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; # A tibble: 34 x 2</span></a>
