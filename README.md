@@ -64,9 +64,79 @@ Once you’ve ran `sqp_login()`, you’re all set to work with the SQP 3.0
 
 ## Exploring the SQP 3.0 API
 
-You can query all the questions in a specific study to check whether a
-specific question has quality predictions. Use `find_studies` to locate
-whether your study is in the SQP 3.0 database.
+### Quick interaction
+
+To explore the SQP 3.0 API quickly, `get_sqp` will be your main
+function. Assuming you know the study, question, country and language
+that you’re looking for, you can make one call to the SQP 3.0 API. Let’s
+try to get the question `tvtot` in Round 3 for Spain in Spanish.
+
+``` r
+sp <-
+  get_sqp(
+    study = "ESS Round 1",
+    question_name = "tvtot",
+    country = "es",
+    lang = "spa"
+  )
+
+sp
+#> # A tibble: 1 x 4
+#>   question reliability validity quality
+#>   <chr>          <dbl>    <dbl>   <dbl>
+#> 1 tvtot          0.731    0.939   0.686
+```
+
+The country and language specification need to be in two and three
+letter codes respectively. A simple search on Google will yield two and
+three letter codes for country and language, feel free to explore them.
+
+`get_sqp` also allows to specify several variables:
+
+``` r
+sp <-
+  get_sqp(
+    study = "ESS Round 1",
+    question_name = c("tvtot", "trstprl", "ppltrst"),
+    country = "es",
+    lang = "spa"
+  )
+
+sp
+#> # A tibble: 3 x 4
+#>   question reliability validity quality
+#>   <chr>          <dbl>    <dbl>   <dbl>
+#> 1 tvtot          0.731    0.939   0.686
+#> 2 ppltrst        0.724    0.956   0.692
+#> 3 trstprl        0.828    0.902   0.747
+```
+
+Additionally, you can also use regular expressions:
+
+``` r
+sp <-
+  get_sqp(
+    study = "ESS Round 1",
+    question_name = "^tv",
+    country = "es",
+    lang = "spa"
+  )
+
+sp
+#> # A tibble: 2 x 4
+#>   question reliability validity quality
+#>   <chr>          <dbl>    <dbl>   <dbl>
+#> 1 tvtot          0.731    0.939   0.686
+#> 2 tvpol         NA       NA      NA
+```
+
+### Manual searching
+
+The previos step assumes you’re well aware of the studies available and
+some of the country/languages available. Alternatively, you can query
+all the questions in a specific study to check whether a specific
+question has quality predictions. Use `find_studies` to locate whether
+your study is in the SQP 3.0 database.
 
 ``` r
 find_studies("ESS Round 4")
