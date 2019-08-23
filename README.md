@@ -60,7 +60,7 @@ For details on the login process see the `Accessing the SQP 3.0 API
 vignette` from the package.
 
 Once you’ve ran `sqp_login()`, you’re all set to work with the SQP 3.0
-3.0 API\! No need to run it again unless you close the R session.
+API\! No need to run it again unless you close the R session.
 
 ## Exploring the SQP 3.0 API
 
@@ -69,7 +69,7 @@ Once you’ve ran `sqp_login()`, you’re all set to work with the SQP 3.0
 To explore the SQP 3.0 API quickly, `get_sqp` will be your main
 function. Assuming you know the study, question, country and language
 that you’re looking for, you can make one call to the SQP 3.0 API. Let’s
-try to get the question `tvtot` in Round 3 for Spain in Spanish.
+try to get the question `tvtot` in Round 1 for Spain in Spanish.
 
 ``` r
 sp <-
