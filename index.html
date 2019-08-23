@@ -105,7 +105,7 @@
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(sqpr)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="reference/sqp_login.html">sqp_login</a></span>(<span class="st">'your username'</span>, <span class="st">'your password'</span>)</a></code></pre></div>
 <p>For details on the login process see the <code>Accessing the SQP 3.0 API vignette</code> from the package.</p>
-<p>Once you’ve ran <code><a href="reference/sqp_login.html">sqp_login()</a></code>, you’re all set to work with the SQP 3.0 3.0 API! No need to run it again unless you close the R session.</p>
+<p>Once you’ve ran <code><a href="reference/sqp_login.html">sqp_login()</a></code>, you’re all set to work with the SQP 3.0 API! No need to run it again unless you close the R session.</p>
 </div>
 </div>
 <div id="exploring-the-sqp-3-0-api" class="section level2">
@@ -114,7 +114,7 @@
 <div id="quick-interaction" class="section level3">
 <h3 class="hasAnchor">
 <a href="#quick-interaction" class="anchor"></a>Quick interaction</h3>
-<p>To explore the SQP 3.0 API quickly, <code>get_sqp</code> will be your main function. Assuming you know the study, question, country and language that you’re looking for, you can make one call to the SQP 3.0 API. Let’s try to get the question <code>tvtot</code> in Round 3 for Spain in Spanish.</p>
+<p>To explore the SQP 3.0 API quickly, <code>get_sqp</code> will be your main function. Assuming you know the study, question, country and language that you’re looking for, you can make one call to the SQP 3.0 API. Let’s try to get the question <code>tvtot</code> in Round 1 for Spain in Spanish.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">sp &lt;-</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/get_sqp.html">get_sqp</a></span>(</a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">    <span class="dt">study =</span> <span class="st">"ESS Round 1"</span>,</a>
