@@ -16,13 +16,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -46,6 +48,7 @@ are previously registered at http://sqp.upf.edu/accounts/login/?next=/loadui/" /
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -72,7 +75,7 @@ are previously registered at http://sqp.upf.edu/accounts/login/?next=/loadui/" /
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -102,6 +105,7 @@ are previously registered at http://sqp.upf.edu/accounts/login/?next=/loadui/" /
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -144,7 +148,7 @@ match any SQP accounts.</p>
     <p>Currently <code>sqp_login</code> offers three possible ways to log in. The first
 is by placing your username/email and password as environment variables with names
 <code>SQP_USER</code> and <code>SQP_PW</code>. The second is placing your username/email and
-password as variables in <code><a href='https://www.rdocumentation.org/packages/base/topics/options'>options()</a></code> with the same names. And finally,
+password as variables in <code><a href='https://rdrr.io/r/base/options.html'>options()</a></code> with the same names. And finally,
 the third, and most insecure, is by providing your username/email and password as
 arguments to <code>sqp_login</code>. We discourage users to use the third option because
 it might pose security threats if the code is shared. See the examples below for
@@ -155,43 +159,7 @@ first.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-
-</div># NOT RUN {
-## Let's suppose your username is 'mary' and your password is 'secret'.
-## Set your environmental variables with Sys.setenv()
-
-Sys.setenv(SQP_USER = 'mary')
-Sys.setenv(SQP_PW = 'secret')
-
-## You can run the previous two lines and then delete them.
-## While that R session is open, sqp_login will search for these two
-## variables even if you delete the previous lines. For example..
-
-sqp_login()
-
-## will login successfully. Users interested in setting these values
-## as permament environment variables are referred to
-https://csgillespie.github.io/efficientR/r-startup.html#renviron
-
-## Similarly, you can set the values as options
-
-options(
- SQP_USER = 'mary',
- SQP_PW = 'secret'
- )
-
-sqp_login()
-
-## Finally, if you never plan to share your code (and even then I suggest the
-## other options), you can always use the account as arguments to sqp_login.
-
-sqp_login(username = 'mary', password = 'secret')
-
-# }
-<div class='input'>
-
-</div></pre>
+    <pre class="examples"></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -208,19 +176,23 @@ sqp_login(username = 'mary', password = 'secret')
   </div>
 </div>
 
+
       <footer>
       <div class="copyright">
   <p>Developed by Jorge Cimentada, Wiebke Weber.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
