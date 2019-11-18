@@ -75,7 +75,7 @@
       <h1>Accessing the SQP 3.0 API</h1>
                         <h4 class="author">Jorge Cimentada</h4>
             
-            <h4 class="date">2019-11-11</h4>
+            <h4 class="date">2019-11-18</h4>
       
       
       <div class="hidden name"><code>accesing-sqp-api.Rmd</code></div>
@@ -124,18 +124,18 @@
 <p>The SQP 3.0 API has questions nested into studies. Some of these studies/questions might be in many different languages because the SQP 3.0 community is very diverse. For that, we need to access the <code>id</code>’s of the study and question of interest. Let’s look for all the questions that have <code>tv</code> at the beginning of the word in the European Social Survey round 4. First, we need to figure out the id of that study. <code><a href="../reference/find_studies.html">find_studies()</a></code> accepts a string with your study of interest and it searches for similar names in the SQP 3.0 database.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="../reference/find_studies.html">find_studies</a></span>(<span class="st">"ess"</span>)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; # A tibble: 34 x 2</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt;       id name                                                              </span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt;    &lt;int&gt; &lt;chr&gt;                                                             </span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt;  1  1206 ASSESSING THE IMPACT OF ORGANISATIONAL CULTURE ON SERVICE DELIVER…</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt;  2  1441 Business performance                                              </span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt;  3   934 ESS 2012                                                          </span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt;  4     1 ESS Round 1                                                       </span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt;  5     2 ESS Round 2                                                       </span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt;  6     3 ESS Round 3                                                       </span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;  7     4 ESS Round 4                                                       </span></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt;  8     5 ESS Round 5                                                       </span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt;  9    88 ESS Round 6                                                       </span></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; 10   579 ESS Round 7                                                       </span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt;       id name                                                                 </span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt;    &lt;int&gt; &lt;chr&gt;                                                                </span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt;  1  1206 ASSESSING THE IMPACT OF ORGANISATIONAL CULTURE ON SERVICE DELIVERY IN</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt;  2  1441 Business performance                                                 </span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt;  3   934 ESS 2012                                                             </span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt;  4     1 ESS Round 1                                                          </span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt;  5     2 ESS Round 2                                                          </span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt;  6     3 ESS Round 3                                                          </span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;  7     4 ESS Round 4                                                          </span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt;  8     5 ESS Round 5                                                          </span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt;  9    88 ESS Round 6                                                          </span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; 10   579 ESS Round 7                                                          </span></a>
 <a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; # … with 24 more rows</span></a></code></pre></div>
 <p>Aha! There it is. Then more specifically..</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="../reference/find_studies.html">find_studies</a></span>(<span class="st">"ESS Round 4"</span>)</a>
@@ -197,19 +197,18 @@
 <p>It will also return empty fields for the questions that don’t have any predictions, like <code>tvpol</code> in the example above. Moreover, <code>get_estimates</code> gives the option of grabbing more columns from the SQP 3.0 API that contain estimations such as standard errors and interquantile ranges of the predictions from above. See <code><a href="../reference/get_estimates.html">?get_estimates</a></code> for a list of all available columns. You can do that like this:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="../reference/get_estimates.html">get_estimates</a></span>(sp_tv<span class="op">$</span>id, <span class="dt">all_columns =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb12-2" data-line-number="2"><span class="co">#&gt; # A tibble: 2 x 23</span></a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co">#&gt;   question reliability validity quality question_id    id created</span></a>
-<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co">#&gt;   &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;  </span></a>
-<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt; 1 tvtot          0.713    0.926    0.66        7999 11345 2018-1…</span></a>
-<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt; 2 tvpol         NA       NA       NA          27699    NA &lt;NA&gt;   </span></a>
-<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt; # … with 16 more variables: routing_id &lt;dbl&gt;, authorized &lt;dbl&gt;,</span></a>
-<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt; #   complete &lt;dbl&gt;, user_id &lt;dbl&gt;, error &lt;dbl&gt;, errorMessage &lt;dbl&gt;,</span></a>
-<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="co">#&gt; #   reliabilityCoefficient &lt;dbl&gt;, validityCoefficient &lt;dbl&gt;,</span></a>
-<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="co">#&gt; #   methodEffectCoefficient &lt;dbl&gt;, qualityCoefficient &lt;dbl&gt;,</span></a>
-<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#&gt; #   reliabilityCoefficientInterquartileRange &lt;list&gt;,</span></a>
-<a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co">#&gt; #   validityCoefficientInterquartileRange &lt;list&gt;,</span></a>
-<a class="sourceLine" id="cb12-13" data-line-number="13"><span class="co">#&gt; #   qualityCoefficientInterquartileRange &lt;list&gt;,</span></a>
-<a class="sourceLine" id="cb12-14" data-line-number="14"><span class="co">#&gt; #   reliabilityCoefficientStdError &lt;dbl&gt;,</span></a>
-<a class="sourceLine" id="cb12-15" data-line-number="15"><span class="co">#&gt; #   validityCoefficientStdError &lt;dbl&gt;, qualityCoefficientStdError &lt;dbl&gt;</span></a></code></pre></div>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co">#&gt;   question reliability validity quality question_id    id created routing_id</span></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co">#&gt;   &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt; 1 tvtot          0.713    0.926    0.66        7999 11345 2018-1…          1</span></a>
+<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt; 2 tvpol         NA       NA       NA          27699    NA &lt;NA&gt;            NA</span></a>
+<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt; # … with 15 more variables: authorized &lt;dbl&gt;, complete &lt;dbl&gt;, user_id &lt;dbl&gt;,</span></a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt; #   error &lt;dbl&gt;, errorMessage &lt;dbl&gt;, reliabilityCoefficient &lt;dbl&gt;,</span></a>
+<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="co">#&gt; #   validityCoefficient &lt;dbl&gt;, methodEffectCoefficient &lt;dbl&gt;,</span></a>
+<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="co">#&gt; #   qualityCoefficient &lt;dbl&gt;, reliabilityCoefficientInterquartileRange &lt;list&gt;,</span></a>
+<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#&gt; #   validityCoefficientInterquartileRange &lt;list&gt;,</span></a>
+<a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co">#&gt; #   qualityCoefficientInterquartileRange &lt;list&gt;,</span></a>
+<a class="sourceLine" id="cb12-13" data-line-number="13"><span class="co">#&gt; #   reliabilityCoefficientStdError &lt;dbl&gt;, validityCoefficientStdError &lt;dbl&gt;,</span></a>
+<a class="sourceLine" id="cb12-14" data-line-number="14"><span class="co">#&gt; #   qualityCoefficientStdError &lt;dbl&gt;</span></a></code></pre></div>
 <p>The nice thing about <code>get_estimates</code> is that once you’ve explored and found your variables, if you save the id’s of the questions in your script, once your restart your R session you can avoid most of the steps above and get your estimates with only <code><a href="../reference/sqp_login.html">sqp_login(); get_estimates(question_ids)</a></code>, assuming you placed your login information as environmental variables (or options) and your question ids are in a vector named <code>question_ids</code>.</p>
 <p>I hope that gives a general idea of how to explore the SQP 3.0 API interactively. For more examples on how this blends with the other <code>sqpr</code> related functions, check out the case-study vignette of the <code>sqpr</code> package.</p>
 </div>
