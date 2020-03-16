@@ -75,7 +75,7 @@
       <h1>Accessing the SQP 3.0 API</h1>
                         <h4 class="author">Jorge Cimentada</h4>
             
-            <h4 class="date">2020-03-02</h4>
+            <h4 class="date">2020-03-16</h4>
       
       
       <div class="hidden name"><code>accesing-sqp-api.Rmd</code></div>
@@ -123,20 +123,20 @@
 <p>If you’re aware of the study/question/country/language that you’re searchin for, please have a look at <code>get_sqp</code>, a function that allows to make one single query to obtain SQP estimates. See for example <a href="https://sociometricresearch.github.io/sqpr/">here</a>.</p>
 <p>The SQP 3.0 API has questions nested into studies. Some of these studies/questions might be in many different languages because the SQP 3.0 community is very diverse. For that, we need to access the <code>id</code>’s of the study and question of interest. Let’s look for all the questions that have <code>tv</code> at the beginning of the word in the European Social Survey round 4. First, we need to figure out the id of that study. <code><a href="../reference/find_studies.html">find_studies()</a></code> accepts a string with your study of interest and it searches for similar names in the SQP 3.0 database.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="../reference/find_studies.html">find_studies</a></span>(<span class="st">"ess"</span>)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; # A tibble: 34 x 2</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; # A tibble: 26 x 2</span></a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt;       id name                                                                 </span></a>
 <a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt;    &lt;int&gt; &lt;chr&gt;                                                                </span></a>
 <a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt;  1  1206 ASSESSING THE IMPACT OF ORGANISATIONAL CULTURE ON SERVICE DELIVERY IN</span></a>
 <a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt;  2  1441 Business performance                                                 </span></a>
 <a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt;  3   934 ESS 2012                                                             </span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt;  4     1 ESS Round 1                                                          </span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt;  5     2 ESS Round 2                                                          </span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt;  6     3 ESS Round 3                                                          </span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;  7     4 ESS Round 4                                                          </span></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt;  8     5 ESS Round 5                                                          </span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt;  9    88 ESS Round 6                                                          </span></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; 10   579 ESS Round 7                                                          </span></a>
-<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; # … with 24 more rows</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt;  4  1915 ESS Pilot R10                                                        </span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt;  5  1847 ESS R10 Pretesting                                                   </span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt;  6     1 ESS Round 1                                                          </span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;  7  1943 ESS Round 10                                                         </span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt;  8     2 ESS Round 2                                                          </span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt;  9     3 ESS Round 3                                                          </span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; 10     4 ESS Round 4                                                          </span></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; # … with 16 more rows</span></a></code></pre></div>
 <p>Aha! There it is. Then more specifically..</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="../reference/find_studies.html">find_studies</a></span>(<span class="st">"ESS Round 4"</span>)</a>
 <a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt; # A tibble: 1 x 2</span></a>
@@ -199,7 +199,7 @@
 <a class="sourceLine" id="cb12-2" data-line-number="2"><span class="co">#&gt; # A tibble: 2 x 23</span></a>
 <a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co">#&gt;   question reliability validity quality question_id    id created routing_id</span></a>
 <a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co">#&gt;   &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt; 1 tvtot          0.713    0.926    0.66        7999 11345 2018-1…          1</span></a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt; 1 tvtot          0.713    0.926    0.66        7999 11345 2020-0…          1</span></a>
 <a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt; 2 tvpol         NA       NA       NA          27699    NA &lt;NA&gt;            NA</span></a>
 <a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt; # … with 15 more variables: authorized &lt;dbl&gt;, complete &lt;dbl&gt;, user_id &lt;dbl&gt;,</span></a>
 <a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt; #   error &lt;dbl&gt;, errorMessage &lt;dbl&gt;, reliabilityCoefficient &lt;dbl&gt;,</span></a>
