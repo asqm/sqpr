@@ -1,5 +1,3 @@
-## test_that("multiplication works", {
-
 check_df <- function(sqp_data, nc = 4, nr = 1) {
   expect_is(sqp_data, "sqp")
   expect_length(sqp_data, nc)
